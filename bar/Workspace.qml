@@ -1,21 +1,56 @@
 import "../services"
+import "../config"
 import QtQuick.Layouts
 import QtQuick
 import Quickshell
 
 Item {
-	Layout.preferredHeight: 50
-	Layout.preferredWidth: parent.width / 3
+    Layout.preferredHeight: 50
+    Layout.preferredWidth: parent.width / 3
 
-	RowLayout {
-		anchors.fill: parent
-		spacing: 0
-		Repeater {
-			model: Hyprland.workspaces
+    property list<bool> workspaceOccupied: []
 
-			Text {
-				text: modelData.active ? modelData.name + " (Active)" : modelData.name
-			}
-		}
-	}
+    function updateWorkspaceOccupied() {
+        // workspaceOccupied = Array.from({ length: Config.options.bar.workspaces.shown }, (_, i) => {
+        //     return Hyprland.workspaces.values.some(ws => ws.id === workspaceGroup * Config.options.bar.workspaces.shown + i + 1);
+        // })
+		workspaceOccupied = Array.from({ length: Bar.workspaces }, (_, i) => {
+			return Hyprland.workspaces.values.some(ws => ws.id === (i + 1));
+		});
+    }
+    function isActive(index: int): bool {
+        Hyprland.focusedWorkspace.id.toString() == (index + 1).toString();
+    }
+    function isOccupied(index: int): bool {
+		return workspaceOccupied[index] === true;
+    }
+
+    Connections {
+        target: Hyprland.workspaces
+        function onValuesChanged() {
+            updateWorkspaceOccupied();
+        }
+    }
+
+    Component.onCompleted: updateWorkspaceOccupied()
+
+    RowLayout {
+        anchors.fill: parent
+        spacing: 0
+        Repeater {
+            model: Bar.workspaces
+
+            Rectangle {
+                Text {
+                    text: Hyprland.focusedWorkspace.id.toString() == (index + 1).toString()
+                    // text: isActive(index)
+                }
+                implicitWidth: 10
+                implicitHeight: 10
+                opacity: !isOccupied(index) ? 0.2 : 1
+                // color: isActive(index) ? "#00ff00" : "#ffffff"
+                color: "#000000"
+            }
+        }
+    }
 }
