@@ -1,11 +1,11 @@
-import "../services"
-import "../config"
 import QtQuick.Layouts
 import QtQuick
 import Quickshell
+import "../services"
+import "../config"
 
 Item {
-    Layout.preferredHeight: 50
+    Layout.fillHeight: true
     Layout.preferredWidth: parent.width / 3
 
     property list<bool> workspaceOccupied: []
@@ -14,15 +14,17 @@ Item {
         // workspaceOccupied = Array.from({ length: Config.options.bar.workspaces.shown }, (_, i) => {
         //     return Hyprland.workspaces.values.some(ws => ws.id === workspaceGroup * Config.options.bar.workspaces.shown + i + 1);
         // })
-		workspaceOccupied = Array.from({ length: Bar.workspaces }, (_, i) => {
-			return Hyprland.workspaces.values.some(ws => ws.id === (i + 1));
-		});
+        workspaceOccupied = Array.from({
+            length: Bar.workspaces
+        }, (_, i) => {
+            return Hyprland.workspaces.values.some(ws => ws.id === (i + 1));
+        });
     }
     function isActive(index: int): bool {
         Hyprland.focusedWorkspace.id.toString() == (index + 1).toString();
     }
     function isOccupied(index: int): bool {
-		return workspaceOccupied[index] === true;
+        return workspaceOccupied[index] === true;
     }
 
     Connections {
@@ -42,7 +44,7 @@ Item {
 
             Rectangle {
                 Text {
-                    text: Hyprland.focusedWorkspace.id.toString() == (index + 1).toString()
+                    text: Hyprland.focusedWorkspace?.id.toString() == (index + 1).toString()
                     // text: isActive(index)
                 }
                 implicitWidth: 10
