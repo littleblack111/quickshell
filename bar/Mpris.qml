@@ -3,6 +3,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Services.Mpris
 import qs.services
+import qs.config
 
 // import Quickshell.Utils
 
@@ -15,7 +16,7 @@ Item {
     readonly property string position: friendlyTimeForSeconds(activePlayer?.position) || "0:00"
     readonly property string length: friendlyTimeForSeconds(activePlayer?.length) || "0:00"
     readonly property string progress: activePlayer.positionSupported && position != length ? position + "/" + length : activePlayer.positionSupported && !activePlayer.lengthSupported ? !activePlayer.positionSupported && activePlayer.lengthSupported ? "" : position : activePlayer.lengthSupported ? length : ""
-    readonly property string state: activePlayer?.isPlaying ? "Playing" : "Paused"
+    readonly property string state: activePlayer?.isPlaying ? Icons.media.pause : Icons.media.play
 
     function cleanMusicTitle(title: string): string {
         if (!title)
