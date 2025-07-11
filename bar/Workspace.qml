@@ -5,29 +5,29 @@ import qs.services
 import qs.config
 
 Item {
-    Layout.fillHeight: true
+    id: root
 
     property list<bool> workspaceOccupied: []
 
     function updateWorkspaceOccupied() {
         // workspaceOccupied = Array.from({ length: Config.options.bar.workspaces.shown }, (_, i) => {
-        //     return Hyprland.workspaces.values.some(ws => ws.id === workspaceGroup * Config.options.bar.workspaces.shown + i + 1);
+        //     return SHyprland.workspaces.values.some(ws => ws.id === workspaceGroup * Config.options.bar.workspaces.shown + i + 1);
         // })
         workspaceOccupied = Array.from({
             length: Bar.workspaces
         }, (_, i) => {
-            return Hyprland.workspaces.values.some(ws => ws.id === (i + 1));
+            return SHyprland.workspaces.values.some(ws => ws.id === (i + 1));
         });
     }
     function isActive(index: int): bool {
-        Hyprland.focusedWorkspace.id.toString() == (index + 1).toString();
+        SHyprland.focusedWorkspace.id.toString() == (index + 1).toString();
     }
     function isOccupied(index: int): bool {
         return workspaceOccupied[index] === true;
     }
 
     Connections {
-        target: Hyprland.workspaces
+        target: SHyprland.workspaces
         function onValuesChanged() {
             updateWorkspaceOccupied();
         }
@@ -36,14 +36,18 @@ Item {
     Component.onCompleted: updateWorkspaceOccupied()
 
     RowLayout {
-        anchors.fill: parent
+        id: layout
+        implicitWidth: parent.width
+        height: Bar.height
+
         spacing: 0
+
         Repeater {
             model: Bar.workspaces
 
             Rectangle {
                 Text {
-                    text: Hyprland.focusedWorkspace?.id.toString() == (index + 1).toString()
+                    text: SHyprland.focusedWorkspace?.id.toString() == (index + 1).toString()
                     // text: isActive(index)
                 }
                 implicitWidth: 10

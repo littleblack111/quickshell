@@ -43,16 +43,19 @@ Scope {
                         id: leftRow
                         Layout.preferredWidth: 1
                         Layout.fillWidth: true
+                        spacing: 40
                         // Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
                         Workspace {
                             id: workspace
                             Layout.preferredWidth: 3
+                            Layout.fillHeight: true
                             Layout.fillWidth: true
                         }
                         Mpris {
                             id: mpris
                             Layout.fillWidth: true
+                            Layout.fillHeight: true
                             Layout.preferredWidth: 1
                         }
                     }
