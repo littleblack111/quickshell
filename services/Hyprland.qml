@@ -3,7 +3,7 @@ pragma Singleton
 import Quickshell
 import Quickshell.Hyprland
 import QtQuick
-import "../config"
+import qs.config
 
 Singleton {
     id: root

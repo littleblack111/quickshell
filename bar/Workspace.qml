@@ -1,12 +1,11 @@
 import QtQuick.Layouts
 import QtQuick
 import Quickshell
-import "../services"
-import "../config"
+import qs.services
+import qs.config
 
 Item {
     Layout.fillHeight: true
-    Layout.preferredWidth: parent.width / 3
 
     property list<bool> workspaceOccupied: []
 

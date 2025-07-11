@@ -1,8 +1,8 @@
-import "../utils"
-import "../config"
 import QtQuick
 import Quickshell
 import QtQuick.Layouts
+import qs.utils
+import qs.config
 
 Scope {
     id: root
@@ -11,7 +11,7 @@ Scope {
         model: Quickshell.screens
 
         IWindow {
-			name: "Bar"
+            name: "Bar"
 
             anchors {
                 top: true
@@ -24,7 +24,7 @@ Scope {
                 id: child
                 radius: Bar.borderRadius
                 implicitHeight: Bar.height
-				implicitWidth: parent.width
+                implicitWidth: parent.width
 
                 anchors {
                     left: parent.left
@@ -36,26 +36,49 @@ Scope {
                     rightMargin: Bar.rightMargin
                 }
                 RowLayout {
-                    anchors {
-                        fill: parent
-                        left: parent.left
-                    }
-					Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                    id: row
+                    id: rowLayout
+                    anchors.fill: parent
 
-                    Workspace {
-                        id: workspace
+                    RowLayout {
+                        id: leftRow
+                        Layout.preferredWidth: 1
+                        Layout.fillWidth: true
+                        // Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+
+                        Workspace {
+                            id: workspace
+                            Layout.preferredWidth: 3
+                            Layout.fillWidth: true
+                        }
+                        Mpris {
+                            id: mpris
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 1
+                        }
                     }
-                    // Workspace {
-                    //
-                    //     id: workspace2
-                    // }
-                    // Workspace {
-                    //
-                    //     id: workspace3
-                    // }
+                    RowLayout {
+                        id: centerRow
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.preferredWidth: 1
+                        Rectangle {
+                            Layout.fillWidth: true
+                            implicitHeight: 1
+                            color: "#000000"
+                        }
+                    }
+                    RowLayout {
+                        id: rightRow
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 1
+                        Rectangle {
+                            Layout.fillWidth: true
+                            Text {
+                                text: "a"
+                            }
+                        }
+                    }
                 }
-
             }
         }
     }
