@@ -1,7 +1,7 @@
 import QtQuick.Layouts
 import QtQuick
 import Quickshell
-import qs.services
+import Quickshell.Hyprland
 import qs.config
 
 Item {
@@ -11,23 +11,23 @@ Item {
 
     function updateWorkspaceOccupied() {
         // workspaceOccupied = Array.from({ length: Config.options.bar.workspaces.shown }, (_, i) => {
-        //     return SHyprland.workspaces.values.some(ws => ws.id === workspaceGroup * Config.options.bar.workspaces.shown + i + 1);
+        //     return Hyprland.workspaces.values.some(ws => ws.id === workspaceGroup * Config.options.bar.workspaces.shown + i + 1);
         // })
         workspaceOccupied = Array.from({
             length: Bar.workspaces
         }, (_, i) => {
-            return SHyprland.workspaces.values.some(ws => ws.id === (i + 1));
+            return Hyprland.workspaces.values.some(ws => ws?.id === (i + 1));
         });
     }
     function isActive(index: int): bool {
-        SHyprland.focusedWorkspace.id.toString() == (index + 1).toString();
+        Hyprland.focusedWorkspace?.id.toString() == (index + 1).toString();
     }
     function isOccupied(index: int): bool {
         return workspaceOccupied[index] === true;
     }
 
     Connections {
-        target: SHyprland.workspaces
+        target: Hyprland.workspaces
         function onValuesChanged() {
             updateWorkspaceOccupied();
         }
@@ -47,7 +47,7 @@ Item {
 
             Rectangle {
                 Text {
-                    text: SHyprland.focusedWorkspace?.id.toString() == (index + 1).toString()
+                    text: Hyprland.focusedWorkspace?.id.toString() == (index + 1).toString()
                     // text: isActive(index)
                 }
                 implicitWidth: 10

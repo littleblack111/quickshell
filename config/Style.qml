@@ -36,8 +36,8 @@ Singleton {
     }
 
     component FontFamily: QtObject {
-		readonly property string symbols: "Symbols Nerd Font"
-		readonly property string iosevka: "Iosevka Nerd Font"
+        readonly property string symbols: "Symbols Nerd Font"
+        readonly property string iosevka: "Iosevka Nerd Font"
         readonly property string mono: "JetBrains Mono"
     }
 
@@ -82,4 +82,3 @@ Singleton {
         readonly property AnimDurations durations: AnimDurations {}
     }
 }
-

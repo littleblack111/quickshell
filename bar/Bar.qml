@@ -43,7 +43,7 @@ Scope {
                         id: leftRow
                         Layout.preferredWidth: 1
                         Layout.fillWidth: true
-                        spacing: 40
+                        spacing: 0
                         // Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
                         Workspace {
@@ -64,11 +64,7 @@ Scope {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.preferredWidth: 1
-                        Rectangle {
-                            Layout.fillWidth: true
-                            implicitHeight: 1
-                            color: "#000000"
-                        }
+                        ActiveWindow {}
                     }
                     RowLayout {
                         id: rightRow
