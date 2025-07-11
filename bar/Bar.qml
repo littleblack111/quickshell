@@ -48,12 +48,18 @@ Scope {
 
                         Workspace {
                             id: workspace
-                            Layout.preferredWidth: 3
+                            Layout.preferredWidth: 5
                             Layout.fillHeight: true
                             Layout.fillWidth: true
+                            Layout.maximumWidth: 400
                         }
                         Mpris {
                             id: mpris
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            Layout.preferredWidth: 1
+                        }
+                        Item {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             Layout.preferredWidth: 1

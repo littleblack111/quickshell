@@ -38,7 +38,7 @@ Item {
     RowLayout {
         id: layout
         implicitWidth: parent.width
-        height: Bar.height
+        anchors.verticalCenter: parent.verticalCenter
 
         spacing: 0
 

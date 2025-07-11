@@ -8,7 +8,6 @@ import qs.services
 
 Item {
     id: root
-    implicitWidth: parent.width
     height: Bar.height
     readonly property MprisPlayer activePlayer: SMpris.activePlayer
     readonly property string cleanedTitle: cleanMusicTitle(activePlayer?.trackTitle) || qsTr("No media")
@@ -47,7 +46,7 @@ Item {
     }
 
     Text {
-        anchors.centerIn: parent
+        anchors.verticalCenter: parent.verticalCenter
         text: root.state + " " + root.cleanedTitle + " [" + root.progress + "]"
     }
     // hover
