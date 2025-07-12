@@ -10,12 +10,7 @@ Item {
     id: root
     property var toplevel: ToplevelManager.activeToplevel
     property var icon: Quickshell.iconPath(AppSearch.guessIcon(toplevel?.appId), "image-missing")
-    anchors.verticalCenter: parent.verticalCenter
 
-    Rectangle {
-        anchors.fill: parent
-        color: "blue"
-    }
     RowLayout {
         anchors.fill: parent
 
@@ -29,6 +24,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
         Text {
+            // TOOD: if not exist, use lazyloader or something hide this
             text: root.toplevel?.title
         }
     }
