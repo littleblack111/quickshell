@@ -65,7 +65,7 @@ Scope {
                             Layout.preferredWidth: 1
                         }
                     }
-                    RowLayout {
+                    Item {
                         id: centerRow
                         Layout.fillWidth: true
                         Layout.fillHeight: true
@@ -76,11 +76,25 @@ Scope {
                         id: rightRow
                         Layout.fillWidth: true
                         Layout.preferredWidth: 1
-                        Rectangle {
+                        Cpu {
+                            Layout.fillHeight: true
                             Layout.fillWidth: true
-                            Text {
-                                text: "a"
-                            }
+                        }
+                        Memory {
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
+                        }
+                        Gpu {
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
+                        }
+                        Temp {
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
+                        }
+                        Network {
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
                         }
                     }
                 }

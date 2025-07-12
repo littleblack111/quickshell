@@ -11,5 +11,10 @@ Singleton {
     readonly property int leftMargin: Style.spacing.larger
     readonly property int rightMargin: Style.spacing.larger
 
+    readonly property int workspaceIconSize: 32
     readonly property int workspaces: 10
+
+    readonly property int appIconSize: 32
+
+    readonly property int resourceIconTextSpacing: 8
 }

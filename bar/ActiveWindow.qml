@@ -1,23 +1,35 @@
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Widgets
 import qs.utils
+import qs.config
 
 Item {
     id: root
     property var toplevel: ToplevelManager.activeToplevel
     property var icon: Quickshell.iconPath(AppSearch.guessIcon(toplevel?.appId), "image-missing")
+    anchors.verticalCenter: parent.verticalCenter
 
-    IconImage {
-        source: root.icon
-        implicitWidth: 32
-        implicitHeight: 32
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: 8
+    Rectangle {
+        anchors.fill: parent
+        color: "blue"
     }
-    Text {
-        text: root.toplevel?.title
+    RowLayout {
+        anchors.fill: parent
+
+        anchors.verticalCenter: parent.verticalCenter
+        IconImage {
+            source: root.icon
+            implicitWidth: Bar.appIconSize
+            implicitHeight: Bar.appIconSize
+            Layout.fillHeight: true
+            Layout.fillWidth: false
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        }
+        Text {
+            text: root.toplevel?.title
+        }
     }
 }

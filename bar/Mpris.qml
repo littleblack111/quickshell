@@ -2,7 +2,7 @@ import QtQuick.Layouts
 import QtQuick
 import Quickshell
 import Quickshell.Services.Mpris
-import qs.services
+import qs.services as Services
 import qs.config
 
 // import Quickshell.Utils
@@ -10,7 +10,7 @@ import qs.config
 Item {
     id: root
     height: Bar.height
-    readonly property MprisPlayer activePlayer: SMpris.activePlayer
+    readonly property MprisPlayer activePlayer: Services.Mpris.activePlayer
     readonly property string cleanedTitle: cleanMusicTitle(activePlayer?.trackTitle) || qsTr("No media")
     // length broken (https://github.com/quickshell-mirror/quickshell/issues/109)
     readonly property string position: friendlyTimeForSeconds(activePlayer?.position) || "0:00"

@@ -29,4 +29,38 @@ Singleton {
             mute: "",
             unmute: ""
         })
+
+    readonly property var wifi: ({
+            min: "󰤯",
+            low: "󰤟",
+            mid: "󰤢",
+            high: "󰤥",
+            max: "󰤨"
+        })
+
+    readonly property var network: ({
+            disconnected: "󰤭",
+            download: "",
+            upload: "",
+            wifi: wifi
+        })
+
+    readonly property var resource: ({
+            cpu: "",
+            memory: "󰍛",
+            disk: "",
+            gpu: "󱓞",
+            temp: "",
+            network: network,
+            clock: "",
+            calendar: ""
+        })
+
+    readonly property var power: ({
+            shutdown: "",
+            dpms: "󰶐",
+            lock: "󰍁",
+            suspend: "󰤄",
+            restart: ""
+        })
 }
