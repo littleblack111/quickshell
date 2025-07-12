@@ -60,7 +60,9 @@ Singleton {
     Component.onCompleted: {
         getRouteProcess.running = true;
         getNetDevProcess.running = true;
-        __iface = Network.defaultInterface(getRouteProcess.stdout.text);
-        __prev = Network.getRxTxBytes(getNetDevProcess.stdout.text, __iface);
+        if (getRouteProcess.stdout.text)
+            __iface = Network.defaultInterface(getRouteProcess.stdout.text);
+        if (getNetDevProcess.stdout.text)
+            __prev = Network.getRxTxBytes(getNetDevProcess.stdout.text, __iface);
     }
 }
