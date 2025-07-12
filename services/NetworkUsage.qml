@@ -4,7 +4,7 @@ pragma Singleton
 import Quickshell
 import Quickshell.Io
 import QtQuick
-import "networkUsage.js" as Network
+import "../utils/networkUsage.js" as Network
 import qs.config
 
 Singleton {

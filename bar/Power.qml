@@ -2,12 +2,11 @@ import QtQuick
 import QtQuick.Layouts
 
 import qs.services as Services
-import qs.components
+import qs.utils
 import qs.config as Config
 
 Item {
     id: root
-
     RowLayout {
         Item {
             Layout.fillWidth: true
@@ -16,16 +15,10 @@ Item {
         spacing: Config.Bar.resourceIconTextSpacing
 
         Icons {
-            text: Services.Network.state
+            text: Config.Icons.resource.clock
         }
         Text {
-            text: Math.round(Services.Resource.cpuUsage * 100)
-        }
-        Text {
-            text: Services.NetworkUsage.up + " " + Services.NetworkUsage.upUnit
-        }
-        Text {
-            text: Services.NetworkUsage.down + " " + Services.NetworkUsage.downUnit
+            text: Services.TimeDate.time
         }
         Item {
             Layout.fillWidth: true
