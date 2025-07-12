@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
 import QtQuick.Layouts
-import qs.utils
+import qs.components
 import qs.config
 
 Scope {
@@ -76,6 +76,10 @@ Scope {
                     implicitWidth: (child.width - centerRow.width) / 2
                     implicitHeight: child.height
 
+                    TimeDate {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                    }
                     Network {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
