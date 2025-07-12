@@ -63,8 +63,8 @@ Singleton {
             const cpuTempText = fileCpuThermal.text();
             cpuTemp = cpuTempText ? parseInt(cpuTempText.trim()) / 100000 : 0;
 
-            gpuUsageProcess.running = true;
-            gpuTempProcess.running = true;
+            gpuUsageProc.running = true;
+            gpuTempProc.running = true;
             interval = General.resourceUpdateInterval * 1000;
         }
     }
@@ -83,7 +83,7 @@ Singleton {
     }
     // nvidia-smi may be dead if firmware update so ABI break etc.
     Process {
-        id: gpuUsageProcess
+        id: gpuUsageProc
         running: true
         command: ["nvidia-smi", "--query-gpu=utilization.gpu", "--format=csv,noheader,nounits"]
         stdout: StdioCollector {
@@ -93,7 +93,7 @@ Singleton {
         }
     }
     Process {
-        id: gpuTempProcess
+        id: gpuTempProc
         running: true
         command: ["nvidia-smi", "--query-gpu=temperature.gpu", "--format=csv,noheader,nounits"]
         stdout: StdioCollector {

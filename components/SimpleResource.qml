@@ -20,6 +20,7 @@ RowLayout {
     Text {
         text: root.text
     }
+
     Item {
         Layout.fillWidth: true
     }

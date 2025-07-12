@@ -76,6 +76,10 @@ Scope {
                     implicitWidth: (child.width - centerRow.width) / 2
                     implicitHeight: child.height
 
+                    Power {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                    }
                     TimeDate {
                         Layout.fillHeight: true
                         Layout.fillWidth: true

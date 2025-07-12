@@ -61,6 +61,6 @@ Singleton {
             dpms: "󰶐",
             lock: "󰍁",
             suspend: "󰤄",
-            restart: ""
+            reboot: ""
         })
 }

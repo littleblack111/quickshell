@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import qs.services as Services
 import qs.utils
 import qs.config as Config
+import qs.components
 
 Item {
     id: root
@@ -15,11 +16,25 @@ Item {
         spacing: Config.Bar.resourceIconTextSpacing
 
         Icons {
-            text: Config.Icons.resource.clock
+            text: Config.Icons.power.shutdown
         }
-        Text {
-            text: Services.TimeDate.time
+
+        Icons {
+            text: Config.Icons.power.dpms
         }
+
+        Icons {
+            text: Config.Icons.power.lock
+        }
+
+        Icons {
+            text: Config.Icons.power.suspend
+        }
+
+        Icons {
+            text: Config.Icons.power.reboot
+        }
+
         Item {
             Layout.fillWidth: true
         }
