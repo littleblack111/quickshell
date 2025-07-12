@@ -1,7 +1,7 @@
 pragma Singleton
 
-import "fuzzysort.js" as Fuzzy
-import "levendist.js" as Levendist
+import "../utils/fuzzysort.js" as Fuzzy
+import "../utils/levendist.js" as Levendist
 import Quickshell
 import Quickshell.Io
 import qs.config
