@@ -16,5 +16,5 @@ Singleton {
 
     readonly property int appIconSize: 32
 
-    readonly property int resourceIconTextSpacing: 8
+    readonly property int resourceIconTextSpacing: Style.spacing.small
 }

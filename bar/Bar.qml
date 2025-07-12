@@ -35,67 +35,70 @@ Scope {
                     leftMargin: Bar.leftMargin
                     rightMargin: Bar.rightMargin
                 }
+
                 RowLayout {
-                    id: rowLayout
-                    anchors.fill: parent
+                    id: leftRow
+                    implicitWidth: (child.width - centerRow.width) / 2
+                    implicitHeight: child.height
 
-                    RowLayout {
-                        id: leftRow
-                        Layout.preferredWidth: 1
+                    Workspace {
+                        id: workspace
+                        Layout.preferredWidth: 5
+                        Layout.fillHeight: true
                         Layout.fillWidth: true
-                        spacing: 0
-                        // Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-
-                        Workspace {
-                            id: workspace
-                            Layout.preferredWidth: 5
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                            Layout.maximumWidth: 400
-                        }
-                        Mpris {
-                            id: mpris
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            Layout.preferredWidth: 1
-                        }
-                        Item {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            Layout.preferredWidth: 1
-                        }
+                        Layout.maximumWidth: 400 // FIXME
                     }
-                    Item {
-                        id: centerRow
+                    Mpris {
+                        id: mpris
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.preferredWidth: 1
-                        ActiveWindow {}
                     }
-                    RowLayout {
-                        id: rightRow
+                    Item {
                         Layout.fillWidth: true
+                        Layout.fillHeight: true
                         Layout.preferredWidth: 1
-                        Cpu {
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                        }
-                        Memory {
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                        }
-                        Gpu {
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                        }
-                        Temp {
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                        }
-                        Network {
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                        }
+                    }
+                }
+
+                Item {
+                    id: centerRow
+                    anchors.centerIn: parent
+                    ActiveWindow {
+                        anchors.fill: parent
+                    }
+                }
+
+                RowLayout {
+                    id: rightRow
+                    anchors.right: parent.right
+                    layoutDirection: Qt.RightToLeft
+                    implicitWidth: (child.width - centerRow.width) / 2
+                    implicitHeight: child.height
+
+                    Cpu {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                    }
+                    Memory {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                    }
+                    Gpu {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                    }
+                    Temp {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                    }
+                    Network {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                    }
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
                     }
                 }
             }

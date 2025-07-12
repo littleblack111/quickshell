@@ -12,7 +12,8 @@ Item {
     property var icon: Quickshell.iconPath(AppSearch.guessIcon(toplevel?.appId), "image-missing")
 
     RowLayout {
-        anchors.fill: parent
+        anchors.centerIn: parent
+        spacing: Bar.resourceIconTextSpacing
 
         anchors.verticalCenter: parent.verticalCenter
         IconImage {
