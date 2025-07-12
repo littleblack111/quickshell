@@ -76,15 +76,7 @@ Scope {
                     implicitWidth: (child.width - centerRow.width) / 2
                     implicitHeight: child.height
 
-                    Cpu {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                    }
-                    Memory {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                    }
-                    Gpu {
+                    Network {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                     }
@@ -92,10 +84,19 @@ Scope {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                     }
-                    Network {
+                    Gpu {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                     }
+                    Memory {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                    }
+                    Cpu {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                    }
+
                     Item {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
