@@ -47,6 +47,7 @@ Item {
     }
 
     implicitWidth: rect.width + 3 // +3 cause it look better somehow
+    implicitHeight: Bar.height
 
     // TODO fancy animation progress bar etc.
     Rectangle {
@@ -54,7 +55,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         // TODO: move to IRect
         implicitWidth: text.width + General.rectMargin * 2
-        implicitHeight: parent.height
+        implicitHeight: parent.height - General.rectMargin
         color: Colors.alt
         radius: Style.rounding.smaller
         Text {
