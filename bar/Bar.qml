@@ -36,23 +36,32 @@ Scope {
                     rightMargin: Bar.rightMargin
                 }
 
+                color: "transparent"
+
+                Rectangle {
+                    id: barBackground
+                    anchors {
+                        left: parent.left
+                    }
+                    implicitWidth: workspace.width + mpris.width
+                    implicitHeight: leftRow.height
+                    color: Qt.rgba(Colors.r, Colors.g, Colors.b, Bar.bgTransparency)
+                    radius: Bar.moduleRadius
+                }
+
                 RowLayout {
                     id: leftRow
+                    anchors.left: parent.left
+                    anchors.leftMargin: 20
                     implicitWidth: (child.width - centerRow.width) / 2
                     implicitHeight: child.height
 
                     Workspace {
                         id: workspace
-                        Layout.preferredWidth: 5
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        Layout.maximumWidth: 400 // FIXME
+                        Layout.minimumWidth: 400 // FIXME
                     }
                     Mpris {
                         id: mpris
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Layout.preferredWidth: 1
                     }
                     Item {
                         Layout.fillWidth: true

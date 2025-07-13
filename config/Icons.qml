@@ -15,6 +15,7 @@ Singleton {
             7: "",
             8: "",
             9: "",
+            10: "",
             urgent: "",
             active: "",
             default: " "

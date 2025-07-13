@@ -2,7 +2,8 @@ import QtQuick.Layouts
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
-import qs.config
+import qs.config as Config
+import qs.components
 
 Item {
     id: root
@@ -14,13 +15,14 @@ Item {
         //     return Hyprland.workspaces.values.some(ws => ws.id === workspaceGroup * Config.options.bar.workspaces.shown + i + 1);
         // })
         workspaceOccupied = Array.from({
-            length: Bar.workspaces
+            length: Config.Bar.workspaces
         }, (_, i) => {
             return Hyprland.workspaces.values.some(ws => ws?.id === (i + 1));
         });
     }
+    // dont work no more for some reason
     function isActive(index: int): bool {
-        Hyprland.focusedWorkspace?.id.toString() == (index + 1).toString();
+        return Hyprland.focusedWorkspace?.id === (index + 1);
     }
     function isOccupied(index: int): bool {
         return workspaceOccupied[index] === true;
@@ -37,24 +39,35 @@ Item {
 
     RowLayout {
         id: layout
-        implicitWidth: parent.width
+        implicitWidth: childrenRect.width
         anchors.verticalCenter: parent.verticalCenter
 
-        spacing: 0
+        spacing: Config.Bar.workspaceSpacing
 
         Repeater {
-            model: Bar.workspaces
+            model: Config.Bar.workspaces
 
             Rectangle {
-                Text {
-                    text: Hyprland.focusedWorkspace?.id.toString() == (index + 1).toString()
-                    // text: isActive(index)
+                id: workspaceRect
+                // text: Hyprland.focusedWorkspace?.id.toString() == (index + 1).toString()
+                // text: isActive(index)
+
+                implicitWidth: !isActive(index) ? Config.Bar.workspaceIconSize : Config.Bar.workspaceActiveIconSize
+                implicitHeight: Config.Bar.workspaceIconSize - 10
+                anchors {
+                    topMargin: 20
                 }
-                implicitWidth: 10
-                implicitHeight: 10
-                opacity: !isOccupied(index) ? 0.2 : 1
-                // color: isActive(index) ? "#00ff00" : "#ffffff"
-                color: "#000000"
+                radius: Config.Bar.workspaceRounding
+                Icons {
+                    anchors.centerIn: parent
+                    text: Config.Icons.ws[index + 1]
+                    font.pixelSize: Config.Bar.workspaceIconSize / 1.9
+                    color: Config.Colors.foreground // TODO make IText w/ ts default color
+                    // opacity: !isOccupied(index) ? 0 : 1 // less contrast
+                    opacity: isActive(index) ? Config.Bar.workspaceActiveOpacity : isOccupied(index) ? Config.Bar.workspaceOpacity : Config.Bar.workspaceEmptyOpacity
+                }
+                color: isOccupied(index) ? Config.Colors.alt : Config.Colors.foreground
+                opacity: isActive(index) ? Config.Bar.workspaceActiveOpacity : isOccupied(index) ? Config.Bar.workspaceOpacity : Config.Bar.workspaceEmptyOpacity
             }
         }
     }
