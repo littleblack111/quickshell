@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Services.Mpris
 import qs.services as Services
 import qs.config
+import qs.components
 
 // import Quickshell.Utils
 
@@ -53,14 +54,13 @@ Item {
         id: rect
         anchors.verticalCenter: parent.verticalCenter
         // TODO: move to IRect
-        implicitWidth: text.width + General.rectMargin * 2
+        implicitWidth: text.width + General.rectMargin * 4
         height: parent.height - General.rectMargin
         color: Colors.alt
         radius: Style.rounding.smaller
-        Text {
+        IText {
             id: text
             // TODO: use IText
-            font.pixelSize: General.fontSize
             anchors.centerIn: parent
             anchors.verticalCenter: parent.verticalCenter
             text: root.state + " " + root.cleanedTitle + " [" + root.progress + "]"

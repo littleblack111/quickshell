@@ -34,23 +34,29 @@ Item {
 
             Icons {
                 text: Config.Icons.power.shutdown
+                font.pixelSize: Config.Style.font.size.large
+                color: Qt.rgba(191, 97, 106, 1)
             }
 
-            Icons {
-                text: Config.Icons.power.dpms
-            }
-
-            Icons {
-                text: Config.Icons.power.lock
-            }
-
-            Icons {
-                text: Config.Icons.power.suspend
-            }
-
-            Icons {
-                text: Config.Icons.power.reboot
-            }
+            // Icons {
+            //     text: Config.Icons.power.dpms
+            //     font.pixelSize: Config.Style.fontSize.large
+            // }
+            //
+            // Icons {
+            //     text: Config.Icons.power.lock
+            //     font.pixelSize: Config.Style.fontSize.large
+            // }
+            //
+            // Icons {
+            //     text: Config.Icons.power.suspend
+            //     font.pixelSize: Config.Style.fontSize.large
+            // }
+            //
+            // Icons {
+            //     text: Config.Icons.power.reboot
+            //     font.pixelSize: Config.Style.fontSize.large
+            // }
 
             Item {
                 Layout.fillWidth: true

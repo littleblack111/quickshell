@@ -12,7 +12,7 @@ Scope {
 
         IWindow {
             id: barWindow
-            name: "Bar"
+            name: "quickshell:bar"
 
             anchors {
                 top: true
@@ -108,9 +108,9 @@ Scope {
                     Power {
                         id: power
                     }
-                    Tray {
-                        id: tray
-                    }
+                    // Tray {
+                    //     id: tray
+                    // }
                     TimeDate {
                         id: timeDate
                     }

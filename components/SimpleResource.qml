@@ -34,7 +34,7 @@ Item {
             Icons {
                 text: root.icon
             }
-            Text {
+            IText {
                 text: root.text
             }
 

@@ -34,7 +34,7 @@ Item {
                 text: Config.Icons.resource.clock
                 font.pixelSize: Config.Style.font.size.larger
             }
-            Text {
+            IText {
                 text: Services.TimeDate.time
             }
             Item {

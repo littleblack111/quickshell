@@ -41,19 +41,19 @@ Item {
 
             RowLayout {
                 spacing: Config.Bar.resourceIconTextSpacing / 2
-                Text {
+                IText {
                     text: Config.Icons.resource.network.download
                 }
-                Text {
+                IText {
                     text: Services.NetworkUsage.down + Services.NetworkUsage.downUnit
                 }
             }
             RowLayout {
                 spacing: Config.Bar.resourceIconTextSpacing / 2
-                Text {
+                IText {
                     text: Config.Icons.resource.network.upload
                 }
-                Text {
+                IText {
                     text: Services.NetworkUsage.up + Services.NetworkUsage.upUnit
                 }
             }

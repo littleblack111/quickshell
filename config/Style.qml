@@ -47,6 +47,7 @@ Singleton {
         readonly property int smaller: 12
         readonly property int normal: 13
         readonly property int larger: 15
+        readonly property int largerr: 16
         readonly property int large: 18
         readonly property int extraLarge: 28
     }

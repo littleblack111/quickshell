@@ -3,14 +3,15 @@ import QtQuick.Layouts
 
 import qs.config
 
-Text {
+IText {
     id: root
     property real iconSize: General.iconSize
     property real fill: 0
     property real truncatedFill: Math.round(fill * 100) / 100 // Reduce memory consumption spikes from constant font remapping
     renderType: Text.NativeRendering
     font {
-        hintingPreference: Font.PreferFullHinting
+        // hintingPreference: Font.PreferFullHinting
+        hintingPreference: Font.PreferNoHinting // so the icons dont just offset away
         family: Style.font.family.symbols ?? "Symbols Nerd Font"
         pixelSize: iconSize
         weight: Font.Normal + (Font.DemiBold - Font.Normal) * fill

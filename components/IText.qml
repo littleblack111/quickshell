@@ -1,15 +1,55 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
-import QtQuick.Layouts
 import qs.config
 
 Text {
+    id: root
+
+    property bool animate: false
+    property string animateProp: "scale"
+    property real animateFrom: 0
+    property real animateTo: 1
+    property int animateDuration: Style.anim.durations.normal
+
     renderType: Text.NativeRendering
-    verticalAlignment: Text.AlignVCenter
+    textFormat: Text.PlainText
+    color: Colors.foreground
+
     font {
-        hintingPreference: Font.PreferFullHinting
-        family: Appearance?.font.family.main ?? "sans-serif"
-        pixelSize: Appearance?.font.pixelSize.small ?? 15
+        family: Style.font.family.iosevka
+        // pointSize: root.pixelSize
+        pixelSize: Style.font.size.largerr
     }
-    color: Appearance?.m3colors.m3onBackground ?? "black"
-    linkColor: Appearance?.m3colors.m3primary
+
+    Behavior on color {
+        ColorAnimation {
+            duration: Style.anim.durations.normal
+            easing.type: Easing.BezierSpline
+            easing.bezierCurve: Style.anim.curves.standard
+        }
+    }
+
+    Behavior on text {
+        enabled: root.animate
+
+        SequentialAnimation {
+            Anim {
+                to: root.animateFrom
+                easing.bezierCurve: Appearance.anim.curves.standardAccel
+            }
+            PropertyAction {}
+            Anim {
+                to: root.animateTo
+                easing.bezierCurve: Appearance.anim.curves.standardDecel
+            }
+        }
+    }
+
+    component Anim: NumberAnimation {
+        target: root
+        property: root.animateProp
+        duration: root.animateDuration / 2
+        easing.type: Easing.BezierSpline
+    }
 }
