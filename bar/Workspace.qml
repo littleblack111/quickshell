@@ -2,12 +2,16 @@ import QtQuick.Layouts
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Wayland
 import qs.config as Config
 import qs.components
 
 Item {
     id: root
 
+    // required property ShellScreen screen // multi monitor
+
+    // readonly property HyprlandMonitor monitor: Hyprland.monitorFor(screen) // multi monitor
     property list<bool> workspaceOccupied: []
 
     function updateWorkspaceOccupied() {
@@ -23,10 +27,19 @@ Item {
     // dont work no more for some reason
     function isActive(index: int): bool {
         return Hyprland.focusedWorkspace?.id === (index + 1);
+    // return monitor.activeWorkspace.id === (index + 1); // multi monitor
     }
     function isOccupied(index: int): bool {
         return workspaceOccupied[index] === true;
     }
+
+    // TODO: allow specific index after tl can do that
+    // function isEmpty(): bool {
+    //     for (let i of ToplevelManager.toplevels.values)
+    //         if (i.activated)
+    //             return false;
+    //     return true;
+    // }
 
     Connections {
         target: Hyprland.workspaces
@@ -36,6 +49,8 @@ Item {
     }
 
     Component.onCompleted: updateWorkspaceOccupied()
+
+    implicitWidth: layout.implicitWidth
 
     RowLayout {
         id: layout
@@ -54,18 +69,16 @@ Item {
 
                 implicitWidth: !isActive(index) ? Config.Bar.workspaceIconSize : Config.Bar.workspaceActiveIconSize
                 implicitHeight: Config.Bar.workspaceIconSize - 10
-                anchors {
-                    topMargin: 20
-                }
                 radius: Config.Bar.workspaceRounding
                 Icons {
                     anchors.centerIn: parent
                     text: Config.Icons.ws[index + 1]
                     font.pixelSize: Config.Bar.workspaceIconSize / 1.9
                     color: Config.Colors.foreground // TODO make IText w/ ts default color
-                    // opacity: !isOccupied(index) ? 0 : 1 // less contrast
-                    opacity: isActive(index) ? Config.Bar.workspaceActiveOpacity : isOccupied(index) ? Config.Bar.workspaceOpacity : Config.Bar.workspaceEmptyOpacity
+                    opacity: !isOccupied(index) ? 0 : 1 // less contrast
+                    // opacity: isActive(index) ? Config.Bar.workspaceActiveOpacity : isOccupied(index) ? Config.Bar.workspaceOpacity : Config.Bar.workspaceEmptyOpacity
                 }
+
                 color: isOccupied(index) ? Config.Colors.alt : Config.Colors.foreground
                 opacity: isActive(index) ? Config.Bar.workspaceActiveOpacity : isOccupied(index) ? Config.Bar.workspaceOpacity : Config.Bar.workspaceEmptyOpacity
             }

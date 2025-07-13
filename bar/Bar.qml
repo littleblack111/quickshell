@@ -11,6 +11,7 @@ Scope {
         model: Quickshell.screens
 
         IWindow {
+            id: barWindow
             name: "Bar"
 
             anchors {
@@ -43,7 +44,7 @@ Scope {
                     anchors {
                         left: parent.left
                     }
-                    implicitWidth: workspace.width + mpris.width
+                    implicitWidth: workspace.width + leftRow.anchors.leftMargin + mpris.width
                     implicitHeight: leftRow.height
                     color: Qt.rgba(Colors.r, Colors.g, Colors.b, Bar.bgTransparency)
                     radius: Bar.moduleRadius
@@ -58,7 +59,8 @@ Scope {
 
                     Workspace {
                         id: workspace
-                        Layout.minimumWidth: 400 // FIXME
+                        // screen: barWindow.screen // multi monitor
+                        // Layout.minimumWidth: 400 // FIXME
                     }
                     Mpris {
                         id: mpris
