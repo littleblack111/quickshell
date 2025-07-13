@@ -14,19 +14,14 @@ Item {
 
     // readonly property HyprlandMonitor monitor: Hyprland.monitorFor(screen) // multi monitor
     // dont work no more for some reason
-    function isActive(index: int): bool {
-        for (let i of ws.values)
-            if (i.id === (index + 1) && i.active)
-                return true;
-        return false;
-    }
-    function isOccupied(index: int): bool {
-        for (let i of ws.values) {
-            if (i.id === (index + 1) && i?.toplevels?.values?.length > 0) {
-                return true;
-            }
-        }
-        return false;
+
+    function getWorkspaceStats(index) {
+        const w = ws.values.find(i => i.id === index + 1);
+        return {
+            isOccupied: !!(w?.toplevels?.values?.length),
+            isActive: !!w?.active,
+            isUrgent: !!w?.urgent
+        };
     }
 
     implicitWidth: layout.implicitWidth
@@ -43,8 +38,9 @@ Item {
 
             Rectangle {
                 id: workspaceRect
+                property var st: getWorkspaceStats(index)
 
-                implicitWidth: !isActive(index) ? Config.Bar.workspaceIconSize : Config.Bar.workspaceActiveIconSize
+                implicitWidth: !st?.isActive ? Config.Bar.workspaceIconSize : Config.Bar.workspaceActiveIconSize
                 implicitHeight: Config.Bar.workspaceIconSize - Config.Bar.workspaceHorizontalSpacing
                 radius: Config.Bar.workspaceRounding
                 Icons {
@@ -52,12 +48,12 @@ Item {
                     text: Config.Icons.ws[index + 1]
                     font.pixelSize: Config.Bar.workspaceIconSize / 2
                     color: Config.Colors.foreground // TODO make IText w/ ts default color
-                    opacity: !isOccupied(index) ? 0 : 1 // less contrast
+                    opacity: !st?.isOccupied ? 0 : 1 // less contrast?
                     // opacity: isActive(index) ? Config.Bar.workspaceActiveOpacity : isOccupied(index) ? Config.Bar.workspaceOpacity : Config.Bar.workspaceEmptyOpacity
                 }
 
-                color: isOccupied(index) ? Config.Colors.alt : Config.Colors.foreground
-                opacity: isActive(index) && isOccupied(index) ? Config.Bar.workspaceActiveOpacity : isOccupied(index) ? Config.Bar.workspaceOpacity : Config.Bar.workspaceEmptyOpacity
+                color: st?.isOccupied ? Config.Colors.alt : Config.Colors.foreground
+                opacity: st?.isActive && st?.isOccupied ? Config.Bar.workspaceActiveOpacity : st?.isOccupied ? Config.Bar.workspaceOpacity : Config.Bar.workspaceEmptyOpacity
             }
         }
     }
