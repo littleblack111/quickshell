@@ -40,11 +40,10 @@ Scope {
                 color: "transparent"
 
                 Rectangle {
-                    id: leftBackground
                     anchors {
                         left: parent.left
                     }
-                    implicitWidth: workspace.width + leftRow.anchors.leftMargin + leftRow.anchors.rightMargin + leftRow.spacing + mpris.width
+                    implicitWidth: leftRow.width + leftRow.spacing - leftSpacer.width
                     implicitHeight: leftRow.height
                     color: Qt.rgba(Colors.background.r, Colors.background.g, Colors.background.b, Bar.bgTransparency)
                     radius: Bar.moduleRadius
@@ -52,9 +51,10 @@ Scope {
 
                 RowLayout {
                     id: leftRow
-                    anchors.left: parent.left
-                    anchors.leftMargin: Bar.moduleLeftMargin
-                    anchors.rightMargin: Bar.moduleRightMargin // does nothing but more consistent code style (as leftRow's right is middle but leftRow will never reach middle)
+                    anchors {
+                        left: parent.left
+                        leftMargin: Bar.moduleLeftMargin
+                    }
                     implicitWidth: (child.width - centerRow.width) / 2
                     implicitHeight: child.height
                     spacing: Bar.leftModuleSpacing
@@ -68,9 +68,9 @@ Scope {
                         id: mpris
                     }
                     Item {
+                        id: leftSpacer
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        Layout.preferredWidth: 1
                     }
                 }
 
@@ -88,6 +88,17 @@ Scope {
                     }
                 }
 
+                Rectangle {
+                    anchors {
+                        right: parent.right
+                        rightMargin: Bar.moduleRightMargin
+                    }
+                    implicitWidth: power.width + tray.width + timeDate.width + network.width + temp.width + gpu.width + memory.width + cpu.width
+                    implicitHeight: leftRow.height
+                    color: Qt.rgba(Colors.background.r, Colors.background.g, Colors.background.b, Bar.bgTransparency)
+                    radius: Bar.moduleRadius
+                }
+
                 RowLayout {
                     id: rightRow
                     anchors.right: parent.right
@@ -96,42 +107,31 @@ Scope {
                     implicitHeight: child.height
 
                     Power {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
+                        id: power
                     }
                     Tray {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
+                        id: tray
                     }
                     TimeDate {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
+                        id: timeDate
                     }
                     Network {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
+                        id: network
                     }
                     Temp {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
+                        id: temp
                     }
                     Gpu {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
+                        id: gpu
                     }
                     Memory {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
+                        id: memory
                     }
                     Cpu {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
+                        id: cpu
                     }
 
-                    Item {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                    }
+                    Item {}
                 }
             }
         }
