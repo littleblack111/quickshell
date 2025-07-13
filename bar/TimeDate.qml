@@ -3,11 +3,11 @@ import QtQuick.Layouts
 
 import qs.services as Services
 import qs.components
-import qs.config as Config
+import qs.config
 
 Item {
     implicitWidth: container.implicitWidth
-    implicitHeight: container.implicitHeight - Config.General.rectMargin
+    implicitHeight: container.implicitHeight - General.rectMargin
     Rectangle {
         id: container
         anchors {
@@ -16,11 +16,11 @@ Item {
             horizontalCenter: parent.horizontalCenter
         }
 
-        implicitWidth: layout.implicitWidth + Config.General.rectMargin * 2
-        implicitHeight: Config.Bar.height
+        implicitWidth: layout.implicitWidth + General.rectMargin * 2
+        implicitHeight: Bar.height
 
-        color: Config.Colors.alt
-        radius: Config.Style.rounding.large
+        color: Colors.alt
+        radius: Style.rounding.large
 
         RowLayout {
             id: layout
@@ -28,11 +28,11 @@ Item {
                 Layout.fillWidth: true
             }
             anchors.fill: parent
-            spacing: Config.Bar.resourceIconTextSpacing
+            spacing: Bar.resourceIconTextSpacing
 
-            Icons {
-                text: Config.Icons.resource.clock
-                font.pixelSize: Config.Style.font.size.larger
+            Icon {
+                text: Icons.resource.clock
+                font.pixelSize: Style.font.size.larger
             }
             IText {
                 text: Services.TimeDate.time

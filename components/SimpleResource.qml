@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
 import QtQuick.Layouts
-import qs.config as Config
+import qs.config
 import qs.components
 
 Item {
@@ -15,23 +15,23 @@ Item {
 
     Rectangle {
         id: container
-        implicitWidth: layout.implicitWidth + Config.General.rectMargin * 2
-        implicitHeight: Config.Bar.height - Config.General.rectMargin
+        implicitWidth: layout.implicitWidth + General.rectMargin * 2
+        implicitHeight: Bar.height - General.rectMargin
 
-        color: Config.Colors.alt
-        radius: Config.Style.rounding.large
+        color: Colors.alt
+        radius: Style.rounding.large
 
         RowLayout {
             id: layout
             anchors.centerIn: parent
 
-            spacing: Config.Bar.resourceIconTextSpacing
+            spacing: Bar.resourceIconTextSpacing
 
             Item {
                 Layout.fillWidth: true
             }
 
-            Icons {
+            Icon {
                 text: root.icon
             }
             IText {

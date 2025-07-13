@@ -3,7 +3,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Wayland
-import qs.config as Config
+import qs.config
 import qs.components
 
 Item {
@@ -31,29 +31,29 @@ Item {
         implicitWidth: childrenRect.width
         anchors.verticalCenter: parent.verticalCenter
 
-        spacing: Config.Bar.workspaceSpacing
+        spacing: Bar.workspaceSpacing
 
         Repeater {
-            model: Config.Bar.workspaces
+            model: Bar.workspaces
 
             Rectangle {
                 id: workspaceRect
                 property var st: getWorkspaceStats(index)
 
-                implicitWidth: !st.isActive ? Config.Bar.workspaceIconSize : Config.Bar.workspaceActiveIconSize
-                implicitHeight: Config.Bar.workspaceIconSize - Config.Bar.workspaceHorizontalSpacing
-                radius: Config.Bar.workspaceRounding
-                Icons {
+                implicitWidth: !st.isActive ? Bar.workspaceIconSize : Bar.workspaceActiveIconSize
+                implicitHeight: Bar.workspaceIconSize - Bar.workspaceHorizontalSpacing
+                radius: Bar.workspaceRounding
+                Icon {
                     anchors.centerIn: parent
-                    text: !st.isUrgent ? Config.Icons.ws[index + 1] : Config.Icons.ws['urgent'] // TODO: urgent = red
-                    font.pixelSize: Config.Bar.workspaceIconSize / 2
-                    color: Config.Colors.foreground // TODO make IText w/ ts default color
+                    text: !st.isUrgent ? Icons.ws[index + 1] : Icons.ws['urgent'] // TODO: urgent = red
+                    font.pixelSize: Bar.workspaceIconSize / 2
+                    color: Colors.foreground // TODO make IText w/ ts default color
                     opacity: !st.isOccupied ? 0 : 1 // less contrast
-                    // opacity: isActive(index) ? Config.Bar.workspaceActiveOpacity : isOccupied(index) ? Config.Bar.workspaceOpacity : Config.Bar.workspaceEmptyOpacity
+                    // opacity: isActive(index) ? Bar.workspaceActiveOpacity : isOccupied(index) ? Bar.workspaceOpacity : Bar.workspaceEmptyOpacity
                 }
 
-                color: st.isOccupied ? Config.Colors.alt : Config.Colors.foreground
-                opacity: st.isActive && st.isOccupied ? Config.Bar.workspaceActiveOpacity : st.isOccupied ? Config.Bar.workspaceOpacity : Config.Bar.workspaceEmptyOpacity
+                color: st.isOccupied ? Colors.alt : Colors.foreground
+                opacity: st.isActive && st.isOccupied ? Bar.workspaceActiveOpacity : st.isOccupied ? Bar.workspaceOpacity : Bar.workspaceEmptyOpacity
             }
         }
     }

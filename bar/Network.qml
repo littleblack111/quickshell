@@ -3,12 +3,12 @@ import QtQuick.Layouts
 
 import qs.services as Services
 import qs.components
-import qs.config as Config
+import qs.config
 
 Item {
 
     implicitWidth: container.implicitWidth
-    implicitHeight: container.implicitHeight - Config.General.rectMargin
+    implicitHeight: container.implicitHeight - General.rectMargin
 
     Rectangle {
         id: container
@@ -18,10 +18,10 @@ Item {
             horizontalCenter: parent.horizontalCenter
         }
 
-        implicitWidth: layout.implicitWidth + Config.General.rectMargin * 2
-        implicitHeight: Config.Bar.height
-        color: Config.Colors.alt
-        radius: Config.Style.rounding.large
+        implicitWidth: layout.implicitWidth + General.rectMargin * 2
+        implicitHeight: Bar.height
+        color: Colors.alt
+        radius: Style.rounding.large
 
         RowLayout {
             id: layout
@@ -29,29 +29,29 @@ Item {
                 verticalCenter: parent.verticalCenter
                 horizontalCenter: parent.horizontalCenter
             }
-            spacing: Config.Bar.resourceIconTextSpacing
+            spacing: Bar.resourceIconTextSpacing
 
             Item {
                 Layout.fillWidth: true
             }
 
-            Icons {
+            Icon {
                 text: Services.Network.state
             }
 
             RowLayout {
-                spacing: Config.Bar.resourceIconTextSpacing / 2
+                spacing: Bar.resourceIconTextSpacing / 2
                 IText {
-                    text: Config.Icons.resource.network.download
+                    text: Icons.resource.network.download
                 }
                 IText {
                     text: Services.NetworkUsage.down + Services.NetworkUsage.downUnit
                 }
             }
             RowLayout {
-                spacing: Config.Bar.resourceIconTextSpacing / 2
+                spacing: Bar.resourceIconTextSpacing / 2
                 IText {
-                    text: Config.Icons.resource.network.upload
+                    text: Icons.resource.network.upload
                 }
                 IText {
                     text: Services.NetworkUsage.up + Services.NetworkUsage.upUnit
