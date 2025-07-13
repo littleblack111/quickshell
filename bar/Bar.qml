@@ -40,13 +40,13 @@ Scope {
                 color: "transparent"
 
                 Rectangle {
-                    id: barBackground
+                    id: leftBackground
                     anchors {
                         left: parent.left
                     }
                     implicitWidth: workspace.width + leftRow.anchors.leftMargin + leftRow.anchors.rightMargin + leftRow.spacing + mpris.width
                     implicitHeight: leftRow.height
-                    color: Qt.rgba(Colors.r, Colors.g, Colors.b, Bar.bgTransparency)
+                    color: Qt.rgba(Colors.background.r, Colors.background.g, Colors.background.b, Bar.bgTransparency)
                     radius: Bar.moduleRadius
                 }
 
@@ -90,6 +90,10 @@ Scope {
                     implicitHeight: child.height
 
                     Power {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                    }
+                    Tray {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                     }
