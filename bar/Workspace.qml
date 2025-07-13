@@ -68,12 +68,12 @@ Item {
                 // text: isActive(index)
 
                 implicitWidth: !isActive(index) ? Config.Bar.workspaceIconSize : Config.Bar.workspaceActiveIconSize
-                implicitHeight: Config.Bar.workspaceIconSize - 10
+                implicitHeight: Config.Bar.workspaceIconSize - Config.Bar.workspaceHorizontalSpacing
                 radius: Config.Bar.workspaceRounding
                 Icons {
                     anchors.centerIn: parent
                     text: Config.Icons.ws[index + 1]
-                    font.pixelSize: Config.Bar.workspaceIconSize / 1.9
+                    font.pixelSize: Config.Bar.workspaceIconSize / 2
                     color: Config.Colors.foreground // TODO make IText w/ ts default color
                     opacity: !isOccupied(index) ? 0 : 1 // less contrast
                     // opacity: isActive(index) ? Config.Bar.workspaceActiveOpacity : isOccupied(index) ? Config.Bar.workspaceOpacity : Config.Bar.workspaceEmptyOpacity

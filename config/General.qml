@@ -12,4 +12,8 @@ Singleton {
     readonly property real iconSize: Style.font.size.small ?? 16
 
     readonly property string cpuThermalPath: "/sys/class/thermal/thermal_zone0/temp"
+
+    readonly property int rectMargin: Style.spacing.small
+
+    readonly property int fontSize: Style.font.size.larger
 }

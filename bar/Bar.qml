@@ -44,7 +44,7 @@ Scope {
                     anchors {
                         left: parent.left
                     }
-                    implicitWidth: workspace.width + leftRow.anchors.leftMargin + mpris.width
+                    implicitWidth: workspace.width + leftRow.anchors.leftMargin + leftRow.anchors.rightMargin + leftRow.spacing + mpris.width
                     implicitHeight: leftRow.height
                     color: Qt.rgba(Colors.r, Colors.g, Colors.b, Bar.bgTransparency)
                     radius: Bar.moduleRadius
@@ -53,9 +53,11 @@ Scope {
                 RowLayout {
                     id: leftRow
                     anchors.left: parent.left
-                    anchors.leftMargin: 20
+                    anchors.leftMargin: Bar.moduleLeftMargin
+                    anchors.rightMargin: Bar.moduleRightMargin // does nothing but more consistent code style (as leftRow's right is middle but leftRow will never reach middle)
                     implicitWidth: (child.width - centerRow.width) / 2
                     implicitHeight: child.height
+                    spacing: Bar.leftModuleSpacing
 
                     Workspace {
                         id: workspace

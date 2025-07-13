@@ -46,10 +46,27 @@ Item {
         }
     }
 
-    Text {
+    implicitWidth: rect.width + 3 // +3 cause it look better somehow
+
+    // TODO fancy animation progress bar etc.
+    Rectangle {
+        id: rect
         anchors.verticalCenter: parent.verticalCenter
-        text: root.state + " " + root.cleanedTitle + " [" + root.progress + "]"
+        // TODO: move to IRect
+        implicitWidth: text.width + General.rectMargin * 2
+        implicitHeight: parent.height
+        color: Colors.alt
+        radius: Style.rounding.smaller
+        Text {
+            id: text
+            // TODO: use IText
+            font.pixelSize: General.fontSize
+            anchors.centerIn: parent
+            anchors.verticalCenter: parent.verticalCenter
+            text: root.state + " " + root.cleanedTitle + " [" + root.progress + "]"
+        }
     }
+
     // hover
     // Text {
     //     text: root.activePlayer.trackTitle + " by " + root.activePlayer.trackArtist + " - " + root.activePlayer.trackAlbum + root.activePlayer.position + "/" + root.activePlayer.length
