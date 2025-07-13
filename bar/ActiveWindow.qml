@@ -34,7 +34,7 @@ Item {
             // TOOD: if not exist, use lazyloader or something hide this
             // TODO: use IText
             font.pixelSize: General.fontSize
-            text: root.toplevel?.title
+            text: root?.toplevel?.title
         }
     }
 }
