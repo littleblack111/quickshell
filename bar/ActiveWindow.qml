@@ -1,15 +1,15 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Wayland
+import Quickshell.Hyprland
 import Quickshell.Widgets
 import qs.components
 import qs.config
 
 Item {
     id: root
-    property var toplevel: ToplevelManager.activeToplevel
-    property var icon: Quickshell.iconPath(AppSearch.guessIcon(toplevel?.appId), "image-missing")
+    property var toplevel: Hyprland.activeToplevel
+    property var icon: Quickshell.iconPath(AppSearch.guessIcon(toplevel?.wayland.appId), "image-missing")
 
     Rectangle {
         // use IRect
