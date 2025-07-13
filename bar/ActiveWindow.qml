@@ -9,7 +9,7 @@ import qs.config
 Item {
     id: root
     property var toplevel: Hyprland.activeToplevel
-    property var icon: Quickshell.iconPath(AppSearch.guessIcon(toplevel?.wayland.appId), "image-missing")
+    property var icon: Quickshell.iconPath(AppSearch.guessIcon(toplevel?.wayland?.appId), "image-missing")
 
     // use IRect
     implicitWidth: rowLayout.implicitWidth + General.rectMargin * 2
@@ -34,7 +34,7 @@ Item {
             // TOOD: if not exist, use lazyloader or something hide this
             // TODO: use IText
             font.pixelSize: General.fontSize
-            text: root?.toplevel?.title
+            text: root?.toplevel?.title || ""
         }
     }
 }
