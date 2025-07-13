@@ -15,11 +15,6 @@ Item {
 
     Rectangle {
         id: container
-        anchors {
-            fill: parent
-            verticalCenter: parent.verticalCenter
-            horizontalCenter: parent.horizontalCenter
-        }
         implicitWidth: layout.implicitWidth + Config.General.rectMargin * 2
         implicitHeight: Config.Bar.height - Config.General.rectMargin
 
@@ -28,13 +23,13 @@ Item {
 
         RowLayout {
             id: layout
-
-            anchors {
-                verticalCenter: parent.verticalCenter
-                horizontalCenter: parent.horizontalCenter
-            }
+            anchors.centerIn: parent
 
             spacing: Config.Bar.resourceIconTextSpacing
+
+            Item {
+                Layout.fillWidth: true
+            }
 
             Icons {
                 text: root.icon
@@ -45,7 +40,6 @@ Item {
 
             Item {
                 Layout.fillWidth: true
-                Layout.fillHeight: true
             }
         }
     }
