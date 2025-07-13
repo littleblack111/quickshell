@@ -40,20 +40,20 @@ Item {
                 id: workspaceRect
                 property var st: getWorkspaceStats(index)
 
-                implicitWidth: !st?.isActive ? Config.Bar.workspaceIconSize : Config.Bar.workspaceActiveIconSize
+                implicitWidth: !st.isActive ? Config.Bar.workspaceIconSize : Config.Bar.workspaceActiveIconSize
                 implicitHeight: Config.Bar.workspaceIconSize - Config.Bar.workspaceHorizontalSpacing
                 radius: Config.Bar.workspaceRounding
                 Icons {
                     anchors.centerIn: parent
-                    text: Config.Icons.ws[index + 1]
+                    text: !st.isUrgent ? Config.Icons.ws[index + 1] : Config.Icons.ws['urgent'] // TODO: urgent = red
                     font.pixelSize: Config.Bar.workspaceIconSize / 2
                     color: Config.Colors.foreground // TODO make IText w/ ts default color
-                    opacity: !st?.isOccupied ? 0 : 1 // less contrast?
+                    opacity: !st.isOccupied ? 0 : 1 // less contrast
                     // opacity: isActive(index) ? Config.Bar.workspaceActiveOpacity : isOccupied(index) ? Config.Bar.workspaceOpacity : Config.Bar.workspaceEmptyOpacity
                 }
 
-                color: st?.isOccupied ? Config.Colors.alt : Config.Colors.foreground
-                opacity: st?.isActive && st?.isOccupied ? Config.Bar.workspaceActiveOpacity : st?.isOccupied ? Config.Bar.workspaceOpacity : Config.Bar.workspaceEmptyOpacity
+                color: st.isOccupied ? Config.Colors.alt : Config.Colors.foreground
+                opacity: st.isActive && st.isOccupied ? Config.Bar.workspaceActiveOpacity : st.isOccupied ? Config.Bar.workspaceOpacity : Config.Bar.workspaceEmptyOpacity
             }
         }
     }
