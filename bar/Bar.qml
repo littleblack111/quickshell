@@ -40,11 +40,9 @@ Scope {
                 color: "transparent"
 
                 Rectangle {
-                    anchors {
-                        left: parent.left
-                    }
-                    implicitWidth: leftRow.width + leftRow.spacing - leftSpacer.width
-                    implicitHeight: leftRow.height
+                    anchors.left: parent.left
+                    width: leftRow.width + leftRow.anchors.leftMargin - leftSpacer.width
+                    height: leftRow.height
                     color: Qt.rgba(Colors.background.r, Colors.background.g, Colors.background.b, Bar.bgTransparency)
                     radius: Bar.moduleRadius
                 }
@@ -55,8 +53,8 @@ Scope {
                         left: parent.left
                         leftMargin: Bar.moduleLeftMargin
                     }
-                    implicitWidth: (child.width - centerRow.width) / 2
-                    implicitHeight: child.height
+                    width: (child.width - centerRow.width) / 2
+                    height: child.height
                     spacing: Bar.leftModuleSpacing
 
                     Workspace {
@@ -77,8 +75,8 @@ Scope {
                 Rectangle {
                     id: centerRow
                     anchors.centerIn: parent
-                    implicitWidth: activeWindow.implicitWidth + General.rectMargin * 2
-                    implicitHeight: activeWindow.implicitHeight
+                    width: activeWindow.implicitWidth + General.rectMargin * 2
+                    height: activeWindow.implicitHeight
 
                     color: Colors.alt
                     radius: Style.rounding.smaller
@@ -89,22 +87,23 @@ Scope {
                 }
 
                 Rectangle {
-                    anchors {
-                        right: parent.right
-                        rightMargin: Bar.moduleRightMargin
-                    }
-                    implicitWidth: power.width + tray.width + timeDate.width + network.width + temp.width + gpu.width + memory.width + cpu.width
-                    implicitHeight: leftRow.height
+                    anchors.right: parent.right
+                    width: rightRow.width + rightRow.anchors.rightMargin - rightSpacer.width
+                    height: rightRow.height
                     color: Qt.rgba(Colors.background.r, Colors.background.g, Colors.background.b, Bar.bgTransparency)
                     radius: Bar.moduleRadius
                 }
 
                 RowLayout {
                     id: rightRow
-                    anchors.right: parent.right
+                    anchors {
+                        right: parent.right
+                        rightMargin: Bar.moduleRightMargin
+                    }
                     layoutDirection: Qt.RightToLeft
-                    implicitWidth: (child.width - centerRow.width) / 2
-                    implicitHeight: child.height
+                    width: (child.width - centerRow.width) / 2
+                    height: child.height
+                    spacing: Bar.rightModuleSpacing
 
                     Power {
                         id: power
@@ -131,7 +130,11 @@ Scope {
                         id: cpu
                     }
 
-                    Item {}
+                    Item {
+                        id: rightSpacer
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                    }
                 }
             }
         }

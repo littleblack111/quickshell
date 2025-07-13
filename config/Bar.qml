@@ -5,19 +5,20 @@ import Quickshell
 Singleton {
     id: root
 
-    readonly property int height: 40
+    readonly property int height: 35
     readonly property int borderRadius: Style.rounding.small
     readonly property int topMargin: Style.spacing.small
     readonly property int leftMargin: Style.spacing.larger
     readonly property int rightMargin: Style.spacing.larger
 
-    readonly property int moduleLeftMargin: Style.spacing.large
-    readonly property int moduleRightMargin: 0
+    readonly property int moduleLeftMargin: Style.spacing.larger
+    readonly property int moduleRightMargin: Style.spacing.small
 
     readonly property int leftModuleSpacing: Style.spacing.smaller
+    readonly property int rightModuleSpacing: Style.spacing.smaller
 
     readonly property int workspaces: 10
-    readonly property int workspaceIconSize: 34
+    readonly property int workspaceIconSize: 32
     readonly property int workspaceSpacing: 2
     readonly property int workspaceHorizontalSpacing: Style.spacing.smaller
     readonly property int workspaceActiveIconSize: workspaceIconSize * 1.5

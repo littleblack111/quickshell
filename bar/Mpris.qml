@@ -9,7 +9,6 @@ import qs.config
 
 Item {
     id: root
-    height: Bar.height
     readonly property MprisPlayer activePlayer: Services.Mpris.activePlayer
     readonly property string cleanedTitle: cleanMusicTitle(activePlayer?.trackTitle) || qsTr("No media")
     // length broken (https://github.com/quickshell-mirror/quickshell/issues/109)
@@ -46,8 +45,8 @@ Item {
         }
     }
 
-    implicitWidth: rect.width + 3 // +3 cause it look better somehow
-    implicitHeight: Bar.height
+    implicitWidth: rect.width - General.rectMargin / 2
+    height: Bar.height + General.rectMargin / 2
 
     // TODO fancy animation progress bar etc.
     Rectangle {
@@ -55,7 +54,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         // TODO: move to IRect
         implicitWidth: text.width + General.rectMargin * 2
-        implicitHeight: parent.height - General.rectMargin
+        height: parent.height - General.rectMargin
         color: Colors.alt
         radius: Style.rounding.smaller
         Text {

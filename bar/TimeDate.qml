@@ -6,22 +6,40 @@ import qs.components
 import qs.config as Config
 
 Item {
-    id: root
-    RowLayout {
-        Item {
-            Layout.fillWidth: true
+    implicitWidth: container.implicitWidth
+    implicitHeight: container.implicitHeight - Config.General.rectMargin
+    Rectangle {
+        id: container
+        anchors {
+            fill: parent
+            verticalCenter: parent.verticalCenter
+            horizontalCenter: parent.horizontalCenter
         }
-        anchors.fill: parent
-        spacing: Config.Bar.resourceIconTextSpacing
 
-        Icons {
-            text: Config.Icons.resource.clock
-        }
-        Text {
-            text: Services.TimeDate.time
-        }
-        Item {
-            Layout.fillWidth: true
+        implicitWidth: layout.implicitWidth + Config.General.rectMargin * 2
+        implicitHeight: Config.Bar.height
+
+        color: Config.Colors.alt
+        radius: Config.Style.rounding.large
+
+        RowLayout {
+            id: layout
+            Item {
+                Layout.fillWidth: true
+            }
+            anchors.fill: parent
+            spacing: Config.Bar.resourceIconTextSpacing
+
+            Icons {
+                text: Config.Icons.resource.clock
+                font.pixelSize: Config.Style.font.size.larger
+            }
+            Text {
+                text: Services.TimeDate.time
+            }
+            Item {
+                Layout.fillWidth: true
+            }
         }
     }
 }

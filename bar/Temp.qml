@@ -6,8 +6,11 @@ import qs.components
 import qs.config as Config
 
 Item {
-    id: root
+    implicitWidth: resource.implicitWidth
+    implicitHeight: resource.implicitHeight
+
     SimpleResource {
+        id: resource
         icon: Config.Icons.resource.temp
         text: Math.round(Services.Resource.cpuTemp * 100)
     }

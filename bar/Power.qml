@@ -7,36 +7,54 @@ import qs.config as Config
 import qs.components
 
 Item {
-    id: root
-    RowLayout {
-        Item {
-            Layout.fillWidth: true
-        }
-        anchors.fill: parent
-        spacing: Config.Bar.resourceIconTextSpacing
+    implicitWidth: container.implicitWidth
+    implicitHeight: container.implicitHeight
 
-        Icons {
-            text: Config.Icons.power.shutdown
-        }
+    Rectangle {
+        id: container
 
-        Icons {
-            text: Config.Icons.power.dpms
+        anchors {
+            fill: parent
+            verticalCenter: parent.verticalCenter
+            horizontalCenter: parent.horizontalCenter
         }
+        implicitWidth: layout.implicitWidth + Config.General.rectMargin * 2
+        implicitHeight: Config.Bar.height - Config.General.rectMargin
 
-        Icons {
-            text: Config.Icons.power.lock
-        }
+        color: Config.Colors.alt
+        radius: Config.Style.rounding.large
 
-        Icons {
-            text: Config.Icons.power.suspend
-        }
+        RowLayout {
+            id: layout
+            Item {
+                Layout.fillWidth: true
+            }
+            anchors.fill: parent
+            spacing: Config.Bar.resourceIconTextSpacing
 
-        Icons {
-            text: Config.Icons.power.reboot
-        }
+            Icons {
+                text: Config.Icons.power.shutdown
+            }
 
-        Item {
-            Layout.fillWidth: true
+            Icons {
+                text: Config.Icons.power.dpms
+            }
+
+            Icons {
+                text: Config.Icons.power.lock
+            }
+
+            Icons {
+                text: Config.Icons.power.suspend
+            }
+
+            Icons {
+                text: Config.Icons.power.reboot
+            }
+
+            Item {
+                Layout.fillWidth: true
+            }
         }
     }
 }
