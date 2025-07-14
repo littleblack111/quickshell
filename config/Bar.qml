@@ -17,6 +17,8 @@ Singleton {
     readonly property int leftModuleSpacing: Style.spacing.smaller
     readonly property int rightModuleSpacing: Style.spacing.smaller
 
+    readonly property var windowStrip: [" — Zen Browser"]
+
     readonly property int workspaces: 10
     readonly property int workspaceIconSize: 32
     readonly property int workspaceSpacing: 2

@@ -68,6 +68,7 @@ Item {
                     text: root.state
                 }
                 IText {
+                    animate: true
                     text: root.cleanedTitle
                 }
             }
