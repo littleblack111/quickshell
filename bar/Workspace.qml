@@ -18,9 +18,9 @@ Item {
     function getWorkspaceStats(index) {
         const w = ws.values.find(i => i.id === index + 1);
         return {
-            isOccupied: !!(w?.toplevels?.values?.length),
-            isActive: !!w?.active,
-            isUrgent: !!w?.urgent
+            isOccupied: w?.toplevels?.values?.length,
+            isActive: w?.active,
+            isUrgent: w?.urgent
         };
     }
 
