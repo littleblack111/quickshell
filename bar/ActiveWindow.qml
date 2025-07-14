@@ -40,7 +40,7 @@ Rectangle {
         IText {
             // TOOD: if not exist, use lazyloader or something hide this
             font.pixelSize: General.fontSize
-            text: root.toplevel.wayland.title
+            text: root?.toplevel?.wayland?.title
         }
     }
 }
