@@ -12,17 +12,27 @@ Rectangle {
     property var toplevel: Hyprland.activeToplevel
     property var icon: Quickshell.iconPath(AppSearch.guessIcon(toplevel?.wayland?.appId), "image-missing")
 
+    property var activated: ToplevelManager.activeToplevel?.activated || false
+
     // use IRect
-    implicitWidth: rowLayout.implicitWidth + General.rectMargin * 4
+    implicitWidth: activated ? rowLayout.implicitWidth + General.rectMargin * 4 : 0
     implicitHeight: rowLayout.implicitHeight + General.rectMargin * 2
     anchors.centerIn: parent
 
     color: Colors.alt
     // according to docs, null could happen but doesn't seem to happen in practice so..
     // hypr toplevel.activated is always true and doesn't change either so..
-    opacity: ToplevelManager.activeToplevel?.activated ? 1 : 0
+    opacity: activated ? 1 : 0
 
     radius: Style.rounding.smaller
+
+    function strip(s) {
+        var out = s;
+        Bar.windowStrip.forEach(function (w) {
+            out = out.replace(new RegExp(w, "g"), "");
+        });
+        return out;
+    }
 
     RowLayout {
         id: rowLayout
@@ -30,16 +40,75 @@ Rectangle {
         spacing: Bar.resourceIconTextSpacing
 
         IconImage {
+            id: icon
             source: root.icon
             implicitWidth: Bar.appIconSize
             implicitHeight: Bar.appIconSize
-            Layout.fillHeight: true
-            Layout.fillWidth: false
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            // sync animation
+            opacity: root.activated ? 1 : 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: General.animateDuration / 2.5
+                }
+            }
+            Layout.preferredWidth: Bar.appIconSize
+            Layout.preferredHeight: Bar.appIconSize
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
         }
+
         IText {
+            animate: true
             font.pixelSize: General.fontSize
-            text: root?.toplevel?.wayland?.title || ""
+            text: strip(root?.toplevel?.wayland?.title) || ""
+
+            // sync animation
+            opacity: root.activated ? 1 : 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: General.animateDuration / 2.5
+                }
+            }
+        }
+    }
+
+    onIconChanged: fadeIcon.start()
+
+    Behavior on opacity {
+        NumberAnimation {
+            duration: General.animateDuration / 2.5
+        }
+    }
+
+    Behavior on implicitWidth {
+        ISpringAnimation {
+            property: "implicitWidth"
+            spring: General.springAnimationSpring * 2
+            damping: General.springAnimationDamping * 1.3
+        }
+    }
+
+    SequentialAnimation {
+        id: fadeIcon
+        running: false
+
+        PropertyAnimation {
+            target: icon
+            property: "opacity"
+            to: 0
+            duration: General.animateDuration / 3
+        }
+        ScriptAction {
+            script: icon.source = root.icon
+        }
+        PropertyAnimation {
+            target: icon
+            property: "opacity"
+            to: 1
+            duration: General.animateDuration / 3
+        }
+        ScriptAction {
+            script: icon.source = root.icon
         }
     }
 }

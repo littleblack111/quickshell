@@ -17,6 +17,8 @@ Singleton {
 
     readonly property int fontSize: Style.font.size.larger
 
+    readonly property int animateDuration: Style.anim.durations.normal
+    readonly property string animateProp: "scale"
     readonly property real springAnimationSpring: 8
     readonly property real springAnimationDamping: 0.4
 }
