@@ -16,4 +16,7 @@ Singleton {
     readonly property int rectMargin: Style.spacing.small
 
     readonly property int fontSize: Style.font.size.larger
+
+    readonly property real springAnimationSpring: 8
+    readonly property real springAnimationDamping: 0.4
 }

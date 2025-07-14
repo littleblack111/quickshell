@@ -1,5 +1,5 @@
-import QtQuick.Layouts
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Wayland
@@ -9,11 +9,16 @@ import qs.components
 Item {
     id: root
 
-    // required property ShellScreen screen // multi monitor
-    property var ws: Hyprland.workspaces
+    implicitWidth: layout.implicitWidth
 
-    // readonly property HyprlandMonitor monitor: Hyprland.monitorFor(screen) // multi monitor
-    // dont work no more for some reason
+    property var ws: Hyprland.workspaces
+    property int activeIndex: -1
+    property bool activeOccupied: false
+    property real activeRectX: {
+        if (activeIndex < 0)
+            return 0;
+        return layout.x + activeIndex * Bar.workspaceIconSize + activeIndex * Bar.workspaceSpacing;
+    }
 
     function getWorkspaceStats(index) {
         const w = ws.values.find(i => i.id === index + 1);
@@ -24,48 +29,85 @@ Item {
         };
     }
 
-    implicitWidth: layout.implicitWidth
+    Rectangle {
+        id: activeRect
+        x: activeRectX
+        anchors.verticalCenter: layout.verticalCenter
+        implicitWidth: Bar.workspaceActiveIconSize
+        implicitHeight: Bar.workspaceIconSize - Bar.workspaceHorizontalSpacing
+        radius: Bar.workspaceRounding
+        color: root.activeOccupied ? Colors.alt : Colors.foreground
+        opacity: root.activeOccupied ? Bar.workspaceActiveOpacity : Bar.workspaceEmptyOpacity / 3
+        Behavior on x {
+            ISpringAnimation {}
+        }
+        Behavior on color {
+            ColorAnimation {
+                duration: Bar.workspaceAnimationDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on opacity {
+            NumberAnimation {
+                duration: Bar.workspaceAnimationDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+    }
 
     RowLayout {
         id: layout
-        implicitWidth: childrenRect.width
         anchors.verticalCenter: parent.verticalCenter
-
+        implicitWidth: repeater.width
         spacing: Bar.workspaceSpacing
 
         Repeater {
+            id: repeater
             model: Bar.workspaces
 
             Rectangle {
-                id: workspaceRect
                 property var st: getWorkspaceStats(index)
+                property bool active: st?.isActive || false
 
-                implicitWidth: !st.isActive ? Bar.workspaceIconSize : Bar.workspaceActiveIconSize
+                implicitWidth: active ? Bar.workspaceActiveIconSize : Bar.workspaceIconSize
                 implicitHeight: Bar.workspaceIconSize - Bar.workspaceHorizontalSpacing
                 radius: Bar.workspaceRounding
+                color: st.isOccupied ? Colors.alt : Colors.foreground
+                opacity: active && st.isOccupied ? Bar.workspaceActiveOpacity : st.isOccupied ? Bar.workspaceOpacity : Bar.workspaceEmptyOpacity
+
                 Icon {
                     anchors.centerIn: parent
-                    text: !st.isUrgent ? Icons.ws[index + 1] : Icons.ws['urgent'] // TODO: urgent = red
-                    font.pixelSize: Bar.workspaceIconSize / 2
-                    color: Colors.foreground // TODO make IText w/ ts default color
-                    opacity: !st.isOccupied ? 0 : 1 // less contrast
-                    // opacity: isActive(index) ? Bar.workspaceActiveOpacity : isOccupied(index) ? Bar.workspaceOpacity : Bar.workspaceEmptyOpacity
+                    text: !st.isUrgent ? Icons.ws[index + 1] : Icons.ws['urgent']
+                    font.pixelSize: !active ? Bar.workspaceIconSize / 2 : Bar.workspaceActiveIconSize / 2.5
+                    color: Colors.foreground
+                    opacity: !st.isOccupied ? 0 : 1
+                    Behavior on font.pixelSize {
+                        ISpringAnimation {}
+                    }
                 }
-
-                color: st.isOccupied ? Colors.alt : Colors.foreground
-                opacity: st.isActive && st.isOccupied ? Bar.workspaceActiveOpacity : st.isOccupied ? Bar.workspaceOpacity : Bar.workspaceEmptyOpacity
 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: 200
+                        duration: Bar.workspaceAnimationDuration
                         easing.type: Easing.InOutQuad
                     }
                 }
                 Behavior on implicitWidth {
                     NumberAnimation {
-                        duration: 200
+                        duration: Bar.workspaceAnimationDuration
                         easing.type: Easing.InOutQuad
                     }
+                }
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Bar.workspaceAnimationDuration
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+
+                onActiveChanged: if (active) {
+                    root.activeIndex = index;
+                    root.activeOccupied = st.isOccupied;
                 }
             }
         }

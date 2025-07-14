@@ -26,6 +26,8 @@ Singleton {
     readonly property double workspaceOpacity: 0.8
     readonly property int workspaceActiveOpacity: 1
     readonly property double workspaceEmptyOpacity: 0.2
+    // workspaceAnimationEasing using Hyprland's actual ws animation easing
+    readonly property int workspaceAnimationDuration: 200
 
     readonly property int appIconSize: 25
 
