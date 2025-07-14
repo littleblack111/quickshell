@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Wayland
 import Quickshell.Widgets
 import qs.components
 import qs.config
@@ -17,6 +18,10 @@ Rectangle {
     anchors.centerIn: parent
 
     color: Colors.alt
+    // according to docs, null could happen but doesn't seem to happen in practice so..
+    // hypr toplevel.activated is always true and doesn't change either so..
+    opacity: ToplevelManager.activeToplevel?.activated ? 1 : 0
+
     radius: Style.rounding.smaller
 
     RowLayout {
@@ -35,7 +40,7 @@ Rectangle {
         IText {
             // TOOD: if not exist, use lazyloader or something hide this
             font.pixelSize: General.fontSize
-            text: root?.toplevel?.title || ""
+            text: root.toplevel.wayland.title
         }
     }
 }
