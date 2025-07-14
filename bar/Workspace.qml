@@ -54,6 +54,19 @@ Item {
 
                 color: st.isOccupied ? Colors.alt : Colors.foreground
                 opacity: st.isActive && st.isOccupied ? Bar.workspaceActiveOpacity : st.isOccupied ? Bar.workspaceOpacity : Bar.workspaceEmptyOpacity
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 200
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on implicitWidth {
+                    NumberAnimation {
+                        duration: 200
+                        easing.type: Easing.InOutQuad
+                    }
+                }
             }
         }
     }
