@@ -19,7 +19,7 @@ Text {
     font {
         family: Style.font.family.iosevka
         // pointSize: root.pixelSize
-        pixelSize: Style.font.size.largerr
+        pixelSize: Style.font.size.larger
     }
 
     Behavior on color {
