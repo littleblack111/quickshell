@@ -72,18 +72,11 @@ Scope {
                     }
                 }
 
-                Rectangle {
+                Item {
                     id: centerRow
                     anchors.centerIn: parent
-                    width: activeWindow.implicitWidth + General.rectMargin * 2
-                    height: activeWindow.implicitHeight
 
-                    color: Colors.alt
-                    radius: Style.rounding.smaller
-                    ActiveWindow {
-                        id: activeWindow
-                        anchors.fill: parent
-                    }
+                    ActiveWindow {}
                 }
 
                 Rectangle {

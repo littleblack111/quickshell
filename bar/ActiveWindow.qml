@@ -6,22 +6,24 @@ import Quickshell.Widgets
 import qs.components
 import qs.config
 
-Item {
+Rectangle {
     id: root
     property var toplevel: Hyprland.activeToplevel
     property var icon: Quickshell.iconPath(AppSearch.guessIcon(toplevel?.wayland?.appId), "image-missing")
 
     // use IRect
-    implicitWidth: rowLayout.implicitWidth + General.rectMargin * 2
+    implicitWidth: rowLayout.implicitWidth + General.rectMargin * 4
     implicitHeight: rowLayout.implicitHeight + General.rectMargin * 2
     anchors.centerIn: parent
+
+    color: Colors.alt
+    radius: Style.rounding.smaller
 
     RowLayout {
         id: rowLayout
         anchors.centerIn: parent
         spacing: Bar.resourceIconTextSpacing
 
-        anchors.verticalCenter: parent.verticalCenter
         IconImage {
             source: root.icon
             implicitWidth: Bar.appIconSize
