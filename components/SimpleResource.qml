@@ -35,6 +35,7 @@ Item {
                 text: root.icon
             }
             IText {
+                animate: true
                 text: root.text
             }
 

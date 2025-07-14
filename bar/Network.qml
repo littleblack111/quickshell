@@ -45,6 +45,7 @@ Item {
                     text: Icons.resource.network.download
                 }
                 IText {
+                    animate: true
                     text: Services.NetworkUsage.down + Services.NetworkUsage.downUnit
                 }
             }
@@ -54,6 +55,7 @@ Item {
                     text: Icons.resource.network.upload
                 }
                 IText {
+                    animate: true
                     text: Services.NetworkUsage.up + Services.NetworkUsage.upUnit
                 }
             }
