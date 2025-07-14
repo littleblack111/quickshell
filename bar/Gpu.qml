@@ -12,6 +12,6 @@ Item {
     SimpleResource {
         id: resource
         icon: Config.Icons.resource.gpu
-        text: Services.Resource.gpuUsage
+        text: Services.Resource.gpuUsage + "%"
     }
 }

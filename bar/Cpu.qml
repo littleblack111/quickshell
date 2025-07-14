@@ -12,7 +12,7 @@ Item {
     SimpleResource {
         id: resource
 
-        text: Math.round(Services.Resource.cpuUsage * 100)
+        text: Math.round(Services.Resource.cpuUsage * 100) + "%"
         icon: Icons.resource.cpu
     }
 }

@@ -5,7 +5,7 @@ import Quickshell
 Singleton {
     id: root
 
-    readonly property int height: 35
+    readonly property int height: 40
     readonly property int borderRadius: Style.rounding.small
     readonly property int topMargin: Style.spacing.small
     readonly property int leftMargin: Style.spacing.larger

@@ -12,6 +12,6 @@ Item {
     SimpleResource {
         id: resource
         icon: Config.Icons.resource.temp
-        text: Math.round(Services.Resource.cpuTemp * 100)
+        text: Math.round(Services.Resource.cpuTemp * 100) + "°C"
     }
 }
