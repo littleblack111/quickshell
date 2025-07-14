@@ -15,7 +15,7 @@ Item {
     // length broken (https://github.com/quickshell-mirror/quickshell/issues/109)
     readonly property string position: friendlyTimeForSeconds(activePlayer?.position) || "0:00"
     readonly property string length: friendlyTimeForSeconds(activePlayer?.length) || "0:00"
-    readonly property string progress: activePlayer.positionSupported && position != length ? position + "/" + length : activePlayer.positionSupported && !activePlayer.lengthSupported ? !activePlayer.positionSupported && activePlayer.lengthSupported ? "" : position : activePlayer.lengthSupported ? length : ""
+    readonly property string progress: activePlayer?.positionSupported && position != length ? position + "/" + length : activePlayer.positionSupported && !activePlayer.lengthSupported ? !activePlayer.positionSupported && activePlayer.lengthSupported ? "" : position : activePlayer.lengthSupported ? length : ""
     readonly property string state: activePlayer?.isPlaying ? Icons.media.pause : Icons.media.play
 
     function cleanMusicTitle(title: string): string {
