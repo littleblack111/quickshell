@@ -54,7 +54,7 @@ Item {
         id: rect
         anchors.verticalCenter: parent.verticalCenter
         // TODO: move to IRect
-        implicitWidth: layout.width + General.rectMargin * 5
+        implicitWidth: layout.width + General.rectMargin * 4
         height: parent.height - General.rectMargin
         color: Colors.alt
         radius: Style.rounding.smaller
