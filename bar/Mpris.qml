@@ -46,24 +46,34 @@ Item {
         }
     }
 
-    implicitWidth: rect.width - General.rectMargin / 2
-    height: Bar.height + General.rectMargin / 2
+    implicitWidth: rect.width - General.rectMargin / 1.25
+    height: Bar.height + General.rectMargin / 1.5
 
     // TODO fancy animation progress bar etc.
     Rectangle {
         id: rect
         anchors.verticalCenter: parent.verticalCenter
         // TODO: move to IRect
-        implicitWidth: text.width + General.rectMargin * 4
+        implicitWidth: layout.width + General.rectMargin * 5
         height: parent.height - General.rectMargin
         color: Colors.alt
         radius: Style.rounding.smaller
-        IText {
-            id: text
-            // TODO: use IText
+        RowLayout {
+            id: layout
             anchors.centerIn: parent
-            anchors.verticalCenter: parent.verticalCenter
-            text: root.state + " " + root.cleanedTitle + " [" + root.progress + "]"
+            spacing: Bar.resourceIconTextSpacing / 1.5
+            RowLayout {
+                spacing: Bar.resourceIconTextSpacing
+                Icon {
+                    text: root.state
+                }
+                IText {
+                    text: root.cleanedTitle
+                }
+            }
+            IText {
+                text: "[" + root.progress + "]"
+            }
         }
     }
 
