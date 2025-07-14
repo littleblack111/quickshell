@@ -7,6 +7,7 @@ import Quickshell.Widgets
 import qs.components
 import qs.config
 
+// TODO use a item wrapping loader for opacity Behavior
 Rectangle {
     id: root
     property var toplevel: Hyprland.activeToplevel
@@ -29,9 +30,9 @@ Rectangle {
     function strip(s) {
         var out = s;
         Bar.windowStrip.forEach(function (w) {
-            out = out.replace(new RegExp(w, "g"), "");
+            out = out?.replace(new RegExp(w, "g"), "");
         });
-        return out;
+        return out?.trim() || s;
     }
 
     RowLayout {
