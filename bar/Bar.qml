@@ -76,13 +76,7 @@ Scope {
                     id: centerRow
                     anchors.centerIn: parent
 
-                    Loader {
-                        active: activeWindow.opacity === 1
-
-                        ActiveWindow {
-                            id: activeWindow
-                        }
-                    }
+                    ActiveWindow {}
                 }
 
                 Rectangle {
