@@ -28,7 +28,7 @@ Item {
                 Layout.fillWidth: true
             }
             anchors.fill: parent
-            spacing: Bar.resourceIconTextSpacing
+            spacing: Bar.resourceIconTextSpacing / 2
 
             Icon {
                 text: Icons.resource.clock
