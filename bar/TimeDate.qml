@@ -34,8 +34,28 @@ Item {
                 text: Icons.resource.clock
                 font.pixelSize: Style.font.size.larger
             }
-            IText {
-                text: Services.TimeDate.time
+            RowLayout {
+                property int h: Services.TimeDate.hours
+                property int m: Services.TimeDate.minutes
+                property int s: Services.TimeDate.seconds
+                spacing: 0
+                IText {
+                    text: (parent.h > 10 ? "" : "0") + parent.h
+                }
+                IText {
+                    text: ":"
+                }
+                IText {
+                    animate: true
+                    text: (parent.m > 10 ? "" : "0") + parent.m
+                }
+                IText {
+                    text: ":"
+                }
+                IText {
+                    animate: true
+                    text: (parent.s > 10 ? "" : "0") + parent.s
+                }
             }
             Item {
                 Layout.fillWidth: true

@@ -15,6 +15,16 @@ Singleton {
             h = 12;
         return (h < 10 ? "0" : "") + h + ":" + (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
     }
+    readonly property int hours: {
+        var h = clock.date.getHours();
+        h = h % 12;
+        if (h === 0)
+            h = 12;
+        return h;
+    }
+    readonly property int minutes: clock.date.getMinutes()
+    readonly property int seconds: clock.date.getSeconds()
+
     readonly property string date: Qt.formatDateTime(clock.date, "dddd dd/MM")
 
     SystemClock {
