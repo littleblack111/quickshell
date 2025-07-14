@@ -36,12 +36,12 @@ Text {
         SequentialAnimation {
             Anim {
                 to: root.animateFrom
-                easing.bezierCurve: Appearance.anim.curves.standardAccel
+                easing.bezierCurve: Style.anim.curves.standardAccel
             }
             PropertyAction {}
             Anim {
                 to: root.animateTo
-                easing.bezierCurve: Appearance.anim.curves.standardDecel
+                easing.bezierCurve: Style.anim.curves.standardDecel
             }
         }
     }
