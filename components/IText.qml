@@ -12,7 +12,7 @@ Text {
 
     // renderType: Text.NativeRendering
     textFormat: Text.PlainText
-    color: Colors.foreground
+    color: WallustColors.foreground
 
     font {
         family: Style.font.family.iosevka

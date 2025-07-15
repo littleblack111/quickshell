@@ -43,7 +43,7 @@ Scope {
                     anchors.left: parent.left
                     width: leftRow.width + leftRow.anchors.leftMargin - leftSpacer.width
                     height: leftRow.height
-                    color: Qt.rgba(Colors.background.r, Colors.background.g, Colors.background.b, Bar.bgTransparency)
+                    color: Qt.rgba(WallustColors.background.r, WallustColors.background.g, WallustColors.background.b, Bar.bgTransparency)
                     radius: Bar.moduleRadius
                 }
 
@@ -89,7 +89,7 @@ Scope {
                     anchors.right: parent.right
                     width: rightRow.width + rightRow.anchors.rightMargin - rightSpacer.width
                     height: rightRow.height
-                    color: Qt.rgba(Colors.background.r, Colors.background.g, Colors.background.b, Bar.bgTransparency)
+                    color: Qt.rgba(WallustColors.background.r, WallustColors.background.g, WallustColors.background.b, Bar.bgTransparency)
                     radius: Bar.moduleRadius
                 }
 

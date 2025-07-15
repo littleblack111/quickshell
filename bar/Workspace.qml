@@ -36,7 +36,7 @@ Item {
         implicitWidth: Bar.workspaceActiveIconSize
         implicitHeight: Bar.workspaceIconSize - Bar.workspaceHorizontalSpacing
         radius: Bar.workspaceRounding
-        color: root.activeOccupied ? Colors.alt : Colors.foreground
+        color: root.activeOccupied ? WallustColors.color4 : WallustColors.foreground
         opacity: root.activeOccupied ? Bar.workspaceActiveOpacity : Bar.workspaceEmptyOpacity / 3
         Behavior on x {
             ISpringAnimation {}
@@ -72,14 +72,14 @@ Item {
                 implicitWidth: active ? Bar.workspaceActiveIconSize : Bar.workspaceIconSize
                 implicitHeight: Bar.workspaceIconSize - Bar.workspaceHorizontalSpacing
                 radius: Bar.workspaceRounding
-                color: st.isOccupied ? Colors.alt : Colors.foreground
+                color: st.isOccupied ? WallustColors.color4 : WallustColors.foreground
                 opacity: active && st.isOccupied ? Bar.workspaceActiveOpacity : st.isOccupied ? Bar.workspaceOpacity : Bar.workspaceEmptyOpacity
 
                 Icon {
                     anchors.centerIn: parent
                     text: !st.isUrgent ? Icons.ws[index + 1] : Icons.ws['urgent']
                     font.pixelSize: !active ? Bar.workspaceIconSize / 2 : Bar.workspaceActiveIconSize / 2.5
-                    color: Colors.foreground
+                    color: WallustColors.foreground
                     opacity: !st.isOccupied ? 0 : 1
                     Behavior on font.pixelSize {
                         ISpringAnimation {}

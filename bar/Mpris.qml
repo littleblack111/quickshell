@@ -49,12 +49,12 @@ Item {
             value: root.progress
             background: Rectangle {
                 anchors.fill: parent
-                color: Colors.alt
+                color: WallustColors.color4
                 radius: Style.rounding.smaller - 1
             }
             contentItem: Item {
                 Rectangle {
-                    color: Colors.primary
+                    color: WallustColors.color3
                     radius: Style.rounding.smaller - 1
 
                     Behavior on width {

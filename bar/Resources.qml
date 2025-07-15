@@ -14,7 +14,7 @@ Item {
         implicitWidth: layout.implicitWidth + Config.General.rectMargin * 2
         implicitHeight: Config.Bar.height - Config.General.rectMargin
 
-        color: Config.Colors.alt
+        color: Config.WallustColors.color4
         radius: Config.Style.rounding.large
 
         RowLayout {

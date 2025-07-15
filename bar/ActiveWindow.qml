@@ -20,7 +20,7 @@ Rectangle {
     implicitHeight: rowLayout.implicitHeight + General.rectMargin * 2
     anchors.centerIn: parent
 
-    color: Colors.alt
+    color: WallustColors.color4
     // according to docs, null could happen but doesn't seem to happen in practice so..
     // hypr toplevel.activated is always true and doesn't change either so..
     opacity: activated ? 1 : 0
