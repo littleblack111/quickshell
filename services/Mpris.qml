@@ -10,13 +10,15 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Mpris
 
+import qs.config
+
 /**
  * A service that provides easy access to the active Mpris player.
  */
 Singleton {
     id: root
     property MprisPlayer trackedPlayer: null
-    property MprisPlayer activePlayer: trackedPlayer ?? Mpris.players.values[0] ?? null
+    property MprisPlayer activePlayer: Mpris.players.values.find(i => i.desktopEntry === Bar.preferedPlayer) ?? trackedPlayer ?? Mpris.players.values[0] ?? null
     signal trackChanged(reverse: bool)
 
     property bool __reverse: false

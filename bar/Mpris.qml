@@ -77,9 +77,8 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 acceptedButtons: Qt.MiddleButton | Qt.RightButton
-                onClicked: {
+                onClicked: mouse => {
                     if (mouse.button === Qt.MiddleButton) {
-                        console.log("Middle button clicked");
                         root.activePlayer?.togglePlaying();
                     } else if (mouse.button === Qt.RightButton) {
                         root.activePlayer?.next();
