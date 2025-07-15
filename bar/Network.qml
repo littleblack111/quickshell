@@ -6,6 +6,14 @@ import qs.components
 import qs.config
 
 Item {
+    id: root
+    property int down: Services.NetworkUsage.down
+    property string downUnit: Services.NetworkUsage.downUnit
+    property int up: Services.NetworkUsage.up
+    property string upUnit: Services.NetworkUsage.upUnit
+
+    property int significantUsage: 30
+    property string usageUnit: "M"
 
     implicitWidth: container.implicitWidth
     implicitHeight: container.implicitHeight - General.rectMargin
@@ -43,20 +51,24 @@ Item {
                 spacing: Bar.resourceIconTextSpacing / 2
                 IText {
                     text: Icons.resource.network.download
+                    color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : WallustColors.foreground
                 }
                 IText {
                     animate: true
-                    text: Services.NetworkUsage.down + Services.NetworkUsage.downUnit
+                    text: root.down + root.downUnit
+                    color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : WallustColors.foreground
                 }
             }
             RowLayout {
                 spacing: Bar.resourceIconTextSpacing / 2
                 IText {
                     text: Icons.resource.network.upload
+                    color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : WallustColors.foreground
                 }
                 IText {
                     animate: true
-                    text: Services.NetworkUsage.up + Services.NetworkUsage.upUnit
+                    text: root.up + root.upUnit
+                    color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : WallustColors.foreground
                 }
             }
 

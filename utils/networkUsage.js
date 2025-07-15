@@ -28,14 +28,3 @@ function formatSize(size, unit) {
 		return size.toFixed(0)
 	}
 }
-
-// const iface = defaultInterface()
-// let prev = getRxTxBytes(iface)
-
-// setInterval(() => {
-// 	const cur = getRxTxBytes(iface)
-// 	const dr = (cur.rx - prev.rx) / (interval / 1000)
-// 	const dt = (cur.tx - prev.tx) / (interval / 1000)
-// 	prev = cur
-// 	console.log(formatSize(dr), formatSize(dt))
-// }, interval)

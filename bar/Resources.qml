@@ -21,20 +21,30 @@ Item {
             id: layout
             anchors.centerIn: parent
             SimpleResource {
-                text: Math.round(Services.Resource.cpuUsage * 100) + "%"
+                value: Services.Resource.cpuUsage
+                suffix: "%"
                 icon: Config.Icons.resource.cpu
             }
             SimpleResource {
                 icon: Config.Icons.resource.memory
-                text: Math.round(Services.Resource.memoryUsedPercentage * 100) + "%"
+                value: Services.Resource.memoryUsedPercentage
+                suffix: "%"
             }
             SimpleResource {
                 icon: Config.Icons.resource.gpu
-                text: Services.Resource.gpuUsage + "%"
+                value: Services.Resource.gpuUsage / 100
+                suffix: "%"
+                thresholdL1: 0.60
+                thresholdL2: 0.70
+                thresholdL3: 0.80
             }
             SimpleResource {
                 icon: Config.Icons.resource.temp
-                text: Math.round(Services.Resource.cpuTemp * 100) + "°C"
+                value: Services.Resource.cpuTemp
+                suffix: "°C"
+                thresholdL1: 0.60
+                thresholdL2: 0.80
+                thresholdL3: 0.90
             }
         }
     }
