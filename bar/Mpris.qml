@@ -83,7 +83,6 @@ Item {
                     anchors.fill: parent
                     source: activePlayer?.trackArtUrl
                     fillMode: Image.PreserveAspectFit
-                    cache: true
                     visible: false
                 }
                 Rectangle {
