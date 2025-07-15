@@ -9,7 +9,7 @@ import qs.components
 Item {
     id: root
     readonly property MprisPlayer activePlayer: Services.Mpris.activePlayer
-    readonly property real progress: (activePlayer.positionSupported && activePlayer.lengthSupported && activePlayer.length > 0) ? activePlayer.position / activePlayer.length : 0
+    readonly property real progress: (activePlayer?.positionSupported && activePlayer?.lengthSupported && activePlayer?.length > 0) ? activePlayer?.position / activePlayer?.length : 0
     readonly property string cleanedTitle: cleanMusicTitle(activePlayer?.trackTitle)
     readonly property string state: activePlayer?.isPlaying ? Icons.media.pause : Icons.media.play
 
