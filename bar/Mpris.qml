@@ -40,9 +40,11 @@ Item {
         radius: Style.rounding.smaller
         color: "transparent"
 
-        ProgressBar {
+        Slider {
             id: pBar
             anchors.fill: parent
+
+            handle: Item
             from: 0
             to: 1
             value: root.progress
@@ -65,6 +67,25 @@ Item {
                     }
                 }
             }
+
+            onMoved: {
+                if (Math.round(root.activePlayer.position) !== Math.round(value * root.activePlayer.length)) {
+                    root.activePlayer.position = value * root.activePlayer.length;
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.MiddleButton | Qt.RightButton
+                onClicked: {
+                    if (mouse.button === Qt.MiddleButton) {
+                        console.log("Middle button clicked");
+                        root.activePlayer?.togglePlaying();
+                    } else if (mouse.button === Qt.RightButton) {
+                        root.activePlayer?.next();
+                    }
+                }
+            }
         }
 
         RowLayout {
@@ -81,7 +102,10 @@ Item {
                     anchors.fill: parent
                     source: activePlayer?.trackArtUrl
                     fillMode: Image.PreserveAspectFit
+                    antialiasing: true
+                    asynchronous: true
                     visible: false
+                    cache: false
                 }
                 Rectangle {
                     id: mask
