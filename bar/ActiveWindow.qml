@@ -83,7 +83,6 @@ Rectangle {
 
     Behavior on implicitWidth {
         ISpringAnimation {
-            property: "implicitWidth"
             spring: General.springAnimationSpring * 2
             damping: General.springAnimationDamping * 1.3
         }
