@@ -14,6 +14,8 @@ Item {
     property var ws: Hyprland.workspaces
     property int activeIndex: -1
     property bool activeOccupied: false
+    property int previousActiveIndex: -1
+
     property real activeRectX: {
         if (activeIndex < 0)
             return 0;
@@ -79,10 +81,63 @@ Item {
                     anchors.centerIn: parent
                     text: !st.isUrgent ? Icons.ws[index + 1] : Icons.ws['urgent']
                     font.pixelSize: !active ? Bar.workspaceIconSize / 2 : Bar.workspaceActiveIconSize / 2.5
-                    color: WallustColors.foreground
                     opacity: !st.isOccupied ? 0 : 1
+                    color: !st.isActive ? WallustColors.color15 : WallustColors.foreground
                     Behavior on font.pixelSize {
                         ISpringAnimation {}
+                    }
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: Bar.workspaceAnimationDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+
+                    onPressed: {
+                        if (!parent.active)
+                            Hyprland.dispatch(`workspace ${index + 1}`);
+                    }
+                    function moveActive() {
+                        if (!active) {
+                            previousActiveIndex = root.activeIndex;
+                            activeRect.x = parent.x;
+                            activeRect.implicitWidth = Bar.workspaceIconSize;
+                        }
+                    }
+                    onEntered: {
+                        moveActive();
+                    }
+                    // https://github.com/quickshell-mirror/quickshell/issues/118
+                    // onPositionChanged: {
+                    //     moveActive();
+                    // }
+                    onExited: {
+                        if (!active && previousActiveIndex >= 0) {
+                            // just in case
+                            activeRect.x = layout.x + previousActiveIndex * Bar.workspaceIconSize + previousActiveIndex * Bar.workspaceSpacing;
+                            activeRect.implicitWidth = Bar.workspaceActiveIconSize;
+                            previousActiveIndex = -1;
+                        }
+                    }
+                    onWheel: event => {
+                        // no idea wats wrong w/ prev so we just unify it to use +/- 1
+                        if (event.angleDelta.y < 0) {
+                            if (activeIndex + 1 < Bar.workspaces)
+                                Hyprland.dispatch(`workspace +1`);
+                            else
+                                Hyprland.dispatch(`workspace 1`);
+                        } else if (event.angleDelta.y > 0) {
+                            if (activeIndex + 1 > 1) {
+                                Hyprland.dispatch(`workspace -1`);
+                            } else if (Bar.workspaces > 1) {
+                                Hyprland.dispatch(`workspace ${Bar.workspaces}`);
+                            }
+                        }
                     }
                 }
 
@@ -108,6 +163,30 @@ Item {
                 onActiveChanged: if (active) {
                     root.activeIndex = index;
                     root.activeOccupied = st.isOccupied;
+                    activeRect.implicitWidth = Bar.workspaceActiveIconSize;
+                    activeRect.x = activeRectX;
+                    previousActiveIndex = index;
+                }
+            }
+        }
+    }
+    MouseArea {
+        height: Bar.height
+        width: parent.width
+
+        // sync w the inner MouseArea
+        onWheel: event => {
+            // no idea wats wrong w/ prev so we just unify it to use +/- 1
+            if (event.angleDelta.y < 0) {
+                if (activeIndex + 1 < Bar.workspaces)
+                    Hyprland.dispatch(`workspace +1`);
+                else
+                    Hyprland.dispatch(`workspace 1`);
+            } else if (event.angleDelta.y > 0) {
+                if (activeIndex + 1 > 1) {
+                    Hyprland.dispatch(`workspace -1`);
+                } else if (Bar.workspaces > 1) {
+                    Hyprland.dispatch(`workspace ${Bar.workspaces}`);
                 }
             }
         }
