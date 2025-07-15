@@ -35,7 +35,7 @@ Item {
             Icon {
                 text: Icons.power.shutdown
                 font.pixelSize: Style.font.size.large
-                color: Qt.rgba(191, 97, 106, 1)
+                color: Colors.red
             }
 
             // Icon {
