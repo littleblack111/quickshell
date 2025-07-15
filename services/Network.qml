@@ -14,7 +14,6 @@ Singleton {
     property bool ethernet: false
     property string networkName: ""
     property int networkStrength
-    // property string materialSymbol: ethernet ? "lan" : (Network.networkName.length > 0 && Network.networkName != "lo") ? (Network.networkStrength > 80 ? "signal_wifi_4_bar" : Network.networkStrength > 60 ? "network_wifi_3_bar" : Network.networkStrength > 40 ? "network_wifi_2_bar" : Network.networkStrength > 20 ? "network_wifi_1_bar" : "signal_wifi_0_bar") : "signal_wifi_off"
     property string state: ethernet ? Icons.resource.network.wifi : (networkName.length >= 0 && networkName !== "lo") ? (networkStrength >= 90 ? Icons.resource.network.wifi.max : networkStrength >= 80 ? Icons.resource.network.wifi.high : networkStrength >= 60 ? Icons.resource.network.wifi.mid : networkStrength >= 40 ? Icons.resource.network.wifi.low : networkStrength >= 20 ? Icons.resource.network.wifi.min : Icons.resource.network.disconnected) : Icons.resource.network.disconnected
 
     function update() {
