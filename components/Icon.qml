@@ -9,6 +9,7 @@ IText {
     property real fill: 0
     property real truncatedFill: Math.round(fill * 100) / 100 // Reduce memory consumption spikes from constant font remapping
     renderType: Text.NativeRendering
+    color: WallustColors.color15
     font {
         // hintingPreference: Font.PreferFullHinting
         hintingPreference: Font.PreferNoHinting // so the icons dont just offset away
