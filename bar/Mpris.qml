@@ -55,7 +55,7 @@ Item {
                 Rectangle {
                     width: pBar.visualPosition * parent.width
                     height: parent.height
-                    color: WallustColors.color3
+                    color: WallustColors.color12
                     radius: Style.rounding.smaller
 
                     Behavior on width {

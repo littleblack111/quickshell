@@ -49,26 +49,26 @@ Item {
 
             RowLayout {
                 spacing: Bar.resourceIconTextSpacing / 2
-                IText {
+                Icon {
                     text: Icons.resource.network.download
-                    color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : WallustColors.foreground
+                    color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : WallustColors.color15
                 }
                 IText {
                     animate: true
                     text: root.down + root.downUnit
-                    color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : WallustColors.foreground
+                    color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : WallustColors.color15
                 }
             }
             RowLayout {
                 spacing: Bar.resourceIconTextSpacing / 2
-                IText {
+                Icon {
                     text: Icons.resource.network.upload
-                    color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : WallustColors.foreground
+                    color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : WallustColors.color15
                 }
                 IText {
                     animate: true
                     text: root.up + root.upUnit
-                    color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : WallustColors.foreground
+                    color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : WallustColors.color15
                 }
             }
 
