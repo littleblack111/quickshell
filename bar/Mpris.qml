@@ -97,9 +97,14 @@ Item {
                 Layout.preferredHeight: childrenRect.height
                 width: Bar.appIconSize
                 height: Bar.appIconSize
+
+                opacity: activePlayer.playbackState === MprisPlaybackState.Playing ? 1 : Bar.mediaPausedOpacity * 1.1
+
+                // put shadow
                 Image {
                     id: image
                     anchors.fill: parent
+
                     source: activePlayer?.trackArtUrl
                     fillMode: Image.PreserveAspectFit
                     antialiasing: true
@@ -118,10 +123,25 @@ Item {
                     source: image
                     maskSource: mask
                 }
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: General.animateDuration / 4
+                        easing.type: Easing.InOutQuad
+                    }
+                }
             }
             IText {
                 animate: true
+                opacity: activePlayer.playbackState === MprisPlaybackState.Playing ? 1 : Bar.mediaPausedOpacity
                 text: root.cleanedTitle
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: General.animateDuration / 4
+                        easing.type: Easing.InOutQuad
+                    }
+                }
             }
         }
     }
