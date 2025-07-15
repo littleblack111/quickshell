@@ -1,6 +1,7 @@
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Layouts
 import Quickshell
+import Quickshell.Widgets
 import Quickshell.Services.Mpris
 import qs.services as Services
 import qs.config
@@ -26,8 +27,11 @@ Item {
         return title.trim();
     }
 
-    implicitWidth: rect.width - General.rectMargin / 1.25
+    implicitWidth: activePlayer ? rect.width - General.rectMargin / 1.25 : 0
     height: Bar.height + General.rectMargin / 1.5
+
+    // TODO: after support for multiple players is added, this should be changed to if none exist/is active
+    opacity: activePlayer ? 1 : 0
 
     Rectangle {
         id: rect
@@ -41,8 +45,14 @@ Item {
             id: layout
             anchors.centerIn: parent
             spacing: Bar.resourceIconTextSpacing / 1.5
-            Icon {
-                text: root.state
+            // Icon {
+            //     text: root.state
+            // }
+            Image {
+                source: activePlayer.trackArtUrl
+                fillMode: Image.PreserveAspectFit
+                Layout.preferredWidth: Bar.appIconSize
+                cache: true
             }
             IText {
                 animate: true
@@ -169,6 +179,19 @@ Item {
                     canvas.requestPaint();
                 }
             }
+        }
+    }
+
+    Behavior on opacity {
+        NumberAnimation {
+            duration: General.animateDuration / 4
+        }
+    }
+
+    Behavior on implicitWidth {
+        ISpringAnimation {
+            spring: General.springAnimationSpring * 2
+            damping: General.springAnimationDamping * 1.3
         }
     }
 }
