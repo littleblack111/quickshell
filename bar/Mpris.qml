@@ -28,7 +28,7 @@ Item {
         return title.trim();
     }
 
-    implicitWidth: activePlayer ? rect.implicitWidth : 0
+    implicitWidth: activePlayer ? rect.implicitWidth - General.rectMargin : 0
     height: Bar.height + General.rectMargin / 1.5
     opacity: activePlayer ? 1 : 0
 
@@ -39,7 +39,6 @@ Item {
         height: parent.height - General.rectMargin
         radius: Style.rounding.smaller
         color: "transparent"
-        clip: true
 
         ProgressBar {
             id: pBar
@@ -55,8 +54,6 @@ Item {
             }
             contentItem: Item {
                 Rectangle {
-                    width: pBar.visualPosition * parent.width
-                    height: parent.height
                     color: Colors.primary
                     radius: Style.rounding.smaller - 1
 
