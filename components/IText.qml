@@ -10,7 +10,7 @@ Text {
     property real animateFrom: 0
     property real animateTo: 1
 
-    renderType: Text.NativeRendering
+    // renderType: Text.NativeRendering
     textFormat: Text.PlainText
     color: Colors.foreground
 
