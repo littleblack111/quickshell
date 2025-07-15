@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Services.Mpris
@@ -72,11 +73,30 @@ Item {
             id: layout
             anchors.centerIn: parent
             spacing: Bar.resourceIconTextSpacing / 1.5
-            Image {
-                source: activePlayer.trackArtUrl
-                fillMode: Image.PreserveAspectFit
-                Layout.preferredWidth: Bar.appIconSize
-                cache: true
+            Item {
+                Layout.preferredWidth: childrenRect.width
+                Layout.preferredHeight: childrenRect.height
+                width: Bar.appIconSize
+                height: Bar.appIconSize
+                Image {
+                    id: image
+                    anchors.fill: parent
+                    source: activePlayer?.trackArtUrl
+                    fillMode: Image.PreserveAspectFit
+                    cache: true
+                    visible: false
+                }
+                Rectangle {
+                    id: mask
+                    anchors.fill: parent
+                    radius: 6
+                    visible: false
+                }
+                OpacityMask {
+                    anchors.fill: parent
+                    source: image
+                    maskSource: mask
+                }
             }
             IText {
                 animate: true
