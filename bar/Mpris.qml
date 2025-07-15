@@ -28,7 +28,7 @@ Item {
         return title.trim();
     }
 
-    implicitWidth: activePlayer ? rect.implicitWidth - General.rectMargin : 0
+    implicitWidth: activePlayer ? rect.implicitWidth - General.rectMargin / 1.2 : 0
     height: Bar.height + General.rectMargin / 1.5
     opacity: activePlayer ? 1 : 0
 
