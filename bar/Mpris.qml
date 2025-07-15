@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Services.Mpris
@@ -10,7 +11,7 @@ import qs.components
 Item {
     id: root
     readonly property MprisPlayer activePlayer: Services.Mpris.activePlayer
-    readonly property real progress: (activePlayer?.positionSupported && activePlayer?.lengthSupported && activePlayer?.length > 0) ? activePlayer?.position / activePlayer?.length : 0
+    readonly property real progress: (activePlayer?.positionSupported && activePlayer?.lengthSupported && activePlayer.length > 0) ? activePlayer.position / activePlayer.length : 0
     readonly property string cleanedTitle: cleanMusicTitle(activePlayer?.trackTitle)
 
     function cleanMusicTitle(title) {
@@ -26,7 +27,7 @@ Item {
         return title.trim();
     }
 
-    implicitWidth: activePlayer ? rect.width - General.rectMargin / 1.25 : 0
+    implicitWidth: activePlayer ? rect.implicitWidth : 0
     height: Bar.height + General.rectMargin / 1.5
     opacity: activePlayer ? 1 : 0
 
@@ -35,8 +36,37 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         implicitWidth: layout.width + General.rectMargin * 4
         height: parent.height - General.rectMargin
-        color: Colors.alt
         radius: Style.rounding.smaller
+        color: "transparent"
+        clip: true
+
+        ProgressBar {
+            id: pBar
+            anchors.fill: parent
+            anchors.margins: 1
+            from: 0
+            to: 1
+            value: root.progress
+            background: Rectangle {
+                anchors.fill: parent
+                color: Colors.alt
+                radius: Style.rounding.smaller - 1
+            }
+            contentItem: Item {
+                Rectangle {
+                    width: pBar.visualPosition * parent.width
+                    height: parent.height
+                    color: Colors.primary
+                    radius: Style.rounding.smaller - 1
+
+                    Behavior on width {
+                        NumberAnimation {
+                            duration: General.animateDuration / 2
+                        }
+                    }
+                }
+            }
+        }
 
         RowLayout {
             id: layout
