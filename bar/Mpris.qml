@@ -43,19 +43,20 @@ Item {
         ProgressBar {
             id: pBar
             anchors.fill: parent
-            anchors.margins: 1
             from: 0
             to: 1
             value: root.progress
             background: Rectangle {
                 anchors.fill: parent
                 color: WallustColors.color4
-                radius: Style.rounding.smaller - 1
+                radius: Style.rounding.smaller
             }
             contentItem: Item {
                 Rectangle {
+                    width: pBar.visualPosition * parent.width
+                    height: parent.height
                     color: WallustColors.color3
-                    radius: Style.rounding.smaller - 1
+                    radius: Style.rounding.smaller
 
                     Behavior on width {
                         NumberAnimation {
