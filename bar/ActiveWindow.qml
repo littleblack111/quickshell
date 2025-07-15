@@ -50,7 +50,7 @@ Rectangle {
             opacity: root.activated ? 1 : 0
             Behavior on opacity {
                 NumberAnimation {
-                    duration: General.animateDuration / 2.5
+                    duration: General.animateDuration / 4
                 }
             }
             Layout.preferredWidth: Bar.appIconSize
@@ -67,7 +67,7 @@ Rectangle {
             opacity: root.activated ? 1 : 0
             Behavior on opacity {
                 NumberAnimation {
-                    duration: General.animateDuration / 2.5
+                    duration: General.animateDuration / 4
                 }
             }
         }
@@ -77,7 +77,7 @@ Rectangle {
 
     Behavior on opacity {
         NumberAnimation {
-            duration: General.animateDuration / 2.5
+            duration: General.animateDuration / 4
         }
     }
 
@@ -97,7 +97,7 @@ Rectangle {
             target: icon
             property: "opacity"
             to: 0
-            duration: General.animateDuration / 3
+            duration: General.animateDuration / 4
         }
         ScriptAction {
             script: icon.source = root.icon
@@ -106,7 +106,7 @@ Rectangle {
             target: icon
             property: "opacity"
             to: 1
-            duration: General.animateDuration / 3
+            duration: General.animateDuration / 4
         }
         ScriptAction {
             script: icon.source = root.icon
