@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Hyprland
 import Quickshell.Wayland
 import Quickshell.Widgets
 import qs.components
@@ -10,10 +9,11 @@ import qs.config
 // TODO use a item wrapping loader for opacity Behavior
 Rectangle {
     id: root
-    property var toplevel: Hyprland.activeToplevel
-    property var icon: Quickshell.iconPath(AppSearch.guessIcon(toplevel?.wayland?.appId), "image-missing")
+    // hyprland toplevel isn't shown immediately...
+    property var toplevel: ToplevelManager.activeToplevel
+    property var icon: Quickshell.iconPath(AppSearch.guessIcon(toplevel?.appId), "image-missing")
 
-    property var activated: ToplevelManager.activeToplevel?.activated || false
+    property var activated: toplevel?.activated || false
 
     // use IRect
     implicitWidth: activated ? rowLayout.implicitWidth + General.rectMargin * 4 : 0
@@ -61,7 +61,7 @@ Rectangle {
         IText {
             animate: true
             font.pixelSize: General.fontSize
-            text: strip(root?.toplevel?.wayland?.title) || ""
+            text: strip(root?.toplevel?.title) || ""
 
             // sync animation
             opacity: root.activated ? 1 : 0
