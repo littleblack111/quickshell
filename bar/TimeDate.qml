@@ -40,21 +40,22 @@ Item {
                 property int s: Services.TimeDate.seconds
                 spacing: 0
                 IText {
-                    text: (parent.h > 10 ? "" : "0") + parent.h
+                    animate: true
+                    text: (parent.h >= 10 ? "" : "0") + parent.h
                 }
                 IText {
                     text: ":"
                 }
                 IText {
                     animate: true
-                    text: (parent.m > 10 ? "" : "0") + parent.m
+                    text: (parent.m >= 10 ? "" : "0") + parent.m
                 }
                 IText {
                     text: ":"
                 }
                 IText {
                     animate: true
-                    text: (parent.s > 10 ? "" : "0") + parent.s
+                    text: (parent.s >= 10 ? "" : "0") + parent.s
                 }
             }
             Item {
