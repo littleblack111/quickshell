@@ -10,38 +10,28 @@ Item {
     required property string text
     required property string icon
 
-    implicitWidth: container.implicitWidth
-    implicitHeight: container.implicitHeight
+    implicitWidth: layout.implicitWidth
+    implicitHeight: layout.implicitHeight
 
-    Rectangle {
-        id: container
-        implicitWidth: layout.implicitWidth + General.rectMargin * 2
-        implicitHeight: Bar.height - General.rectMargin
+    RowLayout {
+        id: layout
 
-        color: Colors.alt
-        radius: Style.rounding.large
+        spacing: Bar.resourceIconTextSpacing
 
-        RowLayout {
-            id: layout
-            anchors.centerIn: parent
+        Item {
+            Layout.fillWidth: true
+        }
 
-            spacing: Bar.resourceIconTextSpacing
+        Icon {
+            text: root.icon
+        }
+        IText {
+            animate: true
+            text: root.text
+        }
 
-            Item {
-                Layout.fillWidth: true
-            }
-
-            Icon {
-                text: root.icon
-            }
-            IText {
-                animate: true
-                text: root.text
-            }
-
-            Item {
-                Layout.fillWidth: true
-            }
+        Item {
+            Layout.fillWidth: true
         }
     }
 }

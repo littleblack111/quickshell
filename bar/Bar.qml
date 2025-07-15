@@ -110,24 +110,21 @@ Scope {
                     // Tray {
                     //     id: tray
                     // }
-                    TimeDate {
-                        id: timeDate
-                    }
-                    Network {
-                        id: network
-                    }
-                    Temp {
-                        id: temp
-                    }
-                    Gpu {
-                        id: gpu
-                    }
-                    Memory {
-                        id: memory
-                    }
-                    Cpu {
-                        id: cpu
-                    }
+                    TimeDate {}
+                    Network {}
+                    // Temp {
+                    //     id: temp
+                    // }
+                    // Gpu {
+                    //     id: gpu
+                    // }
+                    // Memory {
+                    //     id: memory
+                    // }
+                    // Cpu {
+                    //     id: cpu
+                    // }
+                    Resources {}
 
                     Item {
                         id: rightSpacer
