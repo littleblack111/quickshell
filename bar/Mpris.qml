@@ -29,8 +29,6 @@ Item {
 
     implicitWidth: activePlayer ? rect.width - General.rectMargin / 1.25 : 0
     height: Bar.height + General.rectMargin / 1.5
-
-    // TODO: after support for multiple players is added, this should be changed to if none exist/is active
     opacity: activePlayer ? 1 : 0
 
     Rectangle {
@@ -45,9 +43,6 @@ Item {
             id: layout
             anchors.centerIn: parent
             spacing: Bar.resourceIconTextSpacing / 1.5
-            // Icon {
-            //     text: root.state
-            // }
             Image {
                 source: activePlayer.trackArtUrl
                 fillMode: Image.PreserveAspectFit
@@ -74,11 +69,11 @@ Item {
 
                 var leftHeight = h - 2 * r;
                 var topWidth = w - 2 * r;
-                var rightHeight = h - 2 * r;
+                var arcLen = r * Math.PI / 2;
 
                 var seg1 = leftHeight;
-                var seg2 = 2 * topWidth + 4 * (r * Math.PI / 2);
-                var seg3 = rightHeight;
+                var seg2 = 2 * topWidth + 4 * arcLen;
+                var seg3 = leftHeight;
                 var total = seg1 + seg2 + seg3;
 
                 ctx.lineWidth = bw;
@@ -87,97 +82,79 @@ Item {
 
                 var rem = t * total;
 
-                // left edge
                 if (rem > 0) {
-                    var len = Math.min(rem, seg1);
-                    var centerY = h / 2;
-                    var halfLen = len / 2;
+                    var len1 = Math.min(rem, seg1);
+                    var up1 = Math.min(len1, leftHeight / 2);
+                    var down1 = up1;
 
                     ctx.beginPath();
-                    ctx.moveTo(bw / 2, centerY - halfLen);
-                    ctx.lineTo(bw / 2, centerY + halfLen);
+                    ctx.moveTo(bw / 2, h / 2 - up1);
+                    ctx.lineTo(bw / 2, h / 2 + down1);
                     ctx.stroke();
 
-                    rem -= len;
+                    rem -= len1;
                 }
 
-                // top/bottom edges with corners
                 if (rem > 0) {
-                    var len = Math.min(rem, seg2);
-                    var progress = len / seg2;
-                    var edgeLen = topWidth * progress;
+                    var len2 = Math.min(rem, seg2);
+                    var prog2 = len2 / seg2;
+                    var edgeLen = topWidth * (prog2 * 2);
 
-                    if (progress > 0) {
-                        // top-left corner
+                    if (len2 > 0) {
                         ctx.beginPath();
-                        ctx.arc(r, r, r - bw / 2, Math.PI, 3 * Math.PI / 2);
+                        ctx.arc(r, r, r - bw / 2, Math.PI, 1.5 * Math.PI);
                         ctx.stroke();
 
-                        // bottom-left corner
                         ctx.beginPath();
-                        ctx.arc(r, h - r, r - bw / 2, Math.PI / 2, Math.PI);
+                        ctx.arc(r, h - r, r - bw / 2, 0.5 * Math.PI, Math.PI);
                         ctx.stroke();
 
-                        // top edge
+                        var topDraw = Math.min(edgeLen, topWidth);
                         ctx.beginPath();
                         ctx.moveTo(r, bw / 2);
-                        ctx.lineTo(r + edgeLen, bw / 2);
+                        ctx.lineTo(r + topDraw, bw / 2);
                         ctx.stroke();
 
-                        // bottom edge
+                        var botDraw = topDraw;
                         ctx.beginPath();
                         ctx.moveTo(r, h - bw / 2);
-                        ctx.lineTo(r + edgeLen, h - bw / 2);
+                        ctx.lineTo(r + botDraw, h - bw / 2);
                         ctx.stroke();
 
-                        // top-right and bottom-right corners if complete
-                        if (progress >= 1) {
+                        if (len2 >= seg2) {
                             ctx.beginPath();
-                            ctx.arc(w - r, r, r - bw / 2, 3 * Math.PI / 2, 2 * Math.PI);
+                            ctx.arc(w - r, r, r - bw / 2, 1.5 * Math.PI, 2 * Math.PI);
                             ctx.stroke();
 
                             ctx.beginPath();
-                            ctx.arc(w - r, h - r, r - bw / 2, 0, Math.PI / 2);
+                            ctx.arc(w - r, h - r, r - bw / 2, 0, 0.5 * Math.PI);
                             ctx.stroke();
                         }
                     }
 
-                    rem -= len;
+                    rem -= len2;
                 }
 
-                // right edge
                 if (rem > 0) {
-                    var len = Math.min(rem, seg3);
-                    var centerY = h / 2;
-                    var halfLen = len / 2;
+                    var len3 = Math.min(rem, seg3);
+                    var up3 = Math.min(len3, leftHeight / 2);
+                    var down3 = up3;
 
-                    // draw upward from center
                     ctx.beginPath();
-                    ctx.moveTo(w - bw / 2, centerY);
-                    ctx.lineTo(w - bw / 2, centerY - halfLen);
-                    ctx.stroke();
-
-                    // draw downward from center
-                    ctx.beginPath();
-                    ctx.moveTo(w - bw / 2, centerY);
-                    ctx.lineTo(w - bw / 2, centerY + halfLen);
+                    ctx.moveTo(w - bw / 2, h / 2 - up3);
+                    ctx.lineTo(w - bw / 2, h / 2 + down3);
                     ctx.stroke();
                 }
             }
-
-            onWidthChanged: requestPaint()
-            onHeightChanged: requestPaint()
+            onWidthChanged: canvas.requestPaint()
+            onHeightChanged: canvas.requestPaint()
             Connections {
                 target: root
-                function onProgressChanged() {
-                    canvas.requestPaint();
-                }
+                onProgressChanged: canvas.requestPaint()
             }
             Connections {
                 target: rect
-                function onRadiusChanged() {
-                    canvas.requestPaint();
-                }
+                onRadiusChanged: canvas.requestPaint()
             }
         }
     }
@@ -187,7 +164,6 @@ Item {
             duration: General.animateDuration / 4
         }
     }
-
     Behavior on implicitWidth {
         ISpringAnimation {
             spring: General.springAnimationSpring * 2
