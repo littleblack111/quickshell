@@ -82,7 +82,7 @@ Item {
                     text: !st.isUrgent ? Icons.ws[index + 1] : Icons.ws['urgent']
                     font.pixelSize: !active ? Bar.workspaceIconSize / 2 : Bar.workspaceActiveIconSize / 2.5
                     opacity: !st.isOccupied ? 0 : 1
-                    color: !st.isActive ? WallustColors.color15 : WallustColors.foreground
+                    color: !st.isUrgent ? !st.isActive ? WallustColors.color15 : WallustColors.foreground : Colors.red
                     Behavior on font.pixelSize {
                         ISpringAnimation {}
                     }
