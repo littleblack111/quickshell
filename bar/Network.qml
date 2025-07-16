@@ -15,6 +15,8 @@ Item {
     property int significantUsage: 30
     property string usageUnit: "M"
 
+    property bool isCollapsed: true
+
     implicitWidth: container.implicitWidth
     implicitHeight: container.implicitHeight - General.rectMargin
 
@@ -44,7 +46,12 @@ Item {
             }
 
             Icon {
+                visible: root.isCollapsed
                 text: Services.Network.state
+            }
+            IText {
+                visible: !root.isCollapsed
+                text: Services.Network.networkStrength
             }
 
             RowLayout {
@@ -75,6 +82,13 @@ Item {
             Item {
                 Layout.fillWidth: true
             }
+        }
+    }
+    MouseArea {
+        anchors.fill: container
+        cursorShape: Qt.PointingHandCursor
+        onClicked: {
+            root.isCollapsed = !root.isCollapsed;
         }
     }
 }
