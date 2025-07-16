@@ -12,7 +12,6 @@ import qs.components
 Item {
     id: root
     readonly property MprisPlayer activePlayer: Services.Mpris.activePlayer
-    readonly property real progress: (activePlayer?.positionSupported && activePlayer?.lengthSupported && activePlayer.length > 0) ? activePlayer.position / activePlayer.length : 0
     readonly property string cleanedTitle: cleanMusicTitle(activePlayer?.trackTitle)
 
     function cleanMusicTitle(title) {
@@ -46,8 +45,8 @@ Item {
 
             handle: Item
             from: 0
-            to: 1
-            value: root.progress
+            to: activePlayer?.length || 0
+            value: activePlayer?.position || 0
             background: Rectangle {
                 anchors.fill: parent
                 color: WallustColors.color4
@@ -69,8 +68,8 @@ Item {
             }
 
             onMoved: {
-                if (Math.round(root.activePlayer.position) !== Math.round(value * root.activePlayer.length)) {
-                    root.activePlayer.position = value * root.activePlayer.length;
+                if (Math.round(root.activePlayer.position) !== Math.round(value)) {
+                    root.activePlayer.position = value;
                 }
             }
 
