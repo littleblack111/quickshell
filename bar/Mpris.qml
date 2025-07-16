@@ -97,7 +97,7 @@ Item {
                 width: Bar.appIconSize
                 height: Bar.appIconSize
 
-                opacity: activePlayer.playbackState === MprisPlaybackState.Playing ? 1 : Bar.mediaPausedOpacity
+                opacity: activePlayer?.playbackState === MprisPlaybackState.Playing ? 1 : Bar.mediaPausedOpacity
 
                 // put shadow
                 Image {
@@ -132,8 +132,8 @@ Item {
             }
             IText {
                 animate: true
-                opacity: activePlayer.playbackState === MprisPlaybackState.Playing ? 1 : Bar.mediaPausedOpacity
-                color: activePlayer.playbackState === MprisPlaybackState.Playing ? WallustColors.foreground : WallustColors.color15
+                opacity: activePlayer?.playbackState === MprisPlaybackState.Playing ? 1 : Bar.mediaPausedOpacity
+                color: activePlayer?.playbackState === MprisPlaybackState.Playing ? WallustColors.foreground : WallustColors.color15
                 text: root.cleanedTitle
 
                 Behavior on opacity {
