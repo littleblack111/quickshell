@@ -175,6 +175,7 @@ Item {
     MouseArea {
         height: Bar.height
         width: parent.width
+        acceptedButtons: Qt.MiddleButton
 
         // sync w the inner MouseArea
         onWheel: event => {
