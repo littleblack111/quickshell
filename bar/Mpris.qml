@@ -57,7 +57,7 @@ Item {
                 Rectangle {
                     width: pBar.visualPosition * parent.width
                     height: parent.height
-                    color: WallustColors.color12
+                    color: Qt.rgba(WallustColors.color12.r, WallustColors.color12.g, WallustColors.color12.b, WallustColors.color4.a * 1.5)
                     radius: Style.rounding.smaller
 
                     Behavior on width {
