@@ -96,6 +96,8 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
+
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
                     hoverEnabled: true
 
                     onPressed: {
