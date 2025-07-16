@@ -6,6 +6,7 @@ import qs.utils
 import qs.config
 import qs.components
 
+// TODO: move to a full screen menu
 Item {
     id: root
 
