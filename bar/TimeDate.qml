@@ -68,6 +68,16 @@ Item {
                     Item {
                         Layout.fillWidth: true
                     }
+                    SequentialAnimation {
+                        running: true
+                        NumberAnimation {
+                            target: parent
+                            property: "opacity"
+                            from: 0
+                            to: 1
+                            duration: General.animateDuration / 2
+                        }
+                    }
                 }
             }
         }
@@ -93,6 +103,16 @@ Item {
                     }
                     Item {
                         Layout.fillWidth: true
+                    }
+                    SequentialAnimation {
+                        running: true
+                        NumberAnimation {
+                            target: parent
+                            property: "opacity"
+                            from: 0
+                            to: 1
+                            duration: General.animateDuration / 2
+                        }
                     }
                 }
             }
