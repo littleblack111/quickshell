@@ -38,6 +38,7 @@ Singleton {
     readonly property int moduleRadius: Style.rounding.small
 
     readonly property double mediaPausedOpacity: 0.75
+    readonly property double mediaScrollScale: 1 / 25 // 5sec
     readonly property string preferedPlayer: "spotify"
 
     readonly property double bgTransparency: 0.25

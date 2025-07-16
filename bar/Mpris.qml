@@ -76,6 +76,7 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 acceptedButtons: Qt.MiddleButton | Qt.RightButton | Qt.LeftButton
+                cursorShape: Qt.PointingHandCursor
                 onClicked: mouse => {
                     if (mouse.button === Qt.MiddleButton)
                         root.activePlayer?.togglePlaying();
@@ -83,7 +84,7 @@ Item {
                         root.activePlayer?.next();
                 }
                 onWheel: mouse => {
-                    root.activePlayer?.seek(-mouse.angleDelta.y / 25);
+                    root.activePlayer?.seek(-mouse.angleDelta.y * Bar.mediaScrollScale);
                 }
             }
         }
