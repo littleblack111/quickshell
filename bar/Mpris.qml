@@ -67,21 +67,23 @@ Item {
                 }
             }
 
-            onMoved: {
-                if (Math.round(root.activePlayer.position) !== Math.round(value)) {
-                    root.activePlayer.position = value;
-                }
-            }
+            // onMoved: {
+            //     if (Math.round(root.activePlayer.position) !== Math.round(value)) {
+            //         root.activePlayer.position = value;
+            //     }
+            // }
 
             MouseArea {
                 anchors.fill: parent
-                acceptedButtons: Qt.MiddleButton | Qt.RightButton
+                acceptedButtons: Qt.MiddleButton | Qt.RightButton | Qt.LeftButton
                 onClicked: mouse => {
-                    if (mouse.button === Qt.MiddleButton) {
+                    if (mouse.button === Qt.MiddleButton)
                         root.activePlayer?.togglePlaying();
-                    } else if (mouse.button === Qt.RightButton) {
+                    else if (mouse.button === Qt.RightButton)
                         root.activePlayer?.next();
-                    }
+                }
+                onWheel: mouse => {
+                    root.activePlayer?.seek(-mouse.angleDelta.y / 25);
                 }
             }
         }
