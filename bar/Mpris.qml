@@ -39,6 +39,7 @@ Item {
         radius: Style.rounding.smaller
         color: "transparent"
 
+        // FIXME: at the start, the progress bar's radius will make it go out of bounds. use OpacityMask or something
         Slider {
             id: pBar
             anchors.fill: parent
