@@ -107,7 +107,7 @@ Item {
                     id: image
                     anchors.fill: parent
 
-                    source: activePlayer?.trackArtUrl
+                    source: activePlayer?.trackArtUrl || ""
                     fillMode: Image.PreserveAspectFit
                     antialiasing: true
                     asynchronous: true
