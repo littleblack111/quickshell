@@ -1,5 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
+import Quickshell
 
 import qs.services as Services
 import qs.components
@@ -21,7 +23,7 @@ Item {
         }
 
         // implicitWidth: !isAlt ? nonAlt.implicitWidth + General.rectMargin * 2 : alt.implicitWidth + General.rectMargin * 2
-        implicitWidth: layout.width + General.rectMargin * 2
+        implicitWidth: layout.width
         implicitHeight: Bar.height
 
         color: WallustColors.color4
@@ -29,7 +31,9 @@ Item {
 
         RowLayout {
             id: layout
+            anchors.fill: parent
             anchors.centerIn: parent
+            implicitWidth: nonAlt.width + alt.width + tray.width + General.rectMargin * 2
             spacing: Bar.resourceIconTextSpacing
             Loader {
                 id: nonAlt
@@ -71,9 +75,6 @@ Item {
                                 text: (parent.s >= 10 ? "" : "0") + parent.s
                             }
                         }
-                        Item {
-                            Layout.fillWidth: true
-                        }
                         SequentialAnimation {
                             running: true
                             NumberAnimation {
@@ -107,9 +108,6 @@ Item {
                             animate: true
                             text: Services.TimeDate.date
                         }
-                        Item {
-                            Layout.fillWidth: true
-                        }
                         SequentialAnimation {
                             running: true
                             NumberAnimation {
@@ -123,13 +121,64 @@ Item {
                     }
                 }
             }
+            Loader {
+                id: tray
+
+                active: !root.isCollapsed
+                visible: !root.isCollapsed
+                sourceComponent: Component {
+                    id: trayComponent
+                    Item {
+                        implicitWidth: trayText.width
+                        implicitHeight: trayText.height + 10.5 // the symbol isn't vertically centered
+
+                        Icon {
+                            id: trayText
+                            text: "⌄"
+                            font.pixelSize: Style.font.size.large
+                        }
+
+                        property bool trayActive: false
+                        // LazyLoader {
+                        //     id: trayContainer
+                        //     active: true
+                        //     component: Component {
+                        //
+                        //         Tray {
+                        //             parentWindow: tray
+                        //         }
+                        //     }
+                        // }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onPressed: {
+                                parent.trayActive = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            Item {
+                Layout.fillWidth: true
+            }
         }
     }
-    MouseArea {
-        anchors.fill: parent
-        cursorShape: Qt.PointingHandCursor
-        onPressed: {
-            root.isAlt = !root.isAlt;
-        }
-    }
+    // MouseArea {
+    //     anchors.fill: parent
+    //     cursorShape: Qt.PointingHandCursor
+    //     hoverEnabled: true
+    //
+    //     onPressed: {
+    //         root.isAlt = !root.isAlt;
+    //     }
+    //     onEntered: {
+    //         root.isCollapsed = false;
+    //     }
+    //     onExited: {
+    //         root.isCollapsed = true;
+    //     }
+    // }
 }
