@@ -1,11 +1,13 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Effects
 import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Services.Mpris
 import qs.services as Services
+
 import qs.config
 import qs.components
 
@@ -102,28 +104,19 @@ Item {
 
                 opacity: activePlayer?.playbackState === MprisPlaybackState.Playing ? 1 : Bar.mediaPausedOpacity
 
-                // put shadow
-                Image {
+                RectangularShadow {
+                    anchors.fill: image
+                }
+                ClippingWrapperRectangle {
                     id: image
                     anchors.fill: parent
-
-                    source: activePlayer?.trackArtUrl || ""
-                    fillMode: Image.PreserveAspectFit
-                    antialiasing: true
-                    asynchronous: true
-                    visible: false
-                    cache: false
-                }
-                Rectangle {
-                    id: mask
-                    anchors.fill: parent
                     radius: 6
-                    visible: false
-                }
-                OpacityMask {
-                    anchors.fill: parent
-                    source: image
-                    maskSource: mask
+                    IconImage {
+                        anchors.fill: parent
+                        source: activePlayer?.trackArtUrl || ""
+                        antialiasing: true
+                        asynchronous: true
+                    }
                 }
 
                 Behavior on opacity {
