@@ -32,10 +32,8 @@ Item {
             anchors.centerIn: parent
             spacing: Bar.resourceIconTextSpacing
             Loader {
-                id: nonAlt
-                active: !root.isAlt
-                visible: !root.isAlt
-                sourceComponent: Component {
+                sourceComponent: !root.isAlt ? main : alt
+                readonly property Component main: Component {
                     RowLayout {
                         Item {
                             Layout.fillWidth: true
@@ -86,12 +84,7 @@ Item {
                         }
                     }
                 }
-            }
-            Loader {
-                id: alt
-                active: root.isAlt
-                visible: root.isAlt
-                sourceComponent: Component {
+                readonly property Component alt: Component {
                     RowLayout {
                         Item {
                             Layout.fillWidth: true
