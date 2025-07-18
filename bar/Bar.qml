@@ -6,126 +6,127 @@ import qs.config
 
 Scope {
     id: root
-    required property ShellScreen modelData
 
-    IWindow {
-        id: barWindow
+    Variants {
+        model: Quickshell.screens
 
-        modelData: root.modelData
-        name: "quickshell:bar"
-
-        anchors {
-            top: true
-            left: true
-            right: true
-        }
-        implicitHeight: child.implicitHeight + Bar.topMargin * 2
-
-        Rectangle {
-            id: child
-            radius: Bar.borderRadius
-            implicitHeight: Bar.height
-            implicitWidth: parent.width
+        IWindow {
+            id: barWindow
+            name: "quickshell:bar"
 
             anchors {
-                left: parent.left
-                right: parent.mid
-                fill: parent
-                top: parent.top
-                topMargin: Bar.topMargin
-                leftMargin: Bar.leftMargin
-                rightMargin: Bar.rightMargin
+                top: true
+                left: true
+                right: true
             }
-
-            color: "transparent"
+            implicitHeight: child.implicitHeight + Bar.topMargin * 2
 
             Rectangle {
-                anchors.left: parent.left
-                width: leftRow.width + leftRow.anchors.leftMargin - leftSpacer.width
-                height: leftRow.height
-                color: Qt.rgba(WallustColors.background.r, WallustColors.background.g, WallustColors.background.b, Bar.bgTransparency)
-                radius: Bar.moduleRadius
-            }
+                id: child
+                radius: Bar.borderRadius
+                implicitHeight: Bar.height
+                implicitWidth: parent.width
 
-            RowLayout {
-                id: leftRow
                 anchors {
                     left: parent.left
-                    leftMargin: Bar.moduleLeftMargin
+                    right: parent.mid
+                    fill: parent
+                    top: parent.top
+                    topMargin: Bar.topMargin
+                    leftMargin: Bar.leftMargin
+                    rightMargin: Bar.rightMargin
                 }
-                width: (child.width - centerRow.width) / 2
-                height: child.height
-                spacing: Bar.leftModuleSpacing
 
-                Workspace {
-                    id: workspace
-                    // screen: barWindow.screen // multi monitor
-                    // Layout.minimumWidth: 400 // FIXME
-                }
-                Mpris {
-                    id: mpris
-                }
-                Item {
-                    id: leftSpacer
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-            }
+                color: "transparent"
 
-            Item {
-                id: centerRow
-                anchors.centerIn: parent
-
-                ActiveWindow {
-                    id: activeWindow
+                Rectangle {
+                    anchors.left: parent.left
+                    width: leftRow.width + leftRow.anchors.leftMargin - leftSpacer.width
+                    height: leftRow.height
+                    color: Qt.rgba(WallustColors.background.r, WallustColors.background.g, WallustColors.background.b, Bar.bgTransparency)
+                    radius: Bar.moduleRadius
                 }
-            }
 
-            Rectangle {
-                anchors.right: parent.right
-                width: rightRow.width + rightRow.anchors.rightMargin - rightSpacer.width
-                height: rightRow.height
-                color: Qt.rgba(WallustColors.background.r, WallustColors.background.g, WallustColors.background.b, Bar.bgTransparency)
-                radius: Bar.moduleRadius
-            }
+                RowLayout {
+                    id: leftRow
+                    anchors {
+                        left: parent.left
+                        leftMargin: Bar.moduleLeftMargin
+                    }
+                    width: (child.width - centerRow.width) / 2
+                    height: child.height
+                    spacing: Bar.leftModuleSpacing
 
-            RowLayout {
-                id: rightRow
-                anchors {
-                    right: parent.right
-                    rightMargin: Bar.moduleRightMargin
+                    Workspace {
+                        id: workspace
+                        // screen: barWindow.screen // multi monitor
+                        // Layout.minimumWidth: 400 // FIXME
+                    }
+                    Mpris {
+                        id: mpris
+                    }
+                    Item {
+                        id: leftSpacer
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                    }
                 }
-                layoutDirection: Qt.RightToLeft
-                width: (child.width - centerRow.width) / 2
-                height: child.height
-                spacing: Bar.rightModuleSpacing
-
-                Power {
-                    id: power
-                }
-                // Tray {
-                //     id: tray
-                // }
-                TimeDate {}
-                Network {}
-                // Temp {
-                //     id: temp
-                // }
-                // Gpu {
-                //     id: gpu
-                // }
-                // Memory {
-                //     id: memory
-                // }
-                // Cpu {
-                //     id: cpu
-                // }
-                Resources {}
 
                 Item {
-                    id: rightSpacer
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+                    id: centerRow
+                    anchors.centerIn: parent
+
+                    ActiveWindow {
+                        id: activeWindow
+                    }
+                }
+
+                Rectangle {
+                    anchors.right: parent.right
+                    width: rightRow.width + rightRow.anchors.rightMargin - rightSpacer.width
+                    height: rightRow.height
+                    color: Qt.rgba(WallustColors.background.r, WallustColors.background.g, WallustColors.background.b, Bar.bgTransparency)
+                    radius: Bar.moduleRadius
+                }
+
+                RowLayout {
+                    id: rightRow
+                    anchors {
+                        right: parent.right
+                        rightMargin: Bar.moduleRightMargin
+                    }
+                    layoutDirection: Qt.RightToLeft
+                    width: (child.width - centerRow.width) / 2
+                    height: child.height
+                    spacing: Bar.rightModuleSpacing
+
+                    Power {
+                        id: power
+                    }
+                    // Tray {
+                    //     id: tray
+                    // }
+                    TimeDate {}
+                    Network {}
+                    // Temp {
+                    //     id: temp
+                    // }
+                    // Gpu {
+                    //     id: gpu
+                    // }
+                    // Memory {
+                    //     id: memory
+                    // }
+                    // Cpu {
+                    //     id: cpu
+                    // }
+                    Resources {}
+
+                    Item {
+                        id: rightSpacer
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                    }
                 }
             }
         }
