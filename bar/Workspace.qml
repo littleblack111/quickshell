@@ -15,7 +15,6 @@ Item {
     property var ws: Hyprland.workspaces
     property int activeIndex: -1
     property bool activeOccupied: false
-    property bool previousActiveOccupied: false
     property int previousActiveIndex: -1
 
     property real activeRectX: {
@@ -130,7 +129,6 @@ Item {
                     function moveActive() {
                         if (!active) {
                             previousActiveIndex = root.activeIndex;
-                            previousActiveOccupied = root.activeOccupied;
                             activeRect.x = parent.x;
                             root.activeOccupied = st.isOccupied || false;
                             activeRect.implicitWidth = Bar.workspaceIconSize;
@@ -149,8 +147,7 @@ Item {
                             activeRect.x = layout.x + previousActiveIndex * Bar.workspaceIconSize + previousActiveIndex * Bar.workspaceSpacing;
                             activeRect.implicitWidth = Bar.workspaceActiveIconSize;
                             root.activeOccupied = parent.st.isOccupied || false;
-                            root.activeOccupied = previousActiveOccupied;
-                            previousActiveOccupied = null;
+                            root.activeOccupied = getWorkspaceStats(previousActiveIndex).isOccupied || false;
                             previousActiveIndex = -1;
                         }
                     }
