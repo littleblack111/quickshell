@@ -124,7 +124,8 @@ Item {
                     anchors.fill: parent
                     radius: 6
                     color: "transparent"
-                    IconImage {
+                    Image {
+                        // IconImage makes it less crisp and blurry
                         anchors.fill: parent
                         source: activePlayer?.trackArtUrl || Quickshell.iconPath(AppSearch.guessIcon(activePlayer.desktopEntry), "image-missing")
                         antialiasing: true
