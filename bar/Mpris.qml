@@ -104,9 +104,21 @@ Item {
 
                 opacity: activePlayer?.playbackState === MprisPlaybackState.Playing ? 1 : Bar.mediaPausedOpacity
 
-                RectangularShadow {
+                DropShadow {
                     anchors.fill: image
+                    source: image
+                    opacity: activePlayer?.playbackState === MprisPlaybackState.Playing ? 1 : Bar.mediaPausedOpacity
+                    radius: 6
+                    color: WallustColors.background
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: General.animateDuration / 4
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
                 }
+
                 ClippingWrapperRectangle {
                     id: image
                     anchors.fill: parent
