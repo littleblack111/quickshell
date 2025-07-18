@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Wayland
+import Qt5Compat.GraphicalEffects
 import qs.config
 import qs.components
 
@@ -31,6 +32,27 @@ Item {
         };
     }
 
+    DropShadow {
+        anchors.fill: activeRect
+        source: activeRect
+        radius: 8
+        cached: true
+        color: root.activeOccupied ? WallustColors.color4 : WallustColors.foreground
+        opacity: root.activeOccupied ? Bar.workspaceActiveOpacity : Bar.workspaceEmptyOpacity / 3
+
+        Behavior on color {
+            NumberAnimation {
+                duration: Bar.workspaceAnimationDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on opacity {
+            NumberAnimation {
+                duration: Bar.workspaceAnimationDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+    }
     Rectangle {
         id: activeRect
         x: activeRectX
