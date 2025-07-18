@@ -6,7 +6,10 @@ import QtQuick
 import QtQuick.Layouts
 
 Scope {
-    Bar {}
+    Variants {
+        model: Quickshell.screens
+        Bar {}
+    }
 
     IpcHandler {
         target: "qs"
