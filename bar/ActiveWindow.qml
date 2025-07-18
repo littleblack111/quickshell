@@ -53,9 +53,6 @@ Rectangle {
                     duration: General.animateDuration / 4
                 }
             }
-            Layout.preferredWidth: Bar.appIconSize
-            Layout.preferredHeight: Bar.appIconSize
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
         }
 
         IText {
