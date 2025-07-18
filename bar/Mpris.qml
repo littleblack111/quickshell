@@ -123,9 +123,10 @@ Item {
                     id: image
                     anchors.fill: parent
                     radius: 6
+                    color: "transparent"
                     IconImage {
                         anchors.fill: parent
-                        source: activePlayer?.trackArtUrl || ""
+                        source: activePlayer?.trackArtUrl || Quickshell.iconPath(AppSearch.guessIcon(activePlayer.desktopEntry), "image-missing")
                         antialiasing: true
                         asynchronous: true
                     }
