@@ -7,7 +7,7 @@ import qs.components
 import qs.config
 
 // TODO use a item wrapping loader for opacity Behavior
-Rectangle {
+IRect {
     id: root
     // hyprland toplevel isn't shown immediately...
     property var toplevel: ToplevelManager.activeToplevel
@@ -15,7 +15,6 @@ Rectangle {
 
     property var activated: toplevel?.activated || false
 
-    // use IRect
     implicitWidth: activated ? rowLayout.implicitWidth + General.rectMargin * 4 : 0
     implicitHeight: rowLayout.implicitHeight + General.rectMargin * 2
     anchors.centerIn: parent

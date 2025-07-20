@@ -53,7 +53,7 @@ Item {
             }
         }
     }
-    Rectangle {
+    IRect {
         id: activeRect
         x: activeRectX
         anchors.verticalCenter: layout.verticalCenter
@@ -89,7 +89,7 @@ Item {
             id: repeater
             model: Bar.workspaces
 
-            Rectangle {
+            IRect {
                 property var st: getWorkspaceStats(index)
                 property bool active: st?.isActive || false
 

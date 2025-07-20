@@ -20,7 +20,7 @@ Item {
     implicitWidth: container.implicitWidth
     implicitHeight: container.implicitHeight - General.rectMargin
 
-    Rectangle {
+    IRect {
         id: container
         anchors {
             fill: parent

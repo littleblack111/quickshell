@@ -21,7 +21,7 @@ Scope {
             }
             implicitHeight: child.implicitHeight + Bar.topMargin * 2
 
-            Rectangle {
+            IRect {
                 id: child
                 radius: Bar.borderRadius
                 implicitHeight: Bar.height
@@ -39,12 +39,19 @@ Scope {
 
                 color: "transparent"
 
-                Rectangle {
+                IRect {
                     anchors.left: parent.left
                     width: leftRow.width + leftRow.anchors.leftMargin - leftSpacer.width
                     height: leftRow.height
                     color: Qt.rgba(WallustColors.background.r, WallustColors.background.g, WallustColors.background.b, Bar.bgTransparency)
                     radius: Bar.moduleRadius
+
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: General.animationDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
                 }
 
                 RowLayout {
@@ -81,12 +88,19 @@ Scope {
                     }
                 }
 
-                Rectangle {
+                IRect {
                     anchors.right: parent.right
                     width: rightRow.width + rightRow.anchors.rightMargin - rightSpacer.width
                     height: rightRow.height
                     color: Qt.rgba(WallustColors.background.r, WallustColors.background.g, WallustColors.background.b, Bar.bgTransparency)
                     radius: Bar.moduleRadius
+
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: General.animationDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
                 }
 
                 RowLayout {

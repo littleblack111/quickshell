@@ -9,7 +9,7 @@ Item {
     implicitWidth: container.implicitWidth
     implicitHeight: container.implicitHeight
 
-    Rectangle {
+    IRect {
         id: container
         implicitWidth: layout.implicitWidth + Config.General.rectMargin * 2
         implicitHeight: Config.Bar.height - Config.General.rectMargin

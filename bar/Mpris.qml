@@ -33,7 +33,7 @@ Item {
     height: Bar.height + General.rectMargin / 1.5
     opacity: activePlayer ? 1 : 0
 
-    Rectangle {
+    IRect {
         id: rect
         anchors.verticalCenter: parent.verticalCenter
         implicitWidth: layout.width + General.rectMargin * 4
@@ -50,13 +50,13 @@ Item {
             from: 0
             to: activePlayer?.length || 0
             value: activePlayer?.position || 0
-            background: Rectangle {
+            background: IRect {
                 anchors.fill: parent
                 color: WallustColors.color4
                 radius: Style.rounding.smaller
             }
             contentItem: Item {
-                Rectangle {
+                IRect {
                     width: pBar.visualPosition * parent.width
                     height: parent.height
                     color: Qt.rgba(WallustColors.color12.r, WallustColors.color12.g, WallustColors.color12.b, WallustColors.color4.a * 2)

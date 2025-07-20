@@ -15,7 +15,7 @@ Item {
 
     property bool collapsed: true
 
-    Rectangle {
+    IRect {
         id: container
 
         anchors {
