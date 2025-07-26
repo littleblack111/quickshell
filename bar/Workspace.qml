@@ -15,7 +15,6 @@ Item {
     property var ws: Hyprland.workspaces
     property int activeIndex: -1
     property bool activeOccupied: false
-    property int previousActiveIndex: -1
     property bool toChild: false
 
     property real activeRectX: {
@@ -134,7 +133,6 @@ Item {
                             Hyprland.dispatch(`workspace ${index + 1}`);
                     }
                     function moveActive() {
-                        previousActiveIndex = root.activeIndex;
                         activeRect.x = parent.x;
                         root.activeOccupied = st.isOccupied || false;
                         activeRect.implicitWidth = active ? Bar.workspaceActiveIconSize : Bar.workspaceIconSize;
@@ -200,7 +198,6 @@ Item {
                     root.activeOccupied = st.isOccupied;
                     activeRect.implicitWidth = Bar.workspaceActiveIconSize;
                     activeRect.x = activeRectX;
-                    previousActiveIndex = index;
                 }
             }
         }
@@ -215,27 +212,26 @@ Item {
         // sync w the inner MouseArea
         // https://github.com/quickshell-mirror/quickshell/issues/118 // but onEnter won't update the mouseX
         onPositionChanged: {
-			const abovedItemIndex = Math.round((mouseX - layout.x) / (Bar.workspaceIconSize + Bar.workspaceSpacing)) - 1; // TODO: workspaceActiveIconSize might be before
-            previousActiveIndex = root.activeIndex;
+            const abovedItemIndex = Math.round((mouseX - layout.x) / (Bar.workspaceIconSize + Bar.workspaceSpacing)) - 1; // TODO: workspaceActiveIconSize might be before
             activeRect.x = mouseX - activeRect.width / 2;
             root.activeOccupied = getWorkspaceStats(abovedItemIndex).isOccupied || false;
-            activeRect.implicitWidth = previousActiveIndex === abovedItemIndex ? Bar.workspaceActiveIconSize : Bar.workspaceIconSize;
+            activeRect.implicitWidth = root.activeIndex === abovedItemIndex ? Bar.workspaceActiveIconSize : Bar.workspaceIconSize;
         }
         onExited: {
-            if (!root.toChild) {
+            if (!root.toChild && root.activeIndex >= 0) {
                 // just in case
-                activeRect.x = layout.x + previousActiveIndex * Bar.workspaceIconSize + previousActiveIndex * Bar.workspaceSpacing;
+                activeRect.x = layout.x + root.activeIndex * Bar.workspaceIconSize + root.activeIndex * Bar.workspaceSpacing;
                 activeRect.implicitWidth = Bar.workspaceActiveIconSize;
-                root.activeOccupied = getWorkspaceStats(previousActiveIndex).isOccupied || false;
+                root.activeOccupied = getWorkspaceStats(root.activeIndex).isOccupied || false;
             }
         }
         onWheel: event => {
             // no idea wats wrong w/ prev so we just unify it to use +/- 1
-            if (event.angleDelta.y < 0) {
-                if (activeIndex + 1 < Bar.workspaces)
-                    Hyprland.dispatch(`workspace +1`);
+            if (event.angledelta.y < 0) {
+                if (activeIndex + 1 < bar.workspaces)
+                    hyprland.dispatch(`workspace +1`);
                 else
-                    Hyprland.dispatch(`workspace 1`);
+                    hyprland.dispatch(`workspace 1`);
             } else if (event.angleDelta.y > 0) {
                 if (activeIndex + 1 > 1) {
                     Hyprland.dispatch(`workspace -1`);
