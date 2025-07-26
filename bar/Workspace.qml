@@ -123,7 +123,11 @@ Item {
                 }
 
                 MouseArea {
-                    anchors.fill: parent
+                    anchors {
+                        fill: parent
+                        topMargin: Bar.wsExtraMouseArea * -1
+                        bottomMargin: Bar.wsExtraMouseArea * -1
+                    }
 
                     acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
                     hoverEnabled: true

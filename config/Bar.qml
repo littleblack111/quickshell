@@ -30,6 +30,7 @@ Singleton {
     readonly property double wsEmptyOpacity: 0.2
     // wsAnimationEasing using Hyprland's actual ws animation easing
     readonly property int wsAnimationDuration: 200
+    readonly property int wsExtraMouseArea: wsHorizontalSpacing / 2
 
     readonly property int appIconSize: 25
 
