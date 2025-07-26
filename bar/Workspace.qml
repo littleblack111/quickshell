@@ -231,11 +231,11 @@ Item {
         }
         onWheel: event => {
             // no idea wats wrong w/ prev so we just unify it to use +/- 1
-            if (event.angledelta.y < 0) {
-                if (activeIndex + 1 < bar.workspaces)
-                    hyprland.dispatch(`workspace +1`);
+            if (event.angleDelta.y < 0) {
+                if (activeIndex + 1 < Bar.wss)
+                    Hyprland.dispatch(`workspace +1`);
                 else
-                    hyprland.dispatch(`workspace 1`);
+                    Hyprland.dispatch(`workspace 1`);
             } else if (event.angleDelta.y > 0) {
                 if (activeIndex + 1 > 1) {
                     Hyprland.dispatch(`workspace -1`);
