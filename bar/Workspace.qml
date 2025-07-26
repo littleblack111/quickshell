@@ -78,12 +78,12 @@ Item {
                 easing.type: Easing.InOutQuad
             }
         }
-		Behavior on implicitWidth {
-			NumberAnimation {
-				duration: Bar.workspaceAnimationDuration
-				easing.type: Easing.InOutQuad
-			}
-		}
+        Behavior on implicitWidth {
+            NumberAnimation {
+                duration: Bar.workspaceAnimationDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
 
     RowLayout {
@@ -149,14 +149,15 @@ Item {
                     // }
                     onExited: {
                         root.toChild = false;
-                        if (!active && previousActiveIndex >= 0) {
-                            // just in case
-                            activeRect.x = layout.x + previousActiveIndex * Bar.workspaceIconSize + previousActiveIndex * Bar.workspaceSpacing;
-                            activeRect.implicitWidth = Bar.workspaceActiveIconSize;
-                            // root.activeOccupied = parent.st.isOccupied || false;
-                            root.activeOccupied = getWorkspaceStats(previousActiveIndex).isOccupied || false;
-                            previousActiveIndex = -1;
-                        }
+                        // outer MouseArea will handle this
+                        // if (!active && previousActiveIndex >= 0) {
+                        //     // just in case
+                        //     activeRect.x = layout.x + previousActiveIndex * Bar.workspaceIconSize + previousActiveIndex * Bar.workspaceSpacing;
+                        //     activeRect.implicitWidth = Bar.workspaceActiveIconSize;
+                        //     // root.activeOccupied = parent.st.isOccupied || false;
+                        //     root.activeOccupied = getWorkspaceStats(previousActiveIndex).isOccupied || false;
+                        //     previousActiveIndex = -1;
+                        // }
                     }
                     onWheel: event => {
                         // no idea wats wrong w/ prev so we just unify it to use +/- 1
