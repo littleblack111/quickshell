@@ -16,6 +16,7 @@ Item {
     property int activeIndex: -1
     property bool activeOccupied: false
     property int previousActiveIndex: -1
+    property bool toChild: false
 
     property real activeRectX: {
         if (activeIndex < 0)
@@ -77,6 +78,12 @@ Item {
                 easing.type: Easing.InOutQuad
             }
         }
+		Behavior on implicitWidth {
+			NumberAnimation {
+				duration: Bar.workspaceAnimationDuration
+				easing.type: Easing.InOutQuad
+			}
+		}
     }
 
     RowLayout {
@@ -127,14 +134,13 @@ Item {
                             Hyprland.dispatch(`workspace ${index + 1}`);
                     }
                     function moveActive() {
-                        if (!active) {
-                            previousActiveIndex = root.activeIndex;
-                            activeRect.x = parent.x;
-                            root.activeOccupied = st.isOccupied || false;
-                            activeRect.implicitWidth = Bar.workspaceIconSize;
-                        }
+                        previousActiveIndex = root.activeIndex;
+                        activeRect.x = parent.x;
+                        root.activeOccupied = st.isOccupied || false;
+                        activeRect.implicitWidth = active ? Bar.workspaceActiveIconSize : Bar.workspaceIconSize;
                     }
                     onEntered: {
+                        root.toChild = true;
                         moveActive();
                     }
                     // https://github.com/quickshell-mirror/quickshell/issues/118
@@ -142,11 +148,12 @@ Item {
                     //     moveActive();
                     // }
                     onExited: {
+                        root.toChild = false;
                         if (!active && previousActiveIndex >= 0) {
                             // just in case
                             activeRect.x = layout.x + previousActiveIndex * Bar.workspaceIconSize + previousActiveIndex * Bar.workspaceSpacing;
                             activeRect.implicitWidth = Bar.workspaceActiveIconSize;
-                            root.activeOccupied = parent.st.isOccupied || false;
+                            // root.activeOccupied = parent.st.isOccupied || false;
                             root.activeOccupied = getWorkspaceStats(previousActiveIndex).isOccupied || false;
                             previousActiveIndex = -1;
                         }
@@ -200,9 +207,27 @@ Item {
     MouseArea {
         height: Bar.height
         width: parent.width
+        hoverEnabled: true
+        z: -1000 // to be below the child's MouseArea
         acceptedButtons: Qt.MiddleButton
 
         // sync w the inner MouseArea
+        // https://github.com/quickshell-mirror/quickshell/issues/118 // but onEnter won't update the mouseX
+        onPositionChanged: {
+			const abovedItemIndex = Math.round((mouseX - layout.x) / (Bar.workspaceIconSize + Bar.workspaceSpacing)) - 1; // TODO: workspaceActiveIconSize might be before
+            previousActiveIndex = root.activeIndex;
+            activeRect.x = mouseX - activeRect.width / 2;
+            root.activeOccupied = getWorkspaceStats(abovedItemIndex).isOccupied || false;
+            activeRect.implicitWidth = previousActiveIndex === abovedItemIndex ? Bar.workspaceActiveIconSize : Bar.workspaceIconSize;
+        }
+        onExited: {
+            if (!root.toChild) {
+                // just in case
+                activeRect.x = layout.x + previousActiveIndex * Bar.workspaceIconSize + previousActiveIndex * Bar.workspaceSpacing;
+                activeRect.implicitWidth = Bar.workspaceActiveIconSize;
+                root.activeOccupied = getWorkspaceStats(previousActiveIndex).isOccupied || false;
+            }
+        }
         onWheel: event => {
             // no idea wats wrong w/ prev so we just unify it to use +/- 1
             if (event.angleDelta.y < 0) {
