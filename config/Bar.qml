@@ -19,17 +19,17 @@ Singleton {
 
     readonly property var windowStrip: [" — Zen Browser"]
 
-    readonly property int workspaces: 10
-    readonly property int workspaceIconSize: 32
-    readonly property int workspaceSpacing: 2
-    readonly property int workspaceHorizontalSpacing: Style.spacing.smaller
-    readonly property int workspaceActiveIconSize: workspaceIconSize * 1.5
-    readonly property int workspaceRounding: Style.rounding.small
-    readonly property double workspaceOpacity: 0.8
-    readonly property int workspaceActiveOpacity: 1
-    readonly property double workspaceEmptyOpacity: 0.2
-    // workspaceAnimationEasing using Hyprland's actual ws animation easing
-    readonly property int workspaceAnimationDuration: 200
+    readonly property int wss: 10
+    readonly property int wsIconSize: 32
+    readonly property int wsSpacing: 2
+    readonly property int wsHorizontalSpacing: Style.spacing.smaller
+    readonly property int wsActiveIconSize: wsIconSize * 1.5
+    readonly property int wsRounding: Style.rounding.small
+    readonly property double wsOpacity: 0.8
+    readonly property int wsActiveOpacity: 1
+    readonly property double wsEmptyOpacity: 0.2
+    // wsAnimationEasing using Hyprland's actual ws animation easing
+    readonly property int wsAnimationDuration: 200
 
     readonly property int appIconSize: 25
 

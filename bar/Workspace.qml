@@ -20,7 +20,7 @@ Item {
     property real activeRectX: {
         if (activeIndex < 0)
             return 0;
-        return layout.x + activeIndex * Bar.workspaceIconSize + activeIndex * Bar.workspaceSpacing;
+        return layout.x + activeIndex * Bar.wsIconSize + activeIndex * Bar.wsSpacing;
     }
 
     function getWorkspaceStats(index) {
@@ -38,17 +38,17 @@ Item {
         radius: 8
         cached: true
         color: root.activeOccupied ? WallustColors.color4 : WallustColors.foreground
-        opacity: root.activeOccupied ? Bar.workspaceActiveOpacity : Bar.workspaceEmptyOpacity / 3
+        opacity: root.activeOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
 
         Behavior on color {
             NumberAnimation {
-                duration: Bar.workspaceAnimationDuration
+                duration: Bar.wsAnimationDuration
                 easing.type: Easing.InOutQuad
             }
         }
         Behavior on opacity {
             NumberAnimation {
-                duration: Bar.workspaceAnimationDuration
+                duration: Bar.wsAnimationDuration
                 easing.type: Easing.InOutQuad
             }
         }
@@ -57,29 +57,29 @@ Item {
         id: activeRect
         x: activeRectX
         anchors.verticalCenter: layout.verticalCenter
-        implicitWidth: Bar.workspaceActiveIconSize
-        implicitHeight: Bar.workspaceIconSize - Bar.workspaceHorizontalSpacing
-        radius: Bar.workspaceRounding
+        implicitWidth: Bar.wsActiveIconSize
+        implicitHeight: Bar.wsIconSize - Bar.wsHorizontalSpacing
+        radius: Bar.wsRounding
         color: root.activeOccupied ? WallustColors.color4 : WallustColors.foreground
-        opacity: root.activeOccupied ? Bar.workspaceActiveOpacity : Bar.workspaceEmptyOpacity / 3
+        opacity: root.activeOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
         Behavior on x {
             ISpringAnimation {}
         }
         Behavior on color {
             ColorAnimation {
-                duration: Bar.workspaceAnimationDuration
+                duration: Bar.wsAnimationDuration
                 easing.type: Easing.InOutQuad
             }
         }
         Behavior on opacity {
             NumberAnimation {
-                duration: Bar.workspaceAnimationDuration
+                duration: Bar.wsAnimationDuration
                 easing.type: Easing.InOutQuad
             }
         }
         Behavior on implicitWidth {
             NumberAnimation {
-                duration: Bar.workspaceAnimationDuration
+                duration: Bar.wsAnimationDuration
                 easing.type: Easing.InOutQuad
             }
         }
@@ -89,26 +89,26 @@ Item {
         id: layout
         anchors.verticalCenter: parent.verticalCenter
         implicitWidth: repeater.width
-        spacing: Bar.workspaceSpacing
+        spacing: Bar.wsSpacing
 
         Repeater {
             id: repeater
-            model: Bar.workspaces
+            model: Bar.wss
 
             IRect {
                 property var st: getWorkspaceStats(index)
                 property bool active: st?.isActive || false
 
-                implicitWidth: active ? Bar.workspaceActiveIconSize : Bar.workspaceIconSize
-                implicitHeight: Bar.workspaceIconSize - Bar.workspaceHorizontalSpacing
-                radius: Bar.workspaceRounding
+                implicitWidth: active ? Bar.wsActiveIconSize : Bar.wsIconSize
+                implicitHeight: Bar.wsIconSize - Bar.wsHorizontalSpacing
+                radius: Bar.wsRounding
                 color: st.isOccupied ? WallustColors.color4 : WallustColors.foreground
-                opacity: active && st.isOccupied ? Bar.workspaceActiveOpacity : st.isOccupied ? Bar.workspaceOpacity : Bar.workspaceEmptyOpacity
+                opacity: active && st.isOccupied ? Bar.wsActiveOpacity : st.isOccupied ? Bar.wsOpacity : Bar.wsEmptyOpacity
 
                 Icon {
                     anchors.centerIn: parent
                     text: !st.isUrgent ? Icons.ws[index + 1] : Icons.ws['urgent']
-                    font.pixelSize: !active ? Bar.workspaceIconSize / 2 : Bar.workspaceActiveIconSize / 2.5
+                    font.pixelSize: !active ? Bar.wsIconSize / 2 : Bar.wsActiveIconSize / 2.5
                     opacity: !st.isOccupied ? 0 : 1
                     color: !st.isUrgent ? !st.isActive ? WallustColors.color15 : WallustColors.foreground : Colors.red
                     Behavior on font.pixelSize {
@@ -116,7 +116,7 @@ Item {
                     }
                     Behavior on color {
                         ColorAnimation {
-                            duration: Bar.workspaceAnimationDuration
+                            duration: Bar.wsAnimationDuration
                             easing.type: Easing.InOutQuad
                         }
                     }
@@ -135,7 +135,7 @@ Item {
                     function moveActive() {
                         activeRect.x = parent.x;
                         root.activeOccupied = st.isOccupied || false;
-                        activeRect.implicitWidth = active ? Bar.workspaceActiveIconSize : Bar.workspaceIconSize;
+                        activeRect.implicitWidth = active ? Bar.wsActiveIconSize : Bar.wsIconSize;
                     }
                     onEntered: {
                         root.toChild = true;
@@ -150,8 +150,8 @@ Item {
                         // outer MouseArea will handle this
                         // if (!active && previousActiveIndex >= 0) {
                         //     // just in case
-                        //     activeRect.x = layout.x + previousActiveIndex * Bar.workspaceIconSize + previousActiveIndex * Bar.workspaceSpacing;
-                        //     activeRect.implicitWidth = Bar.workspaceActiveIconSize;
+                        //     activeRect.x = layout.x + previousActiveIndex * Bar.wsIconSize + previousActiveIndex * Bar.wsSpacing;
+                        //     activeRect.implicitWidth = Bar.wsActiveIconSize;
                         //     // root.activeOccupied = parent.st.isOccupied || false;
                         //     root.activeOccupied = getWorkspaceStats(previousActiveIndex).isOccupied || false;
                         //     previousActiveIndex = -1;
@@ -160,15 +160,15 @@ Item {
                     onWheel: event => {
                         // no idea wats wrong w/ prev so we just unify it to use +/- 1
                         if (event.angleDelta.y < 0) {
-                            if (activeIndex + 1 < Bar.workspaces)
+                            if (activeIndex + 1 < Bar.wss)
                                 Hyprland.dispatch(`workspace +1`);
                             else
                                 Hyprland.dispatch(`workspace 1`);
                         } else if (event.angleDelta.y > 0) {
                             if (activeIndex + 1 > 1) {
                                 Hyprland.dispatch(`workspace -1`);
-                            } else if (Bar.workspaces > 1) {
-                                Hyprland.dispatch(`workspace ${Bar.workspaces}`);
+                            } else if (Bar.wss > 1) {
+                                Hyprland.dispatch(`workspace ${Bar.wss}`);
                             }
                         }
                     }
@@ -176,19 +176,19 @@ Item {
 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: Bar.workspaceAnimationDuration
+                        duration: Bar.wsAnimationDuration
                         easing.type: Easing.InOutQuad
                     }
                 }
                 Behavior on implicitWidth {
                     NumberAnimation {
-                        duration: Bar.workspaceAnimationDuration
+                        duration: Bar.wsAnimationDuration
                         easing.type: Easing.InOutQuad
                     }
                 }
                 Behavior on color {
                     ColorAnimation {
-                        duration: Bar.workspaceAnimationDuration
+                        duration: Bar.wsAnimationDuration
                         easing.type: Easing.InOutQuad
                     }
                 }
@@ -196,7 +196,7 @@ Item {
                 onActiveChanged: if (active) {
                     root.activeIndex = index;
                     root.activeOccupied = st.isOccupied;
-                    activeRect.implicitWidth = Bar.workspaceActiveIconSize;
+                    activeRect.implicitWidth = Bar.wsActiveIconSize;
                     activeRect.x = activeRectX;
                 }
             }
@@ -212,31 +212,31 @@ Item {
         // sync w the inner MouseArea
         // https://github.com/quickshell-mirror/quickshell/issues/118 // but onEnter won't update the mouseX
         onPositionChanged: {
-            const abovedItemIndex = Math.round((mouseX - layout.x) / (Bar.workspaceIconSize + Bar.workspaceSpacing)) - 1; // TODO: workspaceActiveIconSize might be before
+            const abovedItemIndex = Math.round((mouseX - layout.x) / (Bar.wsIconSize + Bar.wsSpacing)) - 1; // TODO: workspaceActiveIconSize might be before
             activeRect.x = mouseX - activeRect.width / 2;
             root.activeOccupied = getWorkspaceStats(abovedItemIndex).isOccupied || false;
-            activeRect.implicitWidth = root.activeIndex === abovedItemIndex ? Bar.workspaceActiveIconSize : Bar.workspaceIconSize;
+            activeRect.implicitWidth = root.activeIndex === abovedItemIndex ? Bar.wsActiveIconSize : Bar.wsIconSize;
         }
         onExited: {
             if (!root.toChild && root.activeIndex >= 0) {
                 // just in case
-                activeRect.x = layout.x + root.activeIndex * Bar.workspaceIconSize + root.activeIndex * Bar.workspaceSpacing;
-                activeRect.implicitWidth = Bar.workspaceActiveIconSize;
+                activeRect.x = layout.x + root.activeIndex * Bar.wsIconSize + root.activeIndex * Bar.wsSpacing;
+                activeRect.implicitWidth = Bar.wsActiveIconSize;
                 root.activeOccupied = getWorkspaceStats(root.activeIndex).isOccupied || false;
             }
         }
         onWheel: event => {
             // no idea wats wrong w/ prev so we just unify it to use +/- 1
-            if (event.angledelta.y < 0) {
-                if (activeIndex + 1 < bar.workspaces)
-                    hyprland.dispatch(`workspace +1`);
+            if (event.angleDelta.y < 0) {
+                if (activeIndex + 1 < Bar.wss)
+                    Hyprland.dispatch(`workspace +1`);
                 else
-                    hyprland.dispatch(`workspace 1`);
+                    Hyprland.dispatch(`workspace 1`);
             } else if (event.angleDelta.y > 0) {
                 if (activeIndex + 1 > 1) {
                     Hyprland.dispatch(`workspace -1`);
-                } else if (Bar.workspaces > 1) {
-                    Hyprland.dispatch(`workspace ${Bar.workspaces}`);
+                } else if (Bar.wss > 1) {
+                    Hyprland.dispatch(`workspace ${Bar.wss}`);
                 }
             }
         }
