@@ -67,21 +67,36 @@ Item {
         }
         Behavior on color {
             ColorAnimation {
+                id: colorAnim
                 duration: Bar.wsAnimationDuration
                 easing.type: Easing.InOutQuad
             }
+        }
+        AnimationController {
+            id: colorAnimCtrl
+            animation: colorAnim
         }
         Behavior on opacity {
             NumberAnimation {
+                id: opacityAnim
                 duration: Bar.wsAnimationDuration
                 easing.type: Easing.InOutQuad
             }
         }
+        AnimationController {
+            id: opacityAnimCtrl
+            animation: opacityAnim
+        }
         Behavior on implicitWidth {
             NumberAnimation {
+                id: widthAnim
                 duration: Bar.wsAnimationDuration
                 easing.type: Easing.InOutQuad
             }
+        }
+        AnimationController {
+            id: widthAnimCtrl
+            animation: widthAnim
         }
     }
 
@@ -216,7 +231,8 @@ Item {
         // sync w the inner MouseArea
         // https://github.com/quickshell-mirror/quickshell/issues/118 // but onEnter won't update the mouseX
         onPositionChanged: {
-            const abovedItemIndex = Math.round((mouseX - layout.x) / (Bar.wsIconSize + Bar.wsSpacing)) - 1; // TODO: workspaceActiveIconSize might be before
+            // const abovedItemIndex = Math.round((mouseX - layout.x) / (Bar.wsIconSize + Bar.wsSpacing)) - 1; // TODO: workspaceActiveIconSize might be before
+            const abovedItemIndex = (mouseX - layout.x) / (Bar.wsIconSize + Bar.wsSpacing) - 1; // TODO: workspaceActiveIconSize might be before
             activeRect.x = mouseX - activeRect.width / 2;
             root.activeOccupied = getWorkspaceStats(abovedItemIndex).isOccupied || false;
             activeRect.implicitWidth = root.activeIndex === abovedItemIndex ? Bar.wsActiveIconSize : Bar.wsIconSize;
