@@ -7,6 +7,8 @@ import qs.components
 Item {
     id: root
 
+    // TODO: use https://quickshell.org/docs/master/types/Quickshell/PopupWindow/ for tooltip
+
     required property real value
     required property string suffix // unit
     required property string icon
