@@ -14,16 +14,16 @@ Singleton {
 
     readonly property int borderRadius: Style.rounding.small
 
-    readonly property list<IWidget> order: [
-        Flight {},
-        Math {},
-        Weather {},
-        Clip {},
-        Translate {},
-        Time {},
-        // above most of the time isn't visible
-        App {},
-        Web {},
-        Finder {}
-    ]
+    // readonly property list<IWidget> order: [
+    //     Flight {},
+    //     Math {},
+    //     Weather {},
+    //     Clip {},
+    //     Translate {},
+    //     Time {},
+    //     // above most of the time isn't visible
+    //     App {},
+    //     Web {},
+    //     Finder {}
+    // ]
 }

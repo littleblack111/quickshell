@@ -14,6 +14,7 @@ IRect {
     implicitHeight: Launcher.widgetHeight
 
     radius: Launcher.borderRadius
+    color: Qt.rgba(WallustColors.background.r, WallustColors.background.g, WallustColors.background.b, Bar.bgTransparency)
 
     IText {
         text: name
