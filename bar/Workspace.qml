@@ -14,7 +14,6 @@ Item {
 
     property var ws: Hyprland.workspaces
     property int activeIndex: -1
-    property bool activeOccupied: false
     property bool toChild: false
 
     property real activeRectX: {
@@ -37,8 +36,8 @@ Item {
         source: activeRect
         radius: 8
         cached: true
-        color: root.activeOccupied ? Colors.d2 : Colors.foreground1
-        opacity: root.activeOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
+        color: getWorkspaceStats(activeIndex).isOccupied ? Colors.d2 : Colors.foreground1
+        opacity: getWorkspaceStats(activeIndex).isOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
 
         Behavior on color {
             NumberAnimation {
@@ -60,8 +59,8 @@ Item {
         implicitWidth: Bar.wsActiveIconSize
         implicitHeight: Bar.wsIconSize - Bar.wsHorizontalSpacing
         radius: Bar.wsRounding
-        color: root.activeOccupied ? Colors.d2 : Colors.foreground1
-        opacity: root.activeOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
+        color: getWorkspaceStats(activeIndex).isOccupied ? Colors.d2 : Colors.foreground1
+        opacity: getWorkspaceStats(activeIndex).isOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
         Behavior on x {
             ISpringAnimation {}
         }
@@ -138,7 +137,6 @@ Item {
                     }
                     function moveActive() {
                         activeRect.x = parent.x;
-                        root.activeOccupied = st.isOccupied || false;
                         activeRect.implicitWidth = active ? Bar.wsActiveIconSize : Bar.wsIconSize;
                     }
                     onEntered: {
@@ -199,7 +197,6 @@ Item {
 
                 onActiveChanged: if (active) {
                     root.activeIndex = index;
-                    root.activeOccupied = st.isOccupied;
                     activeRect.implicitWidth = Bar.wsActiveIconSize;
                     activeRect.x = activeRectX;
                 }
@@ -218,7 +215,6 @@ Item {
         onPositionChanged: {
             const abovedItemIndex = Math.round((mouseX - layout.x) / (Bar.wsIconSize + Bar.wsSpacing)) - 1; // TODO: workspaceActiveIconSize might be before
             activeRect.x = mouseX - activeRect.width / 2;
-            root.activeOccupied = getWorkspaceStats(abovedItemIndex).isOccupied || false;
             activeRect.implicitWidth = root.activeIndex === abovedItemIndex ? Bar.wsActiveIconSize : Bar.wsIconSize;
         }
         onExited: {
@@ -226,7 +222,6 @@ Item {
                 // just in case
                 activeRect.x = layout.x + root.activeIndex * Bar.wsIconSize + root.activeIndex * Bar.wsSpacing;
                 activeRect.implicitWidth = Bar.wsActiveIconSize;
-                root.activeOccupied = getWorkspaceStats(root.activeIndex).isOccupied || false;
             }
         }
         onWheel: event => {
