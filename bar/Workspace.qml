@@ -13,6 +13,8 @@ Item {
     implicitWidth: layout.implicitWidth
 
     property var ws: Hyprland.workspaces
+    property var toplevels: Hyprland.toplevels.values // update activeOccupied when toplevels changes as getWorkspaceStat's return is non reactive
+
     property int activeIndex: -1
     property bool activeOccupied: false
     property bool toChild: false
@@ -30,6 +32,12 @@ Item {
             isActive: w?.active,
             isUrgent: w?.urgent
         };
+    }
+
+    onToplevelsChanged: {
+        Qt.callLater(() => {
+            activeOccupied = getWorkspaceStats(activeIndex).isOccupied || false;
+        });
     }
 
     DropShadow {
