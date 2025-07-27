@@ -3,6 +3,25 @@ import Quickshell
 import QtQuick
 
 Singleton {
+    readonly property color background1: WallustColors.color8
+    readonly property color background2: WallustColors.color0
+    readonly property color background3: WallustColors.background
+    readonly property color a1: WallustColors.color9
+    readonly property color a2: WallustColors.color1
+    readonly property color b1: WallustColors.color10
+    readonly property color b2: WallustColors.color2
+    readonly property color c1: WallustColors.color11
+    readonly property color c2: WallustColors.color3
+    readonly property color d1: WallustColors.color12
+    readonly property color d2: WallustColors.color4
+    readonly property color e1: WallustColors.color13
+    readonly property color e2: WallustColors.color5
+    readonly property color f1: WallustColors.color14
+    readonly property color f2: WallustColors.color6
+    readonly property color foreground1: WallustColors.foreground
+    readonly property color foreground2: WallustColors.color15
+    readonly property color foreground3: WallustColors.color7
+
     readonly property color black: Qt.rgba(59 / 255, 66 / 255, 82 / 255, 1)
     readonly property color red: Qt.rgba(191 / 255, 97 / 255, 106 / 255, 1)
     readonly property color green: Qt.rgba(163 / 255, 190 / 255, 140 / 255, 1)

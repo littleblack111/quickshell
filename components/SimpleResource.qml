@@ -40,12 +40,12 @@ Item {
 
         Icon {
             text: !root.isAlt ? root.icon : root.altIcon
-            color: root.value < root.thresholdL1 ? WallustColors.color15 : root.value >= root.thresholdL3 ? root.thresholdColorL3 : root.value >= root.thresholdL2 ? root.thresholdColorL2 : root.thresholdColorL1
+            color: root.value < root.thresholdL1 ? Colors.foreground2 : root.value >= root.thresholdL3 ? root.thresholdColorL3 : root.value >= root.thresholdL2 ? root.thresholdColorL2 : root.thresholdColorL1
         }
         IText {
             animate: true
             text: !root.isAlt ? root.text : root.altText
-            color: root.value < root.thresholdL1 ? WallustColors.foreground : root.value >= root.thresholdL3 ? root.thresholdColorL3 : root.value >= root.thresholdL2 ? root.thresholdColorL2 : root.thresholdColorL1
+            color: root.value < root.thresholdL1 ? Colors.foreground1 : root.value >= root.thresholdL3 ? root.thresholdColorL3 : root.value >= root.thresholdL2 ? root.thresholdColorL2 : root.thresholdColorL1
         }
 
         Item {

@@ -30,7 +30,7 @@ Item {
 
         implicitWidth: layout.implicitWidth + General.rectMargin * 2
         implicitHeight: Bar.height
-        color: WallustColors.color4
+        color: Colors.d2
         radius: Style.rounding.large
 
         RowLayout {
@@ -58,24 +58,24 @@ Item {
                 spacing: Bar.resourceIconTextSpacing / 2
                 Icon {
                     text: Icons.resource.network.download
-                    color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : WallustColors.color15
+                    color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : Colors.foreground2
                 }
                 IText {
                     animate: true
                     text: root.down + root.downUnit
-                    color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : WallustColors.color15
+                    color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : Colors.foreground2
                 }
             }
             RowLayout {
                 spacing: Bar.resourceIconTextSpacing / 2
                 Icon {
                     text: Icons.resource.network.upload
-                    color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : WallustColors.color15
+                    color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : Colors.foreground2
                 }
                 IText {
                     animate: true
                     text: root.up + root.upUnit
-                    color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : WallustColors.color15
+                    color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : Colors.foreground2
                 }
             }
 

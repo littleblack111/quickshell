@@ -24,7 +24,7 @@ Item {
         implicitWidth: layout.width + General.rectMargin * 2
         implicitHeight: Bar.height
 
-        color: WallustColors.color4
+        color: Colors.d2
         radius: Style.rounding.large
 
         RowLayout {

@@ -37,7 +37,7 @@ Item {
         source: activeRect
         radius: 8
         cached: true
-        color: root.activeOccupied ? WallustColors.color4 : WallustColors.foreground
+        color: root.activeOccupied ? Colors.d2 : Colors.foreground1
         opacity: root.activeOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
 
         Behavior on color {
@@ -60,7 +60,7 @@ Item {
         implicitWidth: Bar.wsActiveIconSize
         implicitHeight: Bar.wsIconSize - Bar.wsHorizontalSpacing
         radius: Bar.wsRounding
-        color: root.activeOccupied ? WallustColors.color4 : WallustColors.foreground
+        color: root.activeOccupied ? Colors.d2 : Colors.foreground1
         opacity: root.activeOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
         Behavior on x {
             ISpringAnimation {}
@@ -102,7 +102,7 @@ Item {
                 implicitWidth: active ? Bar.wsActiveIconSize : Bar.wsIconSize
                 implicitHeight: Bar.wsIconSize - Bar.wsHorizontalSpacing
                 radius: Bar.wsRounding
-                color: st.isOccupied ? WallustColors.color4 : WallustColors.foreground
+                color: st.isOccupied ? Colors.d2 : Colors.foreground1
                 opacity: active && st.isOccupied ? Bar.wsActiveOpacity : st.isOccupied ? Bar.wsOpacity : Bar.wsEmptyOpacity
 
                 Icon {
@@ -110,7 +110,7 @@ Item {
                     text: !st.isUrgent ? Icons.ws[index + 1] : Icons.ws['urgent']
                     font.pixelSize: !active ? Bar.wsIconSize / 2 : Bar.wsActiveIconSize / 2.5
                     opacity: !st.isOccupied ? 0 : 1
-                    color: !st.isUrgent ? !st.isActive ? WallustColors.color15 : WallustColors.foreground : Colors.red
+                    color: !st.isUrgent ? !st.isActive ? Colors.foreground2 : Colors.foreground1 : Colors.red
                     Behavior on font.pixelSize {
                         ISpringAnimation {}
                     }

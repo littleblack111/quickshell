@@ -52,14 +52,14 @@ Item {
             value: activePlayer?.position || 0
             background: IRect {
                 anchors.fill: parent
-                color: WallustColors.color4
+                color: Colors.d2
                 radius: Style.rounding.smaller
             }
             contentItem: Item {
                 IRect {
                     width: pBar.visualPosition * parent.width
                     height: parent.height
-                    color: Qt.rgba(WallustColors.color12.r, WallustColors.color12.g, WallustColors.color12.b, WallustColors.color4.a * 2)
+                    color: Qt.rgba(Colors.d1.r, Colors.d1.g, Colors.d1.b, Colors.d2.a * 2)
                     radius: Style.rounding.smaller
 
                     Behavior on width {
@@ -109,7 +109,7 @@ Item {
                     source: image
                     opacity: activePlayer?.playbackState === MprisPlaybackState.Playing ? 1 : Bar.mediaPausedOpacity
                     radius: 6
-                    color: WallustColors.background
+                    color: Colors.background3
 
                     Behavior on opacity {
                         NumberAnimation {
@@ -143,7 +143,7 @@ Item {
             IText {
                 animate: true
                 opacity: activePlayer?.playbackState === MprisPlaybackState.Playing ? 1 : Bar.mediaPausedOpacity
-                color: activePlayer?.playbackState === MprisPlaybackState.Playing ? WallustColors.foreground : WallustColors.color15
+                color: activePlayer?.playbackState === MprisPlaybackState.Playing ? Colors.foreground1 : Colors.foreground2
                 text: root.cleanedTitle
 
                 Behavior on opacity {
