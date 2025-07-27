@@ -14,7 +14,6 @@ Item {
 
     property var ws: Hyprland.workspaces
     property int activeIndex: -1
-    property int hoveredIndex: -1
     property bool toChild: false
 
     property real activeRectX: {
@@ -26,7 +25,7 @@ Item {
     function getWorkspaceStats(index) {
         const w = ws.values.find(i => i.id === index + 1);
         return {
-            isOccupied: w?.toplevels?.values?.length > 0,
+            isOccupied: w?.toplevels?.values?.length,
             isActive: w?.active,
             isUrgent: w?.urgent
         };
@@ -37,8 +36,8 @@ Item {
         source: activeRect
         radius: 8
         cached: true
-        color: getWorkspaceStats(hoveredIndex === -1 ? activeIndex : hoveredIndex).isOccupied ? Colors.d2 : Colors.foreground1
-        opacity: getWorkspaceStats(hoveredIndex === -1 ? activeIndex : hoveredIndex).isOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
+        color: getWorkspaceStats(activeIndex).isOccupied ? Colors.d2 : Colors.foreground1
+        opacity: getWorkspaceStats(activeIndex).isOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
 
         Behavior on color {
             NumberAnimation {
@@ -60,8 +59,8 @@ Item {
         implicitWidth: Bar.wsActiveIconSize
         implicitHeight: Bar.wsIconSize - Bar.wsHorizontalSpacing
         radius: Bar.wsRounding
-        color: getWorkspaceStats(hoveredIndex === -1 ? activeIndex : hoveredIndex).isOccupied ? Colors.d2 : Colors.foreground1
-        opacity: getWorkspaceStats(hoveredIndex === -1 ? activeIndex : hoveredIndex).isOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
+        color: getWorkspaceStats(activeIndex).isOccupied ? Colors.d2 : Colors.foreground1
+        opacity: getWorkspaceStats(activeIndex).isOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
         Behavior on x {
             ISpringAnimation {}
         }
@@ -217,7 +216,6 @@ Item {
             const abovedItemIndex = Math.round((mouseX - layout.x) / (Bar.wsIconSize + Bar.wsSpacing)) - 1; // TODO: workspaceActiveIconSize might be before
             activeRect.x = mouseX - activeRect.width / 2;
             activeRect.implicitWidth = root.activeIndex === abovedItemIndex ? Bar.wsActiveIconSize : Bar.wsIconSize;
-            root.hoveredIndex = abovedItemIndex;
         }
         onExited: {
             if (!root.toChild && root.activeIndex >= 0) {
@@ -225,7 +223,6 @@ Item {
                 activeRect.x = layout.x + root.activeIndex * Bar.wsIconSize + root.activeIndex * Bar.wsSpacing;
                 activeRect.implicitWidth = Bar.wsActiveIconSize;
             }
-            root.hoveredIndex = -1;
         }
         onWheel: event => {
             // no idea wats wrong w/ prev so we just unify it to use +/- 1
