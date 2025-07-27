@@ -14,6 +14,8 @@ Singleton {
 
     readonly property int borderRadius: Style.rounding.small
 
+    readonly property double bgTransparency: 0.75
+
     // readonly property list<IWidget> order: [
     //     Flight {},
     //     Math {},
