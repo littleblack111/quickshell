@@ -2,6 +2,7 @@ import Quickshell
 import QtQuick
 
 import qs.components
+import qs.config
 
 IWindow {
     // TODO: optional only display on focused screen
@@ -13,4 +14,6 @@ IWindow {
         left: false
         right: false
     }
+
+    color: Qt.rgba(WallustColors.background.r, WallustColors.background.g, WallustColors.background.b, Bar.bgTransparency)
 }

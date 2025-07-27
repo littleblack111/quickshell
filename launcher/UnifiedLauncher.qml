@@ -1,6 +1,9 @@
 import Quickshell
 import QtQuick
 
-ILauncher {
+import "widgets"
+import qs.components
 
+ILauncher {
+    Math {}
 }
