@@ -5,5 +5,8 @@ import "widgets"
 import qs.components
 
 ILauncher {
-    Math {}
+    property string input: "a"
+    Math {
+        input: input
+    }
 }

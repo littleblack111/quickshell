@@ -6,15 +6,16 @@ import qs.components
 import qs.config
 
 IRect {
-    required property string name
-    required property var process // function(data: string) -> {visible: bool, priority: bool} // use the current IRect if visible is set
-    // we should maintain a internal priority configrable by user if multiple are prioritized
+    required property string name // Component/File name
+    required property string input
+    input: input
+    required property var process // function() -> {visible: bool, priority: bool} // use the current IRect if visible is set
 
     implicitWidth: Launcher.widgetWidth
     implicitHeight: Launcher.widgetHeight
 
     radius: Launcher.borderRadius
-    color: Qt.rgba(WallustColors.background.r, WallustColors.background.g, WallustColors.background.b, Bar.bgTransparency)
+    color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.bgTransparency)
 
     IText {
         text: name
