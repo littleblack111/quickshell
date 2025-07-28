@@ -74,7 +74,7 @@ ILauncher {
                 }
             }
 
-            Math {
+            Calc {
                 anchors.verticalCenter: parent.verticalCenter
 
                 input: parent.input
