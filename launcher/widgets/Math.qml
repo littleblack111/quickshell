@@ -5,10 +5,10 @@ import qs.components
 
 IWidget {
     name: "Math"
-    valid: process().valid
-    priority: process().priority
-
     anchors.verticalCenter: parent.verticalCenter
+    valid: processed.valid
+    priority: processed.priority
+
     process: function () {
         var isValid = /^[0-9+\-*/()%.\s]+$/.test(input);
         return {
