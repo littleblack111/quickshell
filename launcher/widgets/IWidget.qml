@@ -6,11 +6,14 @@ import qs.components
 import qs.config
 
 IRect {
+    // virtual properties
     required property string name // Component/File name
     required property string input
-    required property bool valid
-    required property bool priority
-    required property var process // function() -> {valid: bool, priority: bool} // use the current IRect if valid is set
+    property bool valid: processed.valid
+    property bool priority: processed.priority
+    property var processed: process() // result of function() -> {valid: bool, priority: bool} // use the current IRect if valid is set
+    property var process
+    visible: valid
 
     anchors.verticalCenter: parent.verticalCenter
 

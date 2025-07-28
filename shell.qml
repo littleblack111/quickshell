@@ -10,7 +10,9 @@ Scope {
     Bar {}
     LazyLoader {
         id: launcherLoader
-        component: UnifiedLauncher {}
+        component: UnifiedLauncher {
+            parentLoader: launcherLoader
+        }
     }
 
     IpcHandler {
