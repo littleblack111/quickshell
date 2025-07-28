@@ -15,7 +15,7 @@ IRect {
     property var processed: process() // cached process, thought qml would do that automatically :/
     property var process // function() -> {valid: bool, priority: bool} // use the current IRect if valid is set
     // visible: valid // no anim :/
-    opacity: valid ? Launcher.widgetBgTransparency : 0 // TODO: better anim, maybe slide in from bottom
+    opacity: valid ? 1 : 0 // TODO: better anim, maybe slide in from bottom
 
     anchors.verticalCenter: parent.verticalCenter
 
@@ -23,5 +23,5 @@ IRect {
     implicitHeight: Launcher.widgetHeight
 
     radius: Launcher.widgetRadius
-    color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.bgTransparency) // TODO when prioritized, highlight
+    color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetBgTransparency) // TODO when prioritized, highlight
 }
