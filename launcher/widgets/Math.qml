@@ -17,6 +17,7 @@ IWidget {
         };
     }
 
+    // TODO: move to IInnerWidget
     IText {
         visible: valid
         text: valid ? eval(input) : ""
