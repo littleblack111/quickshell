@@ -7,6 +7,7 @@ import qs.components
 import qs.config
 
 ILauncher {
+    name: "quickshell::launcher::launcher"
     IRect {
         // TODO: move to IInnerLauncher for other launchers
         anchors.fill: parent
