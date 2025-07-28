@@ -142,8 +142,7 @@ Item {
             }
             IText {
                 animate: true
-                opacity: activePlayer?.playbackState === MprisPlaybackState.Playing ? 1 : Bar.mediaPausedOpacity
-                color: activePlayer?.playbackState === MprisPlaybackState.Playing ? Colors.foreground1 : Colors.foreground2
+                color: activePlayer?.playbackState === MprisPlaybackState.Playing ? Qt.rgba(Colors.foreground1.r, Colors.foreground1.g, Colors.foreground1.b, Colors.foreground1.a) : Qt.rgba(Colors.foreground2.r, Colors.foreground2.g, Colors.foreground2.b, Bar.mediaPausedOpacity)
                 text: root.cleanedTitle
 
                 Behavior on opacity {
