@@ -25,6 +25,7 @@ Singleton {
         readonly property int smaller: 10
         readonly property int normal: 12
         readonly property int larger: 15
+        readonly property int largerr: 17
         readonly property int large: 20
     }
 
@@ -37,6 +38,7 @@ Singleton {
     }
 
     component FontFamily: QtObject {
+        readonly property string sans: "SF Pro Display"
         readonly property string symbols: "Symbols Nerd Font Mono"
         readonly property string iosevka: "Iosevka Nerd Font"
         readonly property string mono: "JetBrains Mono"
