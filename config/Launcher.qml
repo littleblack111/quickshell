@@ -18,8 +18,10 @@ Singleton {
     readonly property int borderWidth: 1
 
     readonly property int widgetRadius: Style.rounding.small
+    readonly property int widgetFontSize: Style.font.size.large
 
-    readonly property double bgTransparency: 0.75
+    readonly property double bgTransparency: 0.65
+    readonly property double widgetBgTransparency: 0.7
 
     readonly property list<IWidget> widgets: [Math,]
     // readonly property list<IWidget> order: [
