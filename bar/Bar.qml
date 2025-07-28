@@ -12,7 +12,7 @@ Scope {
 
         IWindow {
             id: barWindow
-            name: "quickshell:bar"
+            name: "quickshell::bar"
 
             anchors {
                 top: true
