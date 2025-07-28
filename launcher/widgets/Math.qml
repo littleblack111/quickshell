@@ -79,7 +79,7 @@ IWidget {
                     anchors.centerIn: parent
                     renderType: Text.CurveRendering
                     visible: valid
-                    text: valid ? eval(input.replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1')) : "" // replace for () to work properly in math
+                    text: valid ? String(eval(input.replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1'))).replace(/ /g, "").split('').join(' ') : "" // replace for () to work properly in math
                     font {
                         pixelSize: Launcher.widgetFontSize
                         bold: true
