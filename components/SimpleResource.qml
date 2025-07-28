@@ -44,6 +44,7 @@ Item {
         }
         IText {
             animate: true
+            renderType: Text.CurveRendering // it's not static and is rapidly updated
             text: !root.isAlt ? root.text : root.altText
             color: root.value < root.thresholdL1 ? Colors.foreground1 : root.value >= root.thresholdL3 ? root.thresholdColorL3 : root.value >= root.thresholdL2 ? root.thresholdColorL2 : root.thresholdColorL1
         }

@@ -52,6 +52,7 @@ Item {
             IText {
                 visible: !root.isCollapsed
                 text: Services.Network.networkStrength
+                renderType: Text.CurveRendering // it's not static and is rapidly updated
             }
 
             RowLayout {
@@ -64,6 +65,7 @@ Item {
                     animate: true
                     text: root.down + root.downUnit
                     color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : Colors.foreground2
+                    renderType: Text.CurveRendering // it's not static and is rapidly updated
                 }
             }
             RowLayout {
@@ -76,6 +78,7 @@ Item {
                     animate: true
                     text: root.up + root.upUnit
                     color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : Colors.foreground2
+                    renderType: Text.CurveRendering // it's not static and is rapidly updated
                 }
             }
 

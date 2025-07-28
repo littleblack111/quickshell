@@ -67,6 +67,7 @@ Item {
                             IText {
                                 animate: true
                                 text: (parent.s >= 10 ? "" : "0") + parent.s
+                                renderType: Text.CurveRendering // it's not static and is rapidly updated
                             }
                         }
                         Item {
