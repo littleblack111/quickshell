@@ -15,7 +15,7 @@ IRect {
     property var processed: process() // cached process, thought qml would do that automatically :/
     property var process // function() -> {valid: bool, priority: bool} // use the current IRect if valid is set
     // visible: valid // no anim :/
-    opacity: valid ? 1 : 0 // TODO: better anim, maybe slide in from bottom
+    opacity: valid ? Launcher.widgetBgTransparency : 0 // TODO: better anim, maybe slide in from bottom
 
     anchors.verticalCenter: parent.verticalCenter
 
