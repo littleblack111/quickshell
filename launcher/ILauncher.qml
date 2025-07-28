@@ -6,7 +6,6 @@ import qs.config
 
 IWindow {
     // TODO: optional only display on focused screen
-    name: "launcher"
     focusable: true
 
     anchors {
