@@ -56,7 +56,7 @@ IWidget {
                     anchors.centerIn: parent
                     renderType: Text.CurveRendering
                     visible: valid
-                    text: valid ? eval(input.replace('(', '*(')) : "" // replace for () to work properly in math
+                    text: valid ? eval(input.replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1')) : "" // replace for () to work properly in math
                 }
             }
         }
