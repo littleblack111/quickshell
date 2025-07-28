@@ -25,8 +25,7 @@ IWidget {
         width: parent.width
         topLeftRadius: Launcher.widgetRadius
         topRightRadius: Launcher.widgetRadius
-        color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.bgTransparency) // TODO when prioritized, highlight
-        opacity: Launcher.widgetTitleBgTransparency
+        color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetTitleBgTransparency) // TODO when prioritized, highlight
         IText {
             anchors {
                 top: parent.top
