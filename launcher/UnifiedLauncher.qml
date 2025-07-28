@@ -60,6 +60,9 @@ ILauncher {
                         family: Style.font.family.sans
                         wordSpacing: 5
                     }
+                    onActiveFocusChanged: {
+                        parentLoader.active = activeFocus;
+                    }
 
                     // onAccepted: {
                     //     // This signal is emitted when the user presses Enter/Return
