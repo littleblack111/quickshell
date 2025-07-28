@@ -13,6 +13,7 @@ Text {
 
     // renderType: Text.NativeRendering
     textFormat: Text.PlainText
+    elide: Text.ElideRight
     color: Colors.foreground1
 
     font {
