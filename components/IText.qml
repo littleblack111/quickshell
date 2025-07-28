@@ -11,7 +11,7 @@ Text {
     property real animateFrom: 0
     property real animateTo: 1
 
-    // renderType: Text.NativeRendering
+    renderType: Text.NativeRendering // or Text.CurveRenderer
     textFormat: Text.PlainText
     elide: Text.ElideRight
     color: Colors.foreground1

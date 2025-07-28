@@ -2,10 +2,10 @@ import QtQuick
 import qs.config
 
 Rectangle {
-	Behavior on color {
-		ColorAnimation {
-			duration: General.animationDuration
-			easing.type: Easing.InOutQuad
-		}
-	}
+    Behavior on color {
+        NumberAnimation {
+            duration: General.animationDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
 }
