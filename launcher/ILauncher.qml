@@ -15,6 +15,4 @@ IWindow {
         left: false
         right: false
     }
-
-    color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Bar.bgTransparency)
 }

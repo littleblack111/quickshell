@@ -8,14 +8,15 @@ import qs.config
 
 ILauncher {
     IRect {
+        // TODO: move to IInnerLauncher for other launchers
         anchors.fill: parent
-
-        color: "transparent"
 
         border {
             width: Launcher.borderWidth
         }
+        color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Bar.bgTransparency)
         width: parent.width
+        radius: Launcher.borderRadius
 
         IRect {
             id: root
