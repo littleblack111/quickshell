@@ -52,14 +52,26 @@ IWidget {
 
             Item {
                 Layout.fillWidth: true
-                IText {
-                    anchors.centerIn: parent
-                    renderType: Text.CurveRendering // it's not static and is rapidly updated
-                    visible: valid
-                    text: input.replace(/ /g, "").split('').join(' ')
-                    font {
-                        pixelSize: Launcher.widgetFontSize
-                        bold: true
+                Item {
+                    anchors.fill: parent
+                    width: 100
+                    height: 100
+                    IText {
+                        // Rectangle {
+                        //     anchors.fill: parent
+                        //     color: "red"
+                        // }
+                        elide: Text.ElideLeft
+                        anchors.centerIn: parent
+                        width: Math.min(implicitWidth, parent.width)
+                        clip: true
+                        renderType: Text.CurveRendering // it's not static and is rapidly updated
+                        visible: valid
+                        text: input.replace(/ /g, "").split('').join(' ')
+                        font {
+                            pixelSize: Launcher.widgetFontSize
+                            bold: true
+                        }
                     }
                 }
             }
