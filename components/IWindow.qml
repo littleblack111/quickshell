@@ -9,11 +9,4 @@ PanelWindow {
     screen: modelData
     WlrLayershell.namespace: `${name}`
     color: "transparent"
-
-    Behavior on color {
-        NumberAnimation {
-            duration: General.animationDuration
-            easing.type: Easing.InOutQuad
-        }
-    }
 }
