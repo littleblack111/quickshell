@@ -56,7 +56,7 @@ IWidget {
                     anchors.centerIn: parent
                     renderType: Text.CurveRendering // it's not static and is rapidly updated
                     visible: valid
-                    text: input
+                    text: input.replace(/ /g, "").split('').join(' ')
                     font {
                         pixelSize: Launcher.widgetFontSize
                         bold: true
