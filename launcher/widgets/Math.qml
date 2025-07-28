@@ -23,12 +23,32 @@ IWidget {
     ColumnLayout {
         anchors {
             fill: parent
-            margins: Launcher.innerMargin
+            topMargin: Launcher.innerMargin
+            bottomMargin: Launcher.innerMargin
+            leftMargin: Launcher.innerMargin
+            rightMargin: Launcher.innerMargin
         }
-        IText {
-            Layout.fillHeight: false
-            visible: valid
-            text: name
+        IRect {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.minimumHeight: childrenRect.height
+            Layout.alignment: Qt.AlignTop | Qt.AlignLeft
+            Layout.topMargin: Launcher.innerMargin * -1
+            Layout.leftMargin: Launcher.innerMargin * -1
+            Layout.rightMargin: Launcher.innerMargin * -1
+            topLeftRadius: Launcher.widgetRadius
+            topRightRadius: Launcher.widgetRadius
+            color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.bgTransparency) // TODO when prioritized, highlight
+            IText {
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    leftMargin: Launcher.innerMargin
+                }
+                font.pixelSize: Launcher.widgetFontSize
+                visible: valid
+                text: name
+            }
         }
         RowLayout {
             spacing: 0
