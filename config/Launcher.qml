@@ -21,6 +21,7 @@ Singleton {
 
     readonly property double bgTransparency: 0.75
 
+    readonly property list<IWidget> widgets: [Math,]
     // readonly property list<IWidget> order: [
     //     Flight {},
     //     Math {},
