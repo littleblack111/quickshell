@@ -22,6 +22,7 @@ Singleton {
 
     readonly property double bgTransparency: 0.65
     readonly property double widgetBgTransparency: 0.7
+    readonly property double widgetTitleBgTransparency: 0.8
 
     readonly property list<IWidget> widgets: [Math,]
     // readonly property list<IWidget> order: [
