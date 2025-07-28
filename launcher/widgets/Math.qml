@@ -26,22 +26,38 @@ IWidget {
             margins: Launcher.innerMargin
         }
         IText {
+            Layout.fillHeight: false
             visible: valid
             text: name
         }
         RowLayout {
+            spacing: 0
             Layout.fillWidth: true
-            IText {
-                visible: valid
-                text: input
+            Layout.fillHeight: true
+
+            Item {
+                Layout.fillWidth: true
+                IText {
+                    anchors.centerIn: parent
+                    renderType: Text.CurveRendering // it's not static and is rapidly updated
+                    visible: valid
+                    text: input
+                }
             }
+
             IText {
                 visible: valid
-                text: "->"
+                text: "→"
             }
-            IText {
-                visible: valid
-                text: valid ? eval(input) : ""
+
+            Item {
+                Layout.fillWidth: true
+                IText {
+                    anchors.centerIn: parent
+                    renderType: Text.CurveRendering
+                    visible: valid
+                    text: valid ? eval(input.replace('(', '*(')) : "" // replace for () to work properly in math
+                }
             }
         }
     }
