@@ -17,7 +17,7 @@ IRect {
     implicitWidth: Launcher.widgetWidth
     implicitHeight: Launcher.widgetHeight
 
-    radius: Launcher.borderRadius
+    radius: Launcher.widgetRadius
     color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.bgTransparency)
 
     IText {

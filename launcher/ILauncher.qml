@@ -7,6 +7,7 @@ import qs.config
 IWindow {
     // TODO: optional only display on focused screen
     name: "launcher"
+    focusable: true
 
     anchors {
         top: false
@@ -15,5 +16,5 @@ IWindow {
         right: false
     }
 
-    color: Qt.rgba(WallustColors.background.r, WallustColors.background.g, WallustColors.background.b, Bar.bgTransparency)
+    color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Bar.bgTransparency)
 }
