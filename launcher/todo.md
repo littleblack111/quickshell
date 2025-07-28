@@ -18,3 +18,9 @@ when finished:
     - [ ] file size
     - [ ] where it belongs
     - [ ] icon/preview/quick look
+
+- [ ] math:
+    - [x] expression
+    - [ ] natural language (i.e. "5 of 3")
+    - [ ] unit conversion
+    
