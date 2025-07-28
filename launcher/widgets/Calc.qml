@@ -52,26 +52,17 @@ IWidget {
 
             Item {
                 Layout.fillWidth: true
-                Item {
-                    anchors.fill: parent
-                    width: 100
-                    height: 100
-                    IText {
-                        // Rectangle {
-                        //     anchors.fill: parent
-                        //     color: "red"
-                        // }
-                        elide: Text.ElideLeft
-                        anchors.centerIn: parent
-                        width: Math.min(implicitWidth, parent.width)
-                        clip: true
-                        renderType: Text.CurveRendering // it's not static and is rapidly updated
-                        visible: valid
-                        text: input.replace(/ /g, "").split('').join(' ')
-                        font {
-                            pixelSize: Launcher.widgetFontSize
-                            bold: true
-                        }
+                IText {
+                    anchors.centerIn: parent
+                    elide: Text.ElideLeft
+                    width: Math.min(implicitWidth, parent.width - Launcher.innerMargin * 2)
+                    clip: true
+                    renderType: Text.CurveRendering // it's not static and is rapidly updated
+                    visible: valid
+                    text: input.replace(/ /g, "").replace(/\+/g, " + ").replace(/-/g, " - ").replace(/\*/g, " × ").replace(/\//g, " ÷ ").replace(/%/g, " % ").replace(/\(/g, " ( ").replace(/\)/g, " ) ")
+                    font {
+                        pixelSize: Launcher.widgetFontSize
+                        bold: true
                     }
                 }
             }
@@ -89,9 +80,11 @@ IWidget {
                 Layout.fillWidth: true
                 IText {
                     anchors.centerIn: parent
+                    elide: Text.ElideLeft
+                    width: Math.min(implicitWidth, parent.width - Launcher.innerMargin * 2)
                     renderType: Text.CurveRendering
                     visible: valid
-                    text: valid ? String(eval(input.replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1'))).replace(/ /g, "").split('').join(' ') : "" // replace for () to work properly in math
+                    text: valid ? String(eval(input.replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1'))) : "" // replace for () to work properly in math
                     font {
                         pixelSize: Launcher.widgetFontSize
                         bold: true
