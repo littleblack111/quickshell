@@ -23,4 +23,10 @@ when finished:
     - [x] expression
     - [ ] natural language (i.e. "5 of 3")
     - [ ] unit conversion
+        - [ ] temperature
+        - [ ] length
+        - [ ] weight
+        - [ ] currency
+        - [ ] color
+        - [ ] time
     
