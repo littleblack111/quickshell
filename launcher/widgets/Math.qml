@@ -57,12 +57,20 @@ IWidget {
                     renderType: Text.CurveRendering // it's not static and is rapidly updated
                     visible: valid
                     text: input
+                    font {
+                        pixelSize: Launcher.widgetFontSize
+                        bold: true
+                    }
                 }
             }
 
             IText {
                 visible: valid
                 text: "→"
+                font {
+                    pixelSize: Launcher.widgetFontSize
+                    bold: true
+                }
             }
 
             Item {
@@ -72,6 +80,10 @@ IWidget {
                     renderType: Text.CurveRendering
                     visible: valid
                     text: valid ? eval(input.replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1')) : "" // replace for () to work properly in math
+                    font {
+                        pixelSize: Launcher.widgetFontSize
+                        bold: true
+                    }
                 }
             }
         }
