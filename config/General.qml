@@ -21,4 +21,6 @@ Singleton {
     readonly property string animationProp: "scale"
     readonly property real springAnimationSpring: 8
     readonly property real springAnimationDamping: 0.4
+
+    readonly property double accentTransparency: 0.15
 }

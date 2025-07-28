@@ -2,9 +2,12 @@ pragma Singleton
 import Quickshell
 import QtQuick
 
+import qs.config
+
 Singleton {
     readonly property color background1: WallustColors.color8
-    readonly property color background2: WallustColors.color0
+    // readonly property color background2: WallustColors.color0
+    readonly property color background2: Qt.rgba(WallustColors.color0.r, WallustColors.color0.g, WallustColors.color0.b, General.accentTransparency)
     readonly property color background3: WallustColors.background
     readonly property color a1: WallustColors.color9
     readonly property color a2: WallustColors.color1
