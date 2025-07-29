@@ -17,10 +17,10 @@ IRect {
     // visible: valid // no anim :/
     opacity: valid ? 1 : 0 // TODO: better anim, maybe slide in from bottom
 
-    anchors.verticalCenter: parent.verticalCenter
-
-    implicitWidth: Launcher.widgetWidth
-    implicitHeight: Launcher.widgetHeight
+    implicitWidth: valid ? Launcher.widgetWidth : 0
+    implicitHeight: valid ? Launcher.widgetHeight : 0
+    // implicitWidth: Launcher.widgetWidth
+    // implicitHeight: Launcher.widgetHeight
 
     radius: Launcher.widgetRadius
     color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetBgTransparency) // TODO when prioritized, highlight
