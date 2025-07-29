@@ -52,14 +52,14 @@ Item {
             value: activePlayer?.position || 0
             background: IRect {
                 anchors.fill: parent
-                color: Colors.background2
+                color: Colors.accent
                 radius: Style.rounding.smaller
             }
             contentItem: Item {
                 IRect {
                     width: pBar.visualPosition * parent.width
                     height: parent.height
-                    color: Qt.rgba(Colors.background1.r, Colors.background1.g, Colors.background1.b, General.accentTransparency * 1.5)
+                    color: Qt.rgba(Colors.accentAlt.r, Colors.accentAlt.g, Colors.accentAlt.b, General.accentTransparency * 1.5)
                     radius: Style.rounding.smaller
 
                     Behavior on width {

@@ -30,7 +30,7 @@ Item {
 
         implicitWidth: layout.implicitWidth + General.rectMargin * 2
         implicitHeight: Bar.height
-        color: Colors.background2
+        color: Colors.accent
         radius: Style.rounding.large
 
         RowLayout {

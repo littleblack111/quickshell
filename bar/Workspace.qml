@@ -45,7 +45,7 @@ Item {
         source: activeRect
         radius: 8
         cached: true
-        color: root.activeOccupied ? Colors.background2 : Colors.foreground1
+        color: root.activeOccupied ? Colors.accent : Colors.foreground1
         opacity: root.activeOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
 
         Behavior on color {
@@ -68,7 +68,7 @@ Item {
         implicitWidth: Bar.wsActiveIconSize
         implicitHeight: Bar.wsIconSize - Bar.wsHorizontalSpacing
         radius: Bar.wsRounding
-        color: root.activeOccupied ? Colors.background2 : Colors.foreground1
+        color: root.activeOccupied ? Colors.accent : Colors.foreground1
         opacity: root.activeOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
         Behavior on x {
             ISpringAnimation {}
@@ -110,7 +110,7 @@ Item {
                 implicitWidth: active ? Bar.wsActiveIconSize : Bar.wsIconSize
                 implicitHeight: Bar.wsIconSize - Bar.wsHorizontalSpacing
                 radius: Bar.wsRounding
-                color: st.isOccupied ? Colors.background2 : Colors.foreground1
+                color: st.isOccupied ? Colors.accent : Colors.foreground1
                 opacity: active && st.isOccupied ? Bar.wsActiveOpacity : st.isOccupied ? Bar.wsOpacity : Bar.wsEmptyOpacity
 
                 Icon {

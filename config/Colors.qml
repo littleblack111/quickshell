@@ -2,8 +2,6 @@ pragma Singleton
 import Quickshell
 import QtQuick
 
-import qs.config
-
 Singleton {
     readonly property color background1: WallustColors.color8
     // readonly property color background2: WallustColors.color0
@@ -24,6 +22,9 @@ Singleton {
     readonly property color foreground1: WallustColors.foreground
     readonly property color foreground2: WallustColors.color15
     readonly property color foreground3: WallustColors.color7
+
+    readonly property color accent: background2
+    readonly property color accentAlt: background1
 
     readonly property color black: Qt.rgba(59 / 255, 66 / 255, 82 / 255, 1)
     readonly property color red: Qt.rgba(191 / 255, 97 / 255, 106 / 255, 1)
