@@ -54,16 +54,24 @@ Singleton {
 
     /**
    * Returns an Array<DesktopEntry> for a given search.
-   * Results are cached by exact search string.
+   * Results are cached by exact search string and, if the
+   * search starts with a previously cached key, uses that
+   * cached result as the source for filtering.
    */
     function fuzzyQuery(search) {
+        search = search.trim().toLowerCase();
         if (root.fuzzyQueryCache[search]) {
             return root.fuzzyQueryCache[search];
         }
 
-        search = search.trim().toLowerCase();
+        let source = list;
+        let previousLists = Object.keys(root.fuzzyQueryCache).filter(key => key && search.startsWith(key));
+        if (previousLists.length > 0) {
+            var longest = previousLists.reduce((a, b) => a.length >= b.length ? a : b);
+            source = root.fuzzyQueryCache[longest];
+        }
 
-        let results = list.map(obj => ({
+        let results = source.map(obj => ({
                     entry: obj,
                     score: Levendist.distance(obj.name, search),
                     lowered: obj.name.toLowerCase()
@@ -73,9 +81,6 @@ Singleton {
         return results;
     }
 
-    /**
-   * Caches whether an icon actually exists on disk.
-   */
     function iconExists(iconName) {
         if (!iconName || iconName.length === 0) {
             return false;
@@ -88,10 +93,6 @@ Singleton {
         return exists;
     }
 
-    /**
-   * Heavy logic to guess an icon name.  We memoize results by the
-   * exact input string.
-   */
     function guessIcon(str) {
         if (!str || str.length === 0) {
             return "image-missing";
@@ -100,21 +101,18 @@ Singleton {
             return root.guessIconCache[str];
         }
 
-        let result;
+        var result;
 
-        // 1) direct substitution table
         if (substitutions[str]) {
             result = substitutions[str];
-        } else
-        // 2) regex rules
-        {
+        } else {
             result = null;
-            for (let i = 0; i < regexSubstitutions.length; i++) {
-                const {
+            for (var i = 0; i < regexSubstitutions.length; i++) {
+                var {
                     regex,
                     replace
                 } = regexSubstitutions[i];
-                const replaced = str.replace(regex, replace);
+                var replaced = str.replace(regex, replace);
                 if (replaced !== str) {
                     result = replaced;
                     break;
@@ -122,30 +120,24 @@ Singleton {
             }
         }
 
-        // 3) if still not found, see if the original exists
-        if (!result) {
-            if (root.iconExists(str)) {
-                result = str;
-            }
+        if (!result && root.iconExists(str)) {
+            result = str;
         }
 
-        // 4) try domain-reverse name
         if (!result) {
-            let guessStr = str.split(".").slice(-1)[0].toLowerCase();
+            var guessStr = str.split(".").slice(-1)[0].toLowerCase();
             if (root.iconExists(guessStr)) {
                 result = guessStr;
             }
         }
 
-        // 5) kebab-case
         if (!result) {
-            let guessStr = str.toLowerCase().replace(/\s+/g, "-");
-            if (root.iconExists(guessStr)) {
-                result = guessStr;
+            var kebab = str.toLowerCase().replace(/\s+/g, "-");
+            if (root.iconExists(kebab)) {
+                result = kebab;
             }
         }
 
-        // 6) fallback to first fuzzy match’s icon
         if (!result) {
             const matches = root.fuzzyQuery(str);
             if (matches.length > 0) {
@@ -156,7 +148,6 @@ Singleton {
             }
         }
 
-        // 7) give up
         if (!result) {
             result = str;
         }
