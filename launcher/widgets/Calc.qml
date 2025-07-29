@@ -7,7 +7,6 @@ import qs.config
 
 IWidget {
     name: "Math"
-    anchors.verticalCenter: parent.verticalCenter
     valid: processed.valid
     priority: processed.priority
 
