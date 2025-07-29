@@ -3,7 +3,9 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Widgets
+
 import qs.components
+import qs.services
 import qs.config
 
 // TODO use a item wrapping loader for opacity Behavior
