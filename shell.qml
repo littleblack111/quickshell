@@ -10,7 +10,7 @@ Scope {
     Bar {}
     LazyLoader {
         id: launcherLoader
-        component: UnifiedLauncher {
+        component: Launcher {
             parentLoader: launcherLoader
         }
     }
