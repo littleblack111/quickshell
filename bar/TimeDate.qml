@@ -80,7 +80,7 @@ Item {
                                 property: "opacity"
                                 from: 0
                                 to: 1
-                                duration: General.animateDuration / 2
+                                duration: General.animationDuration / 2
                             }
                         }
                     }
@@ -111,7 +111,7 @@ Item {
                                 property: "opacity"
                                 from: 0
                                 to: 1
-                                duration: General.animateDuration / 2
+                                duration: General.animationDuration / 2
                             }
                         }
                     }

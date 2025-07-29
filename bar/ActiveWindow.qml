@@ -49,7 +49,7 @@ IRect {
             opacity: root.activated ? 1 : 0
             Behavior on opacity {
                 NumberAnimation {
-                    duration: General.animateDuration / 4
+                    duration: General.animationDuration / 4
                 }
             }
         }
@@ -63,7 +63,7 @@ IRect {
             opacity: root.activated ? 1 : 0
             Behavior on opacity {
                 NumberAnimation {
-                    duration: General.animateDuration / 4
+                    duration: General.animationDuration / 4
                 }
             }
         }
@@ -73,7 +73,7 @@ IRect {
 
     Behavior on opacity {
         NumberAnimation {
-            duration: General.animateDuration / 4
+            duration: General.animationDuration / 4
         }
     }
 
@@ -92,7 +92,7 @@ IRect {
             target: icon
             property: "opacity"
             to: 0
-            duration: General.animateDuration / 4
+            duration: General.animationDuration / 4
         }
         ScriptAction {
             script: icon.source = root.icon
@@ -101,7 +101,7 @@ IRect {
             target: icon
             property: "opacity"
             to: 1
-            duration: General.animateDuration / 4
+            duration: General.animationDuration / 4
         }
         ScriptAction {
             script: icon.source = root.icon

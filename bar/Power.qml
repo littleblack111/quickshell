@@ -82,7 +82,7 @@ Item {
                                     property: "opacity"
                                     from: 0
                                     to: 1
-                                    duration: General.animateDuration / 2
+                                    duration: General.animationDuration / 2
                                     easing.type: Easing.InOutQuad
                                 }
                             }
@@ -91,7 +91,7 @@ Item {
                 }
                 Behavior on implicitWidth {
                     NumberAnimation {
-                        duration: General.animateDuration / 4
+                        duration: General.animationDuration / 4
                         easing.type: Easing.InOutQuad
                     }
                 }
@@ -99,7 +99,7 @@ Item {
                 // no idea why when collapsing the width animation won't trigger
                 Behavior on visible {
                     NumberAnimation {
-                        duration: General.animateDuration / 4
+                        duration: General.animationDuration / 4
                         easing.type: Easing.InOutQuad
                     }
                 }

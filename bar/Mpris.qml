@@ -64,7 +64,7 @@ Item {
 
                     Behavior on width {
                         NumberAnimation {
-                            duration: General.animateDuration / 2
+                            duration: General.animationDuration / 2
                         }
                     }
                 }
@@ -113,7 +113,7 @@ Item {
 
                     Behavior on opacity {
                         NumberAnimation {
-                            duration: General.animateDuration / 4
+                            duration: General.animationDuration / 4
                             easing.type: Easing.InOutQuad
                         }
                     }
@@ -135,7 +135,7 @@ Item {
 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: General.animateDuration / 4
+                        duration: General.animationDuration / 4
                         easing.type: Easing.InOutQuad
                     }
                 }
@@ -147,14 +147,14 @@ Item {
 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: General.animateDuration / 4
+                        duration: General.animationDuration / 4
                         easing.type: Easing.InOutQuad
                     }
                 }
 
                 Behavior on color {
                     ColorAnimation {
-                        duration: General.animateDuration / 4
+                        duration: General.animationDuration / 4
                         easing.type: Easing.InOutQuad
                     }
                 }
@@ -164,7 +164,7 @@ Item {
 
     Behavior on opacity {
         NumberAnimation {
-            duration: General.animateDuration / 4
+            duration: General.animationDuration / 4
         }
     }
     Behavior on width {
