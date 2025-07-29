@@ -16,13 +16,15 @@ IComponent {
                 priority: false
             };
         const query = AppSearch.fuzzyQuery(input);
-        query.forEach(app => {
-            console.log(app.name);
-        });
+        const first = query.length > 0 && query[0].name.toLowerCase();
+        const priority = first === input.toLowerCase();
+        console.log(priority);
 
         return {
             valid: query.length > 0,
-            priority: query[0]?.name.toLowerCase() === input.toLowerCase() ? true : false // TODO: maybe generic name as well, maybe 1 char fuzzy, also maybe case insensitive?
+            priority: priority // TODO: maybe generic name as well, maybe 1 char fuzzy, also maybe case insensitive?
+            ,
+            answer: first // would still work because if nothing else match, we defaultly promote APp
         };
     }
 
