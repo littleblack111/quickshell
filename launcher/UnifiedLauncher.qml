@@ -21,7 +21,7 @@ ILauncher {
 
         IRect {
             id: root
-            property string input
+            property alias input: textInput.text
 
             height: searchBar.implicitHeight + widgets.height + textInput.height / 2 // * 1.5
             width: Math.max(widgets.implicitWidth, Launcher.defaultWidth)
