@@ -6,8 +6,7 @@ import qs.launcher.widgets
 Singleton {
     id: root
 
-    readonly property int width: 1000
-    readonly property int height: 700
+    readonly property int defaultWidth: 400
 
     readonly property int widgetWidth: 550
     readonly property int widgetHeight: 200
