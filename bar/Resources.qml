@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 
+import "components"
 import qs.components
 import qs.config as Config
 import qs.services as Services
