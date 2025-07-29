@@ -5,7 +5,7 @@ import Quickshell
 Singleton {
     id: root
 
-    readonly property bool sloopySearch: true
+    readonly property bool sloppySearch: true
 
     readonly property int resourceUpdateInterval: 1
 
