@@ -2,7 +2,7 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 
-import "widgets"
+import "components"
 import qs.components
 import qs.config
 

@@ -1,7 +1,7 @@
 pragma Singleton
 
 import Quickshell
-import qs.launcher.widgets
+import qs.launcher.components
 
 Singleton {
     id: root
