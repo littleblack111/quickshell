@@ -67,12 +67,15 @@ Singleton {
             return root.fuzzyQueryCache[search];
         }
 
+        search = search.trim().toLowerCase();
+
         let results;
         if (root.sloppySearch) {
             results = list.map(obj => ({
                         entry: obj,
-                        score: Levendist.distance(obj.name, search)
-                    })).filter(item => item.score < root.scoreThreshold).sort((a, b) => b.score - a.score).map(item => item.entry);
+                        score: Levendist.distance(obj.name, search),
+                        lowered: obj.name.toLowerCase()
+                    })).filter(item => item.score < root.scoreThreshold || item.lowered.startsWith(search)).sort((a, b) => b.score - a.score).map(item => item.entry).filter((entry, idx, arr) => arr.indexOf(entry) === idx);
         } else {
             results = Fuzzy.go(search, preppedNames, {
                 all: true,
