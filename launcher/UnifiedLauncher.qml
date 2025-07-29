@@ -120,6 +120,13 @@ ILauncher {
                 parentLoader.active = false;
         }
     }
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        onExited: {
+            parentLoader.active = false;
+        }
+    }
     implicitWidth: Launcher.width
     implicitHeight: Launcher.height
 }
