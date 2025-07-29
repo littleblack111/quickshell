@@ -6,12 +6,12 @@ import qs.components
 import qs.config
 
 IWidget {
-    name: "Math"
+    name: "Calculator"
     valid: processed.valid
     priority: processed.priority
 
     process: function () {
-        var isValid = /^[0-9+\-*/()%.\s]+$/.test(input);
+        var isValid = /^(?=.*[+\-*/])[0-9+\-*/()%.\s]+$/.test(input);
         return {
             valid: isValid,
             priority: isValid
