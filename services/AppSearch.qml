@@ -14,7 +14,7 @@ Singleton {
     id: root
 
     property bool sloppySearch: General.sloppySearch ?? false
-    property real scoreThreshold: 0.2
+    property int scoreThreshold: 3
 
     property var substitutions: ({
             "code-url-handler": "visual-studio-code",
@@ -71,8 +71,8 @@ Singleton {
         if (root.sloppySearch) {
             results = list.map(obj => ({
                         entry: obj,
-                        score: Levendist.computeScore(obj.name.toLowerCase(), search.toLowerCase())
-                    })).filter(item => item.score > root.scoreThreshold).sort((a, b) => b.score - a.score).map(item => item.entry);
+                        score: Levendist.distance(obj.name, search)
+                    })).filter(item => item.score < root.scoreThreshold).sort((a, b) => b.score - a.score).map(item => item.entry);
         } else {
             results = Fuzzy.go(search, preppedNames, {
                 all: true,

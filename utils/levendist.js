@@ -1,142 +1,273 @@
-// Original code from https://github.com/koeqaife/hyprland-material-you
-// Original code license: GPLv3
-// Translated to Js from Cython with an LLM and reviewed
+var peq = new Uint32Array(0x10000);
 
-function min3(a, b, c) {
-	return a < b && a < c ? a : b < c ? b : c;
-}
+var myers_32 = function(a, b) {
 
-function max3(a, b, c) {
-	return a > b && a > c ? a : b > c ? b : c;
-}
+	var n = a.length;
 
-function min2(a, b) {
-	return a < b ? a : b;
-}
+	var m = b.length;
 
-function max2(a, b) {
-	return a > b ? a : b;
-}
+	var lst = 1 << (n - 1);
 
-function levenshteinDistance(s1, s2) {
-	let len1 = s1.length;
-	let len2 = s2.length;
+	var pv = -1;
 
-	if (len1 === 0) return len2;
-	if (len2 === 0) return len1;
+	var mv = 0;
 
-	if (len2 > len1) {
-		[s1, s2] = [s2, s1];
-		[len1, len2] = [len2, len1];
+	var sc = n;
+
+	var i = n;
+
+	while (i--) {
+
+		peq[a.charCodeAt(i)] |= 1 << i;
+
 	}
 
-	let prev = new Array(len2 + 1);
-	let curr = new Array(len2 + 1);
+	for (i = 0; i < m; i++) {
 
-	for (let j = 0; j <= len2; j++) {
-		prev[j] = j;
-	}
+		var eq = peq[b.charCodeAt(i)];
 
-	for (let i = 1; i <= len1; i++) {
-		curr[0] = i;
-		for (let j = 1; j <= len2; j++) {
-			let cost = s1[i - 1] === s2[j - 1] ? 0 : 1;
-			curr[j] = min3(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost);
+		var xv = eq | mv;
+
+		eq |= ((eq & pv) + pv) ^ pv;
+
+		mv |= ~(eq | pv);
+
+		pv &= eq;
+
+		if (mv & lst) {
+
+			sc++;
+
 		}
-		[prev, curr] = [curr, prev];
-	}
 
-	return prev[len2];
-}
+		if (pv & lst) {
 
-function partialRatio(shortS, longS) {
-	let lenS = shortS.length;
-	let lenL = longS.length;
-	let best = 0.0;
+			sc--;
 
-	if (lenS === 0) return 1.0;
-
-	for (let i = 0; i <= lenL - lenS; i++) {
-		let sub = longS.slice(i, i + lenS);
-		let dist = levenshteinDistance(shortS, sub);
-		let score = 1.0 - (dist / lenS);
-		if (score > best) best = score;
-	}
-
-	return best;
-}
-
-function computeScore(s1, s2) {
-	if (s1 === s2) return 1.0;
-
-	let dist = levenshteinDistance(s1, s2);
-	let maxLen = max2(s1.length, s2.length);
-	if (maxLen === 0) return 1.0;
-
-	let full = 1.0 - (dist / maxLen);
-	let part = s1.length < s2.length ? partialRatio(s1, s2) : partialRatio(s2, s1);
-
-	let score = 0.85 * full + 0.15 * part;
-
-	if (s1 && s2 && s1[0] !== s2[0]) {
-		score -= 0.05;
-	}
-
-	let lenDiff = Math.abs(s1.length - s2.length);
-	if (lenDiff >= 3) {
-		score -= 0.05 * lenDiff / maxLen;
-	}
-
-	let commonPrefixLen = 0;
-	let minLen = min2(s1.length, s2.length);
-	for (let i = 0; i < minLen; i++) {
-		if (s1[i] === s2[i]) {
-			commonPrefixLen++;
-		} else {
-			break;
 		}
-	}
-	score += 0.02 * commonPrefixLen;
 
-	if (s1.includes(s2) || s2.includes(s1)) {
-		score += 0.06;
-	}
+		mv = (mv << 1) | 1;
 
-	return Math.max(0.0, Math.min(1.0, score));
-}
+		pv = (pv << 1) | ~(xv | mv);
 
-function computeTextMatchScore(s1, s2) {
-	if (s1 === s2) return 1.0;
+		mv &= xv;
 
-	let dist = levenshteinDistance(s1, s2);
-	let maxLen = max2(s1.length, s2.length);
-	if (maxLen === 0) return 1.0;
-
-	let full = 1.0 - (dist / maxLen);
-	let part = s1.length < s2.length ? partialRatio(s1, s2) : partialRatio(s2, s1);
-
-	let score = 0.4 * full + 0.6 * part;
-
-	let lenDiff = Math.abs(s1.length - s2.length);
-	if (lenDiff >= 10) {
-		score -= 0.02 * lenDiff / maxLen;
 	}
 
-	let commonPrefixLen = 0;
-	let minLen = min2(s1.length, s2.length);
-	for (let i = 0; i < minLen; i++) {
-		if (s1[i] === s2[i]) {
-			commonPrefixLen++;
-		} else {
-			break;
+	i = n;
+
+	while (i--) {
+
+		peq[a.charCodeAt(i)] = 0;
+
+	}
+
+	return sc;
+
+};
+
+var myers_x = function(b, a) {
+
+	var n = a.length;
+
+	var m = b.length;
+
+	var mhc = [];
+
+	var phc = [];
+
+	var hsize = Math.ceil(n / 32);
+
+	var vsize = Math.ceil(m / 32);
+
+	for (var i = 0; i < hsize; i++) {
+
+		phc[i] = -1;
+
+		mhc[i] = 0;
+
+	}
+
+	var j = 0;
+
+	for (; j < vsize - 1; j++) {
+
+		var mv_1 = 0;
+
+		var pv_1 = -1;
+
+		var start_1 = j * 32;
+
+		var vlen_1 = Math.min(32, m) + start_1;
+
+		for (var k = start_1; k < vlen_1; k++) {
+
+			peq[b.charCodeAt(k)] |= 1 << k;
+
 		}
+
+		for (var i = 0; i < n; i++) {
+
+			var eq = peq[a.charCodeAt(i)];
+
+			var pb = (phc[(i / 32) | 0] >>> i) & 1;
+
+			var mb = (mhc[(i / 32) | 0] >>> i) & 1;
+
+			var xv = eq | mv_1;
+
+			var xh = ((((eq | mb) & pv_1) + pv_1) ^ pv_1) | eq | mb;
+
+			var ph = mv_1 | ~(xh | pv_1);
+
+			var mh = pv_1 & xh;
+
+			if ((ph >>> 31) ^ pb) {
+
+				phc[(i / 32) | 0] ^= 1 << i;
+
+			}
+
+			if ((mh >>> 31) ^ mb) {
+
+				mhc[(i / 32) | 0] ^= 1 << i;
+
+			}
+
+			ph = (ph << 1) | pb;
+
+			mh = (mh << 1) | mb;
+
+			pv_1 = mh | ~(xv | ph);
+
+			mv_1 = ph & xv;
+
+		}
+
+		for (var k = start_1; k < vlen_1; k++) {
+
+			peq[b.charCodeAt(k)] = 0;
+
+		}
+
 	}
-	score += 0.01 * commonPrefixLen;
 
-	if (s1.includes(s2) || s2.includes(s1)) {
-		score += 0.2;
+	var mv = 0;
+
+	var pv = -1;
+
+	var start = j * 32;
+
+	var vlen = Math.min(32, m - start) + start;
+
+	for (var k = start; k < vlen; k++) {
+
+		peq[b.charCodeAt(k)] |= 1 << k;
+
 	}
 
-	return Math.max(0.0, Math.min(1.0, score));
-}
+	var score = m;
 
+	for (var i = 0; i < n; i++) {
+
+		var eq = peq[a.charCodeAt(i)];
+
+		var pb = (phc[(i / 32) | 0] >>> i) & 1;
+
+		var mb = (mhc[(i / 32) | 0] >>> i) & 1;
+
+		var xv = eq | mv;
+
+		var xh = ((((eq | mb) & pv) + pv) ^ pv) | eq | mb;
+
+		var ph = mv | ~(xh | pv);
+
+		var mh = pv & xh;
+
+		score += (ph >>> (m - 1)) & 1;
+
+		score -= (mh >>> (m - 1)) & 1;
+
+		if ((ph >>> 31) ^ pb) {
+
+			phc[(i / 32) | 0] ^= 1 << i;
+
+		}
+
+		if ((mh >>> 31) ^ mb) {
+
+			mhc[(i / 32) | 0] ^= 1 << i;
+
+		}
+
+		ph = (ph << 1) | pb;
+
+		mh = (mh << 1) | mb;
+
+		pv = mh | ~(xv | ph);
+
+		mv = ph & xv;
+
+	}
+
+	for (var k = start; k < vlen; k++) {
+
+		peq[b.charCodeAt(k)] = 0;
+
+	}
+
+	return score;
+
+};
+
+var distance = function(a, b) {
+
+	if (a.length < b.length) {
+
+		var tmp = b;
+
+		b = a;
+
+		a = tmp;
+
+	}
+
+	if (b.length === 0) {
+
+		return a.length;
+
+	}
+
+	if (a.length <= 32) {
+
+		return myers_32(a, b);
+
+	}
+
+	return myers_x(a, b);
+
+};
+
+var closest = function(str, arr) {
+
+	var min_distance = Infinity;
+
+	var min_index = 0;
+
+	for (var i = 0; i < arr.length; i++) {
+
+		var dist = distance(str, arr[i]);
+
+		if (dist < min_distance) {
+
+			min_distance = dist;
+
+			min_index = i;
+
+		}
+
+	}
+
+	return arr[min_index];
+
+};
