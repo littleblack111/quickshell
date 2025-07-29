@@ -7,31 +7,31 @@ import qs.services
 import qs.config
 
 IComponent {
+    // TODO: presist how much times per app is opened on disk, routinely check if the app is still there
     name: "Applications"
     process: function () {
+        if (!input)
+            return {
+                valid: false,
+                priority: false
+            };
+        const query = AppSearch.fuzzyQuery(input);
+        query.forEach(app => {
+            console.log(app.name);
+        });
+        if (query.length < 1)
+            return {
+                valid: false,
+                priority: false
+            };
+
         return {
-            valid: false,
-            priority: false
+            valid: true,
+            priority: query[0].name.toLowerCase() === input.toLowerCase() ? true : false // TODO: maybe generic name as well, maybe 1 char fuzzy, also maybe case insensitive?
         };
-        // if (!input)
-        //     return {
-        //         valid: false,
-        //         priority: false
-        //     };
-        // const query = AppSearch.fuzzyQuery(input);
-        // if (query.length < 1)
-        //     return {
-        //         valid: false,
-        //         priority: false
-        //     };
-        //
-        // return {
-        //     valid: true,
-        //     priority: query[0].name === input ? true : false // TODO: maybe generic name as well, maybe 1 char fuzzy, also maybe case insensitive?
-        // };
     }
 
-    RowLayout {
+    ColumnLayout {
         spacing: 0
         anchors.fill: parent
 
@@ -68,7 +68,7 @@ IComponent {
                 width: Math.min(implicitWidth, parent.width - Launcher.innerMargin * 2)
                 renderType: Text.CurveRendering
                 visible: valid
-                text: valid ? String(eval(input.replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1'))) : ""
+                // text: valid ? String(eval(input.replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1'))) : ""
                 font {
                     pixelSize: Launcher.widgetFontSize
                     bold: true

@@ -91,11 +91,11 @@ ILauncher {
                     Layout.leftMargin: Launcher.innerMargin
                     input: root.input
                 }
-                // App {
-                //     Layout.rightMargin: Launcher.innerMargin
-                //     Layout.leftMargin: Launcher.innerMargin
-                //     input: root.input
-                // }
+                App {
+                    Layout.rightMargin: Launcher.innerMargin
+                    Layout.leftMargin: Launcher.innerMargin
+                    input: root.input
+                }
             }
         }
 
