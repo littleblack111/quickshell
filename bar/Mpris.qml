@@ -29,7 +29,7 @@ Item {
         return title.trim();
     }
 
-    implicitWidth: activePlayer ? rect.implicitWidth - General.rectMargin / 1.2 : 0
+    implicitWidth: activePlayer ? rect.width - General.rectMargin / 1.2 : 0
     height: Bar.height + General.rectMargin / 1.5
     opacity: activePlayer ? 1 : 0
 
@@ -167,7 +167,7 @@ Item {
             duration: General.animateDuration / 4
         }
     }
-    Behavior on implicitWidth {
+    Behavior on width {
         ISpringAnimation {
             spring: General.springAnimationSpring * 2
             damping: General.springAnimationDamping * 1.3
