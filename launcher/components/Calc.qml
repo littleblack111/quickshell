@@ -5,7 +5,7 @@ import QtQuick.Layouts
 import qs.components
 import qs.config
 
-IWidget {
+IComponent {
     name: "Calculator"
     process: function () {
         var isValid = /^(?=.*[+\-*/])[0-9+\-*/()%.\s]+$/.test(input);
