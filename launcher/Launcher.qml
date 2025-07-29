@@ -75,6 +75,10 @@ ILauncher {
                         root.input = text;
                     }
                 }
+                IText {
+                    visible: app.valid
+                    text: app.answer
+                }
             }
 
             ColumnLayout {
@@ -87,12 +91,14 @@ ILauncher {
                 }
 
                 Calc {
+                    id: calc
                     cursorPosition: textInput.cursorPosition
                     Layout.rightMargin: Launcher.innerMargin
                     Layout.leftMargin: Launcher.innerMargin
                     input: root.input
                 }
                 App {
+                    id: app
                     Layout.rightMargin: Launcher.innerMargin
                     Layout.leftMargin: Launcher.innerMargin
                     input: root.input
