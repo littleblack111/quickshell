@@ -13,7 +13,6 @@ import qs.config
 Singleton {
     id: root
 
-    property bool sloppySearch: General.sloppySearch ?? false
     property int scoreThreshold: 3
 
     property var substitutions: ({
@@ -53,11 +52,6 @@ Singleton {
 
     readonly property list<DesktopEntry> list: Array.from(DesktopEntries.applications.values).sort((a, b) => a.name.localeCompare(b.name))
 
-    readonly property var preppedNames: list.map(a => ({
-                name: Fuzzy.prepare(`${a.name} `),
-                entry: a
-            }))
-
     /**
    * Returns an Array<DesktopEntry> for a given search.
    * Results are cached by exact search string.
@@ -69,19 +63,11 @@ Singleton {
 
         search = search.trim().toLowerCase();
 
-        let results;
-        if (root.sloppySearch) {
-            results = list.map(obj => ({
-                        entry: obj,
-                        score: Levendist.distance(obj.name, search),
-                        lowered: obj.name.toLowerCase()
-                    })).filter(item => item.score < root.scoreThreshold || item.lowered.startsWith(search)).sort((a, b) => b.score - a.score).map(item => item.entry).filter((entry, idx, arr) => arr.indexOf(entry) === idx);
-        } else {
-            results = Fuzzy.go(search, preppedNames, {
-                all: true,
-                key: "name"
-            }).map(r => r.obj.entry);
-        }
+        let results = list.map(obj => ({
+                    entry: obj,
+                    score: Levendist.distance(obj.name, search),
+                    lowered: obj.name.toLowerCase()
+                })).filter(item => item.score < root.scoreThreshold || item.lowered.startsWith(search)).sort((a, b) => b.score - a.score).map(item => item.entry).filter((entry, idx, arr) => arr.indexOf(entry) === idx);
 
         root.fuzzyQueryCache[search] = results;
         return results;

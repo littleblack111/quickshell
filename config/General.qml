@@ -5,8 +5,6 @@ import Quickshell
 Singleton {
     id: root
 
-    readonly property bool sloppySearch: true
-
     readonly property int resourceUpdateInterval: 1
 
     readonly property real iconSize: Style.font.size.larger ?? 16
