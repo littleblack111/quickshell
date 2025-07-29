@@ -6,6 +6,7 @@ import qs.components
 import qs.config
 
 IComponent {
+    required property int cursorPosition
     name: "Calculator"
     process: function () {
         const isValid = /^(?=.*\d)(?=.*[+\-*\/\^])[0-9+\-*\/\^().\s]+$/.test(input);
@@ -23,7 +24,7 @@ IComponent {
             Layout.fillWidth: true
             IText {
                 anchors.centerIn: parent
-                elide: Text.ElideLeft
+                elide: cursorPosition > input.length / 2 ? Text.ElideLeft : Text.ElideRight
                 width: Math.min(implicitWidth, parent.width - Launcher.innerMargin * 2)
                 clip: true
                 renderType: Text.CurveRendering
@@ -48,11 +49,10 @@ IComponent {
             IText {
                 animate: true
                 anchors.centerIn: parent
-                elide: Text.ElideLeft
                 width: Math.min(implicitWidth, parent.width - Launcher.innerMargin * 2)
                 renderType: Text.CurveRendering
                 visible: valid
-                text: valid ? String(eval(input.replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1'))) : ""
+                text: valid ? String(eval(input.replace(/\^/g, '**').replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1'))) : ''
                 font {
                     pixelSize: Launcher.widgetFontSize
                     bold: true

@@ -87,6 +87,7 @@ ILauncher {
                 }
 
                 Calc {
+                    cursorPosition: textInput.cursorPosition
                     Layout.rightMargin: Launcher.innerMargin
                     Layout.leftMargin: Launcher.innerMargin
                     input: root.input
