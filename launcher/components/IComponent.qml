@@ -26,6 +26,7 @@ IRect {
     color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetBgTransparency) // TODO when prioritized, highlight
 
     IRect {
+        visible: Launcher.showWidgetTitle && valid
         height: childrenRect.height
         width: parent.width
         topLeftRadius: Launcher.widgetRadius
