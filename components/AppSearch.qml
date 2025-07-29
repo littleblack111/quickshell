@@ -12,8 +12,10 @@ import qs.config
  */
 Singleton {
     id: root
+
     property bool sloppySearch: General.sloppySearch ?? false
     property real scoreThreshold: 0.2
+
     property var substitutions: ({
             "code-url-handler": "visual-studio-code",
             "Code": "visual-studio-code",
@@ -25,24 +27,29 @@ Singleton {
             "zen": "zen-browser",
             "brave-browser": "brave-desktop"
         })
+
     property var regexSubstitutions: [
         {
-            "regex": /^steam_app_(\d+)$/,
-            "replace": "steam_icon_$1"
+            regex: /^steam_app_(\d+)$/,
+            replace: "steam_icon_$1"
         },
         {
-            "regex": /Minecraft.*/,
-            "replace": "minecraft"
+            regex: /Minecraft.*/,
+            replace: "minecraft"
         },
         {
-            "regex": /.*polkit.*/,
-            "replace": "system-lock-screen"
+            regex: /.*polkit.*/,
+            replace: "system-lock-screen"
         },
         {
-            "regex": /gcr.prompter/,
-            "replace": "system-lock-screen"
+            regex: /gcr.prompter/,
+            replace: "system-lock-screen"
         }
     ]
+
+    property var fuzzyQueryCache: ({})
+    property var iconExistsCache: ({})
+    property var guessIconCache: ({})
 
     readonly property list<DesktopEntry> list: Array.from(DesktopEntries.applications.values).sort((a, b) => a.name.localeCompare(b.name))
 
@@ -51,68 +58,121 @@ Singleton {
                 entry: a
             }))
 
-    function fuzzyQuery(search: string): var { // Idk why list<DesktopEntry> doesn't work
+    /**
+   * Returns an Array<DesktopEntry> for a given search.
+   * Results are cached by exact search string.
+   */
+    function fuzzyQuery(search) {
+        if (root.fuzzyQueryCache[search]) {
+            return root.fuzzyQueryCache[search];
+        }
+
+        let results;
         if (root.sloppySearch) {
-            const results = list.map(obj => ({
+            results = list.map(obj => ({
                         entry: obj,
                         score: Levendist.computeScore(obj.name.toLowerCase(), search.toLowerCase())
-                    })).filter(item => item.score > root.scoreThreshold).sort((a, b) => b.score - a.score);
-            return results.map(item => item.entry);
+                    })).filter(item => item.score > root.scoreThreshold).sort((a, b) => b.score - a.score).map(item => item.entry);
+        } else {
+            results = Fuzzy.go(search, preppedNames, {
+                all: true,
+                key: "name"
+            }).map(r => r.obj.entry);
         }
 
-        return Fuzzy.go(search, preppedNames, {
-            all: true,
-            key: "name"
-        }).map(r => {
-            return r.obj.entry;
-        });
+        root.fuzzyQueryCache[search] = results;
+        return results;
     }
 
+    /**
+   * Caches whether an icon actually exists on disk.
+   */
     function iconExists(iconName) {
-        if (!iconName || iconName.length == 0)
+        if (!iconName || iconName.length === 0) {
             return false;
-        return (Quickshell.iconPath(iconName, true).length > 0) && !iconName.includes("image-missing");
+        }
+        if (root.iconExistsCache.hasOwnProperty(iconName)) {
+            return root.iconExistsCache[iconName];
+        }
+        const exists = Quickshell.iconPath(iconName, true).length > 0 && !iconName.includes("image-missing");
+        root.iconExistsCache[iconName] = exists;
+        return exists;
     }
 
+    /**
+   * Heavy logic to guess an icon name.  We memoize results by the
+   * exact input string.
+   */
     function guessIcon(str) {
-        if (!str || str.length == 0)
+        if (!str || str.length === 0) {
             return "image-missing";
-
-        // Normal substitutions
-        if (substitutions[str])
-            return substitutions[str];
-
-        // Regex substitutions
-        for (let i = 0; i < regexSubstitutions.length; i++) {
-            const substitution = regexSubstitutions[i];
-            const replacedName = str.replace(substitution.regex, substitution.replace);
-            if (replacedName != str)
-                return replacedName;
+        }
+        if (root.guessIconCache[str]) {
+            return root.guessIconCache[str];
         }
 
-        // If it gets detected normally, no need to guess
-        if (iconExists(str))
-            return str;
+        let result;
 
-        let guessStr = str;
-        // Guess: Take only app name of reverse domain name notation
-        guessStr = str.split('.').slice(-1)[0].toLowerCase();
-        if (iconExists(guessStr))
-            return guessStr;
-        // Guess: normalize to kebab case
-        guessStr = str.toLowerCase().replace(/\s+/g, "-");
-        if (iconExists(guessStr))
-            return guessStr;
-        // Guess: First fuzzy desktop entry match
-        const searchResults = root.fuzzyQuery(str);
-        if (searchResults.length > 0) {
-            const firstEntry = searchResults[0];
-            guessStr = firstEntry.icon;
-            if (iconExists(guessStr))
-                return guessStr;
+        // 1) direct substitution table
+        if (substitutions[str]) {
+            result = substitutions[str];
+        } else
+        // 2) regex rules
+        {
+            result = null;
+            for (let i = 0; i < regexSubstitutions.length; i++) {
+                const {
+                    regex,
+                    replace
+                } = regexSubstitutions[i];
+                const replaced = str.replace(regex, replace);
+                if (replaced !== str) {
+                    result = replaced;
+                    break;
+                }
+            }
         }
 
-        // Give up
-        return str;
+        // 3) if still not found, see if the original exists
+        if (!result) {
+            if (root.iconExists(str)) {
+                result = str;
+            }
+        }
+
+        // 4) try domain-reverse name
+        if (!result) {
+            let guessStr = str.split(".").slice(-1)[0].toLowerCase();
+            if (root.iconExists(guessStr)) {
+                result = guessStr;
+            }
+        }
+
+        // 5) kebab-case
+        if (!result) {
+            let guessStr = str.toLowerCase().replace(/\s+/g, "-");
+            if (root.iconExists(guessStr)) {
+                result = guessStr;
+            }
+        }
+
+        // 6) fallback to first fuzzy match’s icon
+        if (!result) {
+            const matches = root.fuzzyQuery(str);
+            if (matches.length > 0) {
+                const candidate = matches[0].icon;
+                if (root.iconExists(candidate)) {
+                    result = candidate;
+                }
+            }
+        }
+
+        // 7) give up
+        if (!result) {
+            result = str;
+        }
+
+        root.guessIconCache[str] = result;
+        return result;
     }
 }
