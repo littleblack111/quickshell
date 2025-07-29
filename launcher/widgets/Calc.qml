@@ -69,6 +69,7 @@ IWidget {
             Item {
                 Layout.fillWidth: true
                 IText {
+                    animate: true
                     anchors.centerIn: parent
                     elide: Text.ElideLeft
                     width: Math.min(implicitWidth, parent.width - Launcher.innerMargin * 2)
