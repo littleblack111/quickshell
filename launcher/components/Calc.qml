@@ -8,11 +8,13 @@ import qs.config
 IComponent {
     required property int cursorPosition
     name: "Calculator"
+
     process: function () {
         const isValid = /^(?=.*\d)(?=.*[+\-*\/\^])[0-9+\-*\/\^().\s]+$/.test(input);
         return {
             valid: isValid,
-            priority: isValid
+            priority: isValid,
+            answer: isValid ? String(eval(input.replace(/\^/g, '**').replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1'))) : null
         };
     }
 
@@ -52,7 +54,7 @@ IComponent {
                 width: Math.min(implicitWidth, parent.width - Launcher.innerMargin * 2)
                 renderType: Text.CurveRendering
                 visible: valid
-                text: valid ? String(eval(input.replace(/\^/g, '**').replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1'))) : ''
+                text: valid ? answer : ''
                 font {
                     pixelSize: Launcher.widgetFontSize
                     bold: true
