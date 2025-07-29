@@ -15,25 +15,6 @@ IWidget {
         };
     }
 
-    IRect {
-        height: childrenRect.height
-        width: parent.width
-        topLeftRadius: Launcher.widgetRadius
-        topRightRadius: Launcher.widgetRadius
-        color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetTitleBgTransparency)
-
-        IText {
-            anchors {
-                top: parent.top
-                left: parent.left
-                leftMargin: Launcher.innerMargin
-            }
-            visible: valid
-            font.pixelSize: Launcher.widgetFontSize
-            text: name
-        }
-    }
-
     RowLayout {
         spacing: 0
         anchors.fill: parent
