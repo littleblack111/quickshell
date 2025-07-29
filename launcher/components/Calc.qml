@@ -8,7 +8,7 @@ import qs.config
 IComponent {
     name: "Calculator"
     process: function () {
-        var isValid = /^(?=.*\d)[0-9+\-*/^().\s]+$/.test(input);
+        const isValid = /^(?=.*\d)(?=.*[+\-*\/\^])[0-9+\-*\/\^().\s]+$/.test(input);
         return {
             valid: isValid,
             priority: isValid
