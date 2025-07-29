@@ -48,7 +48,7 @@ Text {
 
     component Anim: NumberAnimation {
         target: root
-        property: General.animationProp
+        property: "scale"
         duration: General.animationDuration / 4
         easing.type: Easing.BezierSpline
     }
