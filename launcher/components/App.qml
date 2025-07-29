@@ -19,15 +19,10 @@ IComponent {
         query.forEach(app => {
             console.log(app.name);
         });
-        if (query.length < 1)
-            return {
-                valid: false,
-                priority: false
-            };
 
         return {
-            valid: true,
-            priority: query[0].name.toLowerCase() === input.toLowerCase() ? true : false // TODO: maybe generic name as well, maybe 1 char fuzzy, also maybe case insensitive?
+            valid: query.length > 0,
+            priority: query[0]?.name.toLowerCase() === input.toLowerCase() ? true : false // TODO: maybe generic name as well, maybe 1 char fuzzy, also maybe case insensitive?
         };
     }
 
