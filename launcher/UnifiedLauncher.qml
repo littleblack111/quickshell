@@ -10,46 +10,54 @@ ILauncher {
     id: launcher
     required property var parentLoader
     name: "quickshell::launcher::launcher"
-    IRect {
-        // TODO: move to IInnerLauncher for other launchers
-        anchors.fill: parent
 
-        border {
-            width: Launcher.borderWidth
-            color: Colors.e2
-        }
+    IRect {
+        id: container
         color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Bar.bgTransparency)
-        width: parent.width
         radius: Launcher.borderRadius
+
+        width: Math.max(root.width, Launcher.defaultWidth) + Launcher.innerMargin
+        height: root.height
 
         IRect {
             id: root
             property string input
 
-            anchors {
-                fill: parent
-                topMargin: Launcher.innerMargin * 1.5
-                leftMargin: Launcher.innerMargin * 2.5
-                rightMargin: Launcher.innerMargin * 2.5
-            }
+            height: searchBar.implicitHeight + widgets.height + textInput.height / 2 // * 1.5
+            width: Math.max(widgets.implicitWidth, Launcher.defaultWidth)
+
+            anchors.centerIn: parent
 
             color: "transparent"
 
             RowLayout {
+                id: searchBar
                 anchors {
                     top: parent.top
-                    margins: Launcher.innerMargin
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: Launcher.innerMargin
+                    rightMargin: Launcher.innerMargin
+                    // try to center it when no widgets are present
+                    topMargin: widgets.height === 0 ? parent.height / 2 - textInput.height / 2 : Launcher.innerMargin // textInput or Icon is the height of this
+
+                    Behavior on topMargin {
+                        NumberAnimation {
+                            duration: General.animationDuration / 2
+                        }
+                    }
                 }
+
                 spacing: Launcher.innerMargin * 2
+
                 Icon {
                     text: ""
                 }
+
                 TextInput {
                     id: textInput
                     Layout.fillWidth: true
-
                     color: Colors.foreground1
-
                     clip: true
                     focus: true
                     renderType: Text.CurveRendering
@@ -63,63 +71,35 @@ ILauncher {
                     onActiveFocusChanged: {
                         parentLoader.active = activeFocus;
                     }
-
-                    // onAccepted: {
-                    //     // This signal is emitted when the user presses Enter/Return
-                    //     console.log("Text accepted:", myTextInput.text);
-                    // }
                     onTextChanged: {
                         root.input = text;
                     }
                 }
             }
 
-            Calc {
-                anchors.verticalCenter: parent.verticalCenter
+            ColumnLayout {
+                id: widgets
+                anchors {
+                    top: searchBar.bottom
+                    left: parent.left
+                    right: parent.right
+                    topMargin: Launcher.innerMargin * 1.5 // gap in between, maybe seperator FIXME
+                }
 
-                input: parent.input
+                Calc {
+                    Layout.rightMargin: Launcher.innerMargin
+                    Layout.leftMargin: Launcher.innerMargin
+                    input: root.input
+                }
             }
-            // ColumnLayout {
-            //     property list<IWidget> widgets: Launcher.widgets
-            //
-            //     function updateAndFilter() {
-            //         // Update input for all widgets
-            //         for (let i = 0; i < widgets.length; i++) {
-            //             widgets[i].input = root.input;
-            //         }
-            //
-            //         // Filter and sort
-            //         let filtered = [];
-            //         for (let i = 0; i < widgets.length; i++) {
-            //             if (widgets[i].valid) {
-            //                 filtered.push({
-            //                     widget: widgets[i],
-            //                     priority: widgets[i].priority,
-            //                     index: i
-            //                 });
-            //             }
-            //         }
-            //
-            //         filtered.sort((a, b) => {
-            //             if (a.priority !== b.priority)
-            //                 return b.priority - a.priority;
-            //             return a.index - b.index;
-            //         });
-            //
-            //         return filtered.map(item => item.widget);
-            //     }
-            //
-            //     Repeater {
-            //         model: parent.updateAndFilter()
-            //         delegate: modelData // Direct widget reference
-            //     }
-            // }
         }
+
         Keys.onPressed: event => {
             if (event.key === Qt.Key_Escape)
                 parentLoader.active = false;
         }
     }
+
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
@@ -127,6 +107,7 @@ ILauncher {
             parentLoader.active = false;
         }
     }
-    implicitWidth: Launcher.width
-    implicitHeight: Launcher.height
+
+    implicitWidth: container.width
+    implicitHeight: container.height
 }

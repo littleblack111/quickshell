@@ -7,9 +7,6 @@ import qs.config
 
 IWidget {
     name: "Calculator"
-    valid: processed.valid
-    priority: processed.priority
-
     process: function () {
         var isValid = /^(?=.*[+\-*/])[0-9+\-*/()%.\s]+$/.test(input);
         return {
@@ -18,32 +15,28 @@ IWidget {
         };
     }
 
-    // TODO: move to IInnerWidget
     IRect {
         height: childrenRect.height
         width: parent.width
         topLeftRadius: Launcher.widgetRadius
         topRightRadius: Launcher.widgetRadius
-        color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetTitleBgTransparency) // TODO when prioritized, highlight
+        color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetTitleBgTransparency)
+
         IText {
             anchors {
                 top: parent.top
                 left: parent.left
                 leftMargin: Launcher.innerMargin
             }
-            font.pixelSize: Launcher.widgetFontSize
             visible: valid
+            font.pixelSize: Launcher.widgetFontSize
             text: name
         }
     }
+
     ColumnLayout {
-        anchors {
-            fill: parent
-            topMargin: Launcher.innerMargin
-            bottomMargin: Launcher.innerMargin
-            leftMargin: Launcher.innerMargin
-            rightMargin: Launcher.innerMargin
-        }
+        anchors.fill: parent
+
         RowLayout {
             spacing: 0
             Layout.fillWidth: true
@@ -56,7 +49,7 @@ IWidget {
                     elide: Text.ElideLeft
                     width: Math.min(implicitWidth, parent.width - Launcher.innerMargin * 2)
                     clip: true
-                    renderType: Text.CurveRendering // it's not static and is rapidly updated
+                    renderType: Text.CurveRendering
                     visible: valid
                     text: input.replace(/ /g, "").replace(/\+/g, " + ").replace(/-/g, " - ").replace(/\*/g, " × ").replace(/\//g, " ÷ ").replace(/%/g, " % ").replace(/\(/g, " ( ").replace(/\)/g, " ) ")
                     font {
@@ -69,10 +62,8 @@ IWidget {
             IText {
                 visible: valid
                 text: "→"
-                font {
-                    pixelSize: Launcher.widgetFontSize
-                    bold: true
-                }
+                font.pixelSize: Launcher.widgetFontSize
+                font.bold: true
             }
 
             Item {
@@ -83,7 +74,7 @@ IWidget {
                     width: Math.min(implicitWidth, parent.width - Launcher.innerMargin * 2)
                     renderType: Text.CurveRendering
                     visible: valid
-                    text: valid ? String(eval(input.replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1'))) : "" // replace for () to work properly in math
+                    text: valid ? String(eval(input.replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1'))) : ""
                     font {
                         pixelSize: Launcher.widgetFontSize
                         bold: true
