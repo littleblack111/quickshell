@@ -11,7 +11,6 @@ IComponent {
     id: root
     // TODO: presist how much times per app is opened on disk, routinely check if the app is still there
     property list<DesktopEntry> entries
-    property var selected
     name: "Applications"
     implicitHeight: valid ? Math.min(layout.height, Launcher.widgetHeight) : 0
     preview: Component {
@@ -47,7 +46,6 @@ IComponent {
         height: Math.min(innerLayout.height + titleBar.height, Launcher.widgetHeight) // childrenRect doesnt work...
         Flickable {
             id: flickable
-            // interactive: false
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
@@ -81,7 +79,7 @@ IComponent {
                             anchors.fill: parent
                             hoverEnabled: true
                             onPositionChanged: {
-                                root.selected = modelData;
+                                root.selected = item;
                             }
                         }
                     }

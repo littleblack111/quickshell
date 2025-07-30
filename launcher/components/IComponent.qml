@@ -32,6 +32,7 @@ IRect {
     property var down: () => {}
     property var prev: () => {}
     property var next: () => {}
+    property var exec: () => {}
 
     // visible: valid // no anim :/
     opacity: valid ? 1 : 0 // TODO: better anim, maybe slide in from bottom
