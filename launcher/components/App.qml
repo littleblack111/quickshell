@@ -8,7 +8,7 @@ import qs.services
 import qs.config
 
 IComponent {
-
+    id: root
     // TODO: presist how much times per app is opened on disk, routinely check if the app is still there
     property list<DesktopEntry> entries
     name: "Applications"
@@ -44,7 +44,7 @@ IComponent {
         id: layout
         fromParent: false
         width: parent.width
-        height: Math.min(innerLayout.implicitHeight, Launcher.widgetHeight)
+        height: Math.min(innerLayout.implicitHeight + titleBar.height, Launcher.widgetHeight)
         Flickable {
             id: flickable
             Layout.fillWidth: true
@@ -58,16 +58,33 @@ IComponent {
                 id: innerLayout
                 spacing: 0
 
+                Timer {
+                    running: true
+                    repeat: true
+                    interval: 1000
+                    onTriggered: {
+                        console.log(innerLayout.implicitHeight, innerLayout.height, layout.height, layout.implicitHeight, flickable.height, repeater.height, repeater.implicitHeight, parent.childrenRect.height, root.height);
+                    }
+                }
                 Repeater {
+                    id: repeater
                     model: entries
+                    onModelChanged: {
+                        console.log(height);
+                    }
 
                     RowLayout {
+                        onHeightChanged: {
+                            console.log(height, implicitHeight);
+                        }
                         IconImage {
+                            id: img
                             source: Quickshell.iconPath(modelData.icon, "image-missing")
                             implicitWidth: Bar.appIconSize
                             implicitHeight: Bar.appIconSize
                         }
                         IText {
+                            id: txt
                             text: modelData.name
                         }
                     }
