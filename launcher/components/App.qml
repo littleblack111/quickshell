@@ -11,6 +11,7 @@ IComponent {
     id: root
     // TODO: presist how much times per app is opened on disk, routinely check if the app is still there
     property list<DesktopEntry> entries
+    property var selected
     name: "Applications"
     implicitHeight: valid ? Math.min(layout.height, Launcher.widgetHeight) : 0
     preview: Component {
@@ -46,10 +47,10 @@ IComponent {
         height: Math.min(innerLayout.height + titleBar.height, Launcher.widgetHeight) // childrenRect doesnt work...
         Flickable {
             id: flickable
+            // interactive: false
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-            interactive: true
             contentWidth: innerLayout.width
             contentHeight: innerLayout.height
 
@@ -61,14 +62,27 @@ IComponent {
                     id: repeater
                     model: entries
 
-                    RowLayout {
-                        IconImage {
-                            source: Quickshell.iconPath(modelData.icon, "image-missing")
-                            implicitWidth: General.appIconSize
-                            implicitHeight: General.appIconSize
+                    Item {
+                        Layout.margins: Launcher.innerMargin
+                        implicitWidth: root.width
+                        implicitHeight: item.height
+                        RowLayout {
+                            id: item
+                            IconImage {
+                                source: Quickshell.iconPath(modelData.icon, "image-missing")
+                                implicitWidth: General.appIconSize
+                                implicitHeight: General.appIconSize
+                            }
+                            IText {
+                                text: modelData.name
+                            }
                         }
-                        IText {
-                            text: modelData.name
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onPositionChanged: {
+                                root.selected = modelData;
+                            }
                         }
                     }
                 }

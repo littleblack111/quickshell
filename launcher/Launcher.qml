@@ -111,13 +111,14 @@ ILauncher {
         }
     }
 
-    MouseArea {
-        anchors.fill: parent
-        hoverEnabled: true
-        // onExited: {
-        //     parentLoader.active = false;
-        // }
-    }
+    // MouseArea {
+    //     z: -1 // otherwise children mouseareas won't work
+    //     anchors.fill: parent
+    //     hoverEnabled: true
+    //     // onExited: {
+    //     //     parentLoader.active = false;
+    //     // }
+    // }
 
     implicitWidth: container.width
     implicitHeight: container.height
