@@ -32,8 +32,6 @@ Singleton {
     readonly property int wsAnimationDuration: 200
     readonly property int wsExtraMouseArea: wsHorizontalSpacing / 2
 
-    readonly property int appIconSize: 25
-
     readonly property int resourceIconTextSpacing: Style.spacing.small
 
     readonly property int moduleRadius: Style.rounding.small
