@@ -11,6 +11,7 @@ IComponent {
     id: root
     // TODO: presist how much times per app is opened on disk, routinely check if the app is still there
     property list<DesktopEntry> entries
+    property int selectedIndex: -1
     name: "Applications"
     implicitHeight: valid ? Math.min(layout.height, Launcher.widgetHeight) : 0
     preview: Component {
@@ -29,6 +30,7 @@ IComponent {
         const first = query.length > 0 && query[0];
         const isValid = query.length > 0;
         const isPriority = first?.name?.toLowerCase() === search;
+        isValid ? selectedIndex = 0 : null;
         return {
             valid: isValid,
             priority: isPriority // TODO: maybe generic name as well, maybe 1 char fuzzy, also maybe case insensitive?
@@ -39,7 +41,23 @@ IComponent {
         };
     }
     exec: function () {
-        ActiveComponent.__selected.parent.modelData.execute();
+        ActiveComponent.selected.modelData.execute();
+    }
+    up: function () {
+        if (selectedIndex <= 0)
+            return true;
+        selectedIndex--;
+    }
+    down: function () {
+        if (selectedIndex + 1 > repeater.count - 1)
+            return true;
+        selectedIndex++;
+    }
+
+    onSelectedIndexChanged: {
+        ActiveComponent.selected = repeater.itemAt(selectedIndex);
+        ActiveComponent.exec = root.exec;
+        console.log("Selected index changed to", selectedIndex, "with entry", ActiveComponent.selected.modelData.name);
     }
 
     IInnerComponent {
@@ -65,6 +83,7 @@ IComponent {
 
                     Item {
                         required property DesktopEntry modelData
+                        required property int index
                         Layout.margins: Launcher.innerMargin
                         implicitWidth: root.width
                         implicitHeight: item.height
@@ -83,8 +102,7 @@ IComponent {
                             anchors.fill: parent
                             hoverEnabled: true
                             onPositionChanged: {
-                                ActiveComponent.__selected = item;
-                                ActiveComponent.__exec = root.exec;
+                                root.selectedIndex = index;
                             }
                         }
                     }

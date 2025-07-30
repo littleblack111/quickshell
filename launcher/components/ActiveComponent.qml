@@ -3,17 +3,17 @@ import Quickshell
 import QtQuick
 
 Singleton {
-    property Item __selected: null
-    property var __exec: null
+    property Item selected: null
+    property var exec: null
 
     function exec() {
-        if (__exec) {
-            __exec();
+        if (exec) {
+            exec();
         }
     }
 
     function clear() {
-        __selected = null;
-        __exec = null;
+        selected = null;
+        exec = null;
     }
 }
