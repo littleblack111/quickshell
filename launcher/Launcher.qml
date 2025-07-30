@@ -10,6 +10,11 @@ ILauncher {
     id: launcher
     name: "quickshell::launcher::launcher"
 
+    anchors.top: true
+    margins.top: Launcher.topMargin
+    aboveWindows: true
+    exclusionMode: ExclusionMode.Ignore
+
     IRect {
         id: container
         color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Bar.bgTransparency)
@@ -157,7 +162,6 @@ ILauncher {
                 parentLoader.active = false;
         }
     }
-
     // MouseArea {
     //     z: -1 // otherwise children mouseareas won't work
     //     anchors.fill: parent
