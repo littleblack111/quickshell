@@ -23,7 +23,7 @@ IWindow {
         active: true
         windows: [root]
         onCleared: {
-            parentLoader.active = false;
+            parentLoader.active = false; // or active = true again
         }
     }
 }
