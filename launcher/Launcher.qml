@@ -145,7 +145,7 @@ ILauncher {
                                 family: Style.font.family.sans
                                 wordSpacing: 5
                             }
-                            text: app.predictiveCompletion
+                            text: calc.predictiveCompletion
                         }
                     }
                     Item {
