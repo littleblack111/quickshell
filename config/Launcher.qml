@@ -27,6 +27,8 @@ Singleton {
 
     readonly property int topMargin: 300
 
+    readonly property int predictiveCompletionRadius: 6
+
     readonly property list<IComponent> widgets: [Math,]
     // readonly property list<IWidget> order: [
     //     Flight {},

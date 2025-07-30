@@ -30,6 +30,7 @@ IComponent {
         const first = query.length > 0 && query[0];
         const isValid = query.length > 0;
         const isPriority = first?.name?.toLowerCase() === search;
+        const predictiveCompletion = isValid ? first.name.slice(search.length) : "";
         isValid ? selectedIndex = 0 : null;
         updateActiveComponent();
         return {
@@ -38,7 +39,8 @@ IComponent {
             ,
             answer: first.icon  // would still work because if nothing else match, we defaultly promote APp
             ,
-            preview: preview
+            preview: preview,
+            predictiveCompletion: predictiveCompletion
         };
     }
     exec: function () {
