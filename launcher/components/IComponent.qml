@@ -26,10 +26,13 @@ IRect {
                 answer: answer,
                 preview: preview
             })// use the current IRect if valid is set
-    property Item selected // for launcher
     // actions
-    property var up: () => {}
-    property var down: () => {}
+    property var up: () => ({
+                top: false
+            })
+    property var down: () => ({
+                bottom: false
+            })
     property var prev: () => {}
     property var next: () => {}
     property var exec: () => {}
