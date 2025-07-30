@@ -19,12 +19,14 @@ IRect {
             text: answer
         }
     }
+    property string predictiveCompletion: processed?.predictiveCompletion || "" // would technically work with just from answer, but stuff like calc's answer wouldnt have anything to do with the input
     property var processed: process() // cached process, thought qml would do that automatically :/
     property var process: () => ({
                 valid: valid,
                 priority: priority,
                 answer: answer,
-                preview: preview
+                preview: preview,
+                predictiveCompletion: predictiveCompletion
             })// use the current IRect if valid is set
     // actions
     property var up: () => ({
