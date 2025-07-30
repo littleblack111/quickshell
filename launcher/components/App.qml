@@ -24,7 +24,8 @@ IComponent {
         const search = input.toLowerCase();
         if (!search)
             return;
-        const query = AppSearch.fuzzyQuery(search);
+        let query = [...AppSearch.fuzzyQuery(search)].reverse();
+        console.log(query[0].name);
         entries = query;
         const first = query.length > 0 && query[0];
         const isValid = query.length > 0;
