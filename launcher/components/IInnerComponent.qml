@@ -6,9 +6,11 @@ import qs.config
 
 ColumnLayout {
     property bool fromParent: true
+    property alias titleBar: titleBar
     anchors.fill: fromParent ? parent : undefined
     spacing: 0
     IRect {
+        id: titleBar
         Layout.fillWidth: true
         Layout.fillHeight: false
         visible: Launcher.showWidgetTitle && valid
