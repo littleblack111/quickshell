@@ -58,8 +58,7 @@ Singleton {
    * search starts with a previously cached key, uses that
    * cached result as the source for filtering.
    */
-    function fuzzyQuery(search) {
-        search = search.trim().toLowerCase();
+    function fuzzyQuery(search) { // search is expected to be .toLowerCase()
         if (root.fuzzyQueryCache[search]) {
             return root.fuzzyQueryCache[search];
         }
