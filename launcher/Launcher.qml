@@ -8,7 +8,6 @@ import qs.config
 
 ILauncher {
     id: launcher
-    required property var parentLoader
     name: "quickshell::launcher::launcher"
 
     IRect {
@@ -68,9 +67,9 @@ ILauncher {
                         family: Style.font.family.sans
                         wordSpacing: 5
                     }
-                    onActiveFocusChanged: {
-                        parentLoader.active = activeFocus;
-                    }
+                    // onActiveFocusChanged: {
+                    //     parentLoader.active = activeFocus;
+                    // }
                     onTextChanged: {
                         root.input = text;
                     }
@@ -115,9 +114,9 @@ ILauncher {
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
-        onExited: {
-            parentLoader.active = false;
-        }
+        // onExited: {
+        //     parentLoader.active = false;
+        // }
     }
 
     implicitWidth: container.width
