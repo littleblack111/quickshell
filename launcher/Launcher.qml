@@ -55,6 +55,53 @@ ILauncher {
 
                 TextInput {
                     id: textInput
+                    opacity: 1
+                    // move to different file if we have more textinput
+                    cursorDelegate: IRect {
+                        id: cursor
+                        color: Colors.cursor
+                        width: 1.5
+                        height: 1
+                        // blinking animation
+                        SequentialAnimation {
+                            running: true
+                            loops: Animation.Infinite
+                            PauseAnimation {
+                                duration: 500
+                            }
+                            ParallelAnimation {
+                                PropertyAnimation {
+                                    target: cursor
+                                    property: "opacity"
+                                    to: 0
+                                    duration: General.animationDuration / 5
+                                }
+                                PropertyAnimation {
+                                    target: cursor
+                                    property: "scale"
+                                    to: 0
+                                    duration: General.animationDuration / 5
+                                }
+                            }
+                            PauseAnimation {
+                                duration: 500
+                            }
+                            ParallelAnimation {
+                                PropertyAnimation {
+                                    target: cursor
+                                    property: "opacity"
+                                    to: 1
+                                    duration: General.animationDuration / 5
+                                }
+                                PropertyAnimation {
+                                    target: cursor
+                                    property: "scale"
+                                    to: 1
+                                    duration: General.animationDuration / 5
+                                }
+                            }
+                        }
+                    }
                     Layout.fillWidth: true
                     color: Colors.foreground1
                     clip: true
