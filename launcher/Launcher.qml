@@ -122,7 +122,8 @@ ILauncher {
                     //     parentLoader.active = activeFocus;
                     // }
                     onAccepted: {
-                        ActiveComponent.exec();
+                        ActiveComponent?.exec(); // TODO: kde like waiting animation for app to launch
+                        parentLoader.active = false;
                     }
                     onTextChanged: {
                         root.input = text;
@@ -162,6 +163,11 @@ ILauncher {
         Keys.onPressed: event => {
             if (event.key === Qt.Key_Escape)
                 parentLoader.active = false;
+            if (event.key === Qt.Key_Down)
+                app.down();
+            if (event.key === Qt.Key_Up)
+                app.up();
+            //TODO: add pg down + up, home, end, ctrl hjkl(vim)
         }
     }
     // MouseArea {
