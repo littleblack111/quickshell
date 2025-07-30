@@ -22,10 +22,7 @@ IComponent {
     process: function () {
         const search = input.toLowerCase();
         if (!search)
-            return {
-                valid: false,
-                priority: false
-            };
+            return;
         const query = AppSearch.fuzzyQuery(search);
         entries = query;
         const first = query.length > 0 && query[0];
