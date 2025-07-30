@@ -25,7 +25,6 @@ IComponent {
         if (!search)
             return;
         let query = [...AppSearch.fuzzyQuery(search)].reverse();
-        console.log(query[0].name);
         entries = query;
         const first = query.length > 0 && query[0];
         const isValid = query.length > 0;
@@ -44,39 +43,25 @@ IComponent {
         id: layout
         fromParent: false
         width: parent.width
-        height: Math.min(innerLayout.implicitHeight + titleBar.height, Launcher.widgetHeight)
+        height: Math.min(innerLayout.height + titleBar.height, Launcher.widgetHeight) // childrenRect doesnt work...
         Flickable {
             id: flickable
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
             interactive: true
-            contentWidth: innerLayout.implicitWidth
-            contentHeight: innerLayout.implicitHeight
+            contentWidth: innerLayout.width
+            contentHeight: innerLayout.height
 
             ColumnLayout {
                 id: innerLayout
                 spacing: 0
 
-                Timer {
-                    running: true
-                    repeat: true
-                    interval: 1000
-                    onTriggered: {
-                        console.log(innerLayout.implicitHeight, innerLayout.height, layout.height, layout.implicitHeight, flickable.height, repeater.height, repeater.implicitHeight, parent.childrenRect.height, root.height);
-                    }
-                }
                 Repeater {
                     id: repeater
                     model: entries
-                    onModelChanged: {
-                        console.log(height);
-                    }
 
                     RowLayout {
-                        onHeightChanged: {
-                            console.log(height, implicitHeight);
-                        }
                         IconImage {
                             id: img
                             source: Quickshell.iconPath(modelData.icon, "image-missing")
