@@ -63,13 +63,11 @@ IComponent {
 
                     RowLayout {
                         IconImage {
-                            id: img
                             source: Quickshell.iconPath(modelData.icon, "image-missing")
                             implicitWidth: General.appIconSize
                             implicitHeight: General.appIconSize
                         }
                         IText {
-                            id: txt
                             text: modelData.name
                         }
                     }
