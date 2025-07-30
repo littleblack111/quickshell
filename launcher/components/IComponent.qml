@@ -10,9 +10,9 @@ IRect {
     // virtual properties
     required property string name // Component/File name
     required property string input
-    property bool valid: processed.valid
-    property bool priority: processed.priority
-    property string answer: processed.answer || ""
+    property bool valid: processed?.valid || false
+    property bool priority: processed?.priority || false
+    property string answer: processed?.answer || ""
     property Component preview: Component {
         IText {
             animate: true
