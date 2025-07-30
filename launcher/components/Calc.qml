@@ -8,13 +8,20 @@ import qs.config
 IComponent {
     required property int cursorPosition
     name: "Calculator"
+    preview: Component {
+        Icon {
+            text: ""
+        }
+    }
 
     process: function () {
         const isValid = /^(?=.*\d)(?=.*[+\-*\/\^])[0-9+\-*\/\^().\s]+$/.test(input);
+        const answer = isValid ? String(eval(input.replace(/\^/g, '**').replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1'))) : null;
         return {
             valid: isValid,
             priority: isValid,
-            answer: isValid ? String(eval(input.replace(/\^/g, '**').replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1'))) : null
+            answer: answer,
+            predictiveCompletion: isValid ? ' = ' + answer : ''
         };
     }
 

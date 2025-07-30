@@ -39,7 +39,7 @@ IComponent {
             ,
             answer: first.icon  // would still work because if nothing else match, we defaultly promote APp
             ,
-            preview: preview,
+            // no need preview cuz it's already defined
             predictiveCompletion: predictiveCompletion
         };
     }
