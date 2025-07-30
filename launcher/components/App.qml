@@ -16,8 +16,8 @@ IComponent {
     preview: Component {
         IconImage {
             source: Quickshell.iconPath(answer, "image-missing")
-            implicitWidth: Bar.appIconSize
-            implicitHeight: Bar.appIconSize
+            implicitWidth: General.appIconSize
+            implicitHeight: General.appIconSize
         }
     }
     process: function () {
@@ -65,8 +65,8 @@ IComponent {
                         IconImage {
                             id: img
                             source: Quickshell.iconPath(modelData.icon, "image-missing")
-                            implicitWidth: Bar.appIconSize
-                            implicitHeight: Bar.appIconSize
+                            implicitWidth: General.appIconSize
+                            implicitHeight: General.appIconSize
                         }
                         IText {
                             id: txt
