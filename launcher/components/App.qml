@@ -12,6 +12,13 @@ IComponent {
     // TODO: presist how much times per app is opened on disk, routinely check if the app is still there
     name: "Applications"
     implicitHeight: valid ? Math.min(layout.height, Launcher.widgetWidth) : 0 // more space for apps
+    preview: Component {
+        IconImage {
+            source: Quickshell.iconPath(answer, "image-missing")
+            implicitWidth: Bar.appIconSize
+            implicitHeight: Bar.appIconSize
+        }
+    }
     process: function () {
         const search = input.toLowerCase();
         if (!search)
@@ -21,33 +28,29 @@ IComponent {
             };
         const query = AppSearch.fuzzyQuery(search);
         entries = query;
-        const first = query.length > 0 && query[0].name.toLowerCase();
+        const first = query.length > 0 && query[0];
+        const isValid = query.length > 0;
+        const isPriority = first?.name?.toLowerCase() === search;
         return {
-            valid: query.length > 0,
-            priority: priority // TODO: maybe generic name as well, maybe 1 char fuzzy, also maybe case insensitive?
+            valid: isValid,
+            priority: isPriority // TODO: maybe generic name as well, maybe 1 char fuzzy, also maybe case insensitive?
             ,
-            answer: first === search ? first : null // would still work because if nothing else match, we defaultly promote APp
+            answer: isPriority ? first.icon : null // would still work because if nothing else match, we defaultly promote APp
+            ,
+            preview: preview
         };
     }
 
     IInnerComponent {
-		fromParent: false 
         id: layout
+        fromParent: false
         ColumnLayout {
-			id: innerLayout
+            id: innerLayout
             Layout.fillWidth: true
             Layout.fillHeight: true
             spacing: 0
-			Timer {
-				running: true
-				repeat: true
-				interval: 1000 // 1 second
-				onTriggered: {
-					console.log(repeater.implicitHeight, repeater.height, innerLayout.height, layout.height);
-				}
-			}
             Repeater {
-				id: repeater
+                id: repeater
                 model: entries
 
                 RowLayout {

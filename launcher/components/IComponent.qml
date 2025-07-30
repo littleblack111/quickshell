@@ -13,6 +13,12 @@ IRect {
     property bool valid: processed.valid
     property bool priority: processed.priority
     property string answer: processed.answer || ""
+    property Component preview: Component {
+        IText {
+            animate: true
+            text: answer
+        }
+    }
     property var processed: process() // cached process, thought qml would do that automatically :/
     property var process // function() -> {valid: bool, priority: bool} // use the current IRect if valid is set
     // visible: valid // no anim :/

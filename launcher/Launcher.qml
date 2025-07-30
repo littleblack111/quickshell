@@ -75,9 +75,9 @@ ILauncher {
                         root.input = text;
                     }
                 }
-                IText {
-                    visible: app.valid
-                    text: app.answer
+                Loader {
+                    active: app.priority
+                    sourceComponent: app.preview
                 }
             }
 
