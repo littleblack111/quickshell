@@ -5,7 +5,8 @@ import qs.components
 import qs.config
 
 ColumnLayout {
-    anchors.fill: parent
+    property bool fromParent: true
+    anchors.fill: fromParent ? parent : undefined
     spacing: 0
     IRect {
         Layout.fillWidth: true

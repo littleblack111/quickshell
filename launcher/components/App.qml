@@ -11,7 +11,7 @@ IComponent {
     property list<DesktopEntry> entries
     // TODO: presist how much times per app is opened on disk, routinely check if the app is still there
     name: "Applications"
-    implicitHeight: valid ? Launcher.widgetHeight * 2 : 0 // more space for apps
+    implicitHeight: valid ? Math.min(layout.height, Launcher.widgetWidth) : 0 // more space for apps
     process: function () {
         const search = input.toLowerCase();
         if (!search)
@@ -31,12 +31,23 @@ IComponent {
     }
 
     IInnerComponent {
+		fromParent: false 
+        id: layout
         ColumnLayout {
+			id: innerLayout
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.preferredHeight: parent.height
             spacing: 0
+			Timer {
+				running: true
+				repeat: true
+				interval: 1000 // 1 second
+				onTriggered: {
+					console.log(repeater.implicitHeight, repeater.height, innerLayout.height, layout.height);
+				}
+			}
             Repeater {
+				id: repeater
                 model: entries
 
                 RowLayout {
@@ -50,10 +61,10 @@ IComponent {
                     }
                 }
             }
-            Item {
-                Layout.fillHeight: true
-                Layout.preferredHeight: parent.height
-            }
+            // Item {
+            //     Layout.fillHeight: true
+            //     Layout.preferredHeight: 100
+            // }
         }
     }
 }
