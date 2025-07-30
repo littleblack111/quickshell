@@ -6,14 +6,14 @@ import qs.launcher.components
 Singleton {
     id: root
 
-    readonly property int defaultWidth: 400
+    readonly property int defaultWidth: 500
 
-    readonly property int widgetWidth: 550
+    readonly property int widgetWidth: 700
     readonly property int widgetHeight: 200
 
     readonly property int innerMargin: 5
 
-    readonly property int borderRadius: Style.rounding.small
+    readonly property int borderRadius: Style.rounding.large
     readonly property int borderWidth: 1
 
     readonly property int widgetRadius: Style.rounding.small
@@ -25,7 +25,7 @@ Singleton {
 
     readonly property bool showWidgetTitle: true
 
-    readonly property int topMargin: 300
+    readonly property int topMargin: 400
 
     readonly property int predictiveCompletionRadius: 6
 

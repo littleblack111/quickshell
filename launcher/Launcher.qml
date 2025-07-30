@@ -79,7 +79,8 @@ ILauncher {
                         cursorDelegate: IRect {
                             id: cursor
                             color: Colors.cursor
-                            width: 1.5
+                            // width: 1.5
+                            width: 2
                             height: 1
                             // blinking animation
                             SequentialAnimation {
@@ -145,7 +146,7 @@ ILauncher {
                                 family: Style.font.family.sans
                                 wordSpacing: 5
                             }
-                            text: calc.predictiveCompletion
+                            text: app.predictiveCompletion
                         }
                     }
                     Item {
