@@ -1,6 +1,5 @@
 pragma Singleton
 
-import "../utils/fuzzysort.js" as Fuzzy
 import "../utils/levendist.js" as Levendist
 import Quickshell
 import Quickshell.Io
@@ -13,7 +12,7 @@ import qs.config
 Singleton {
     id: root
 
-    property int scoreThreshold: 3
+    property int scoreThreshold: 5
 
     property var substitutions: ({
             "code-url-handler": "visual-studio-code",
@@ -70,11 +69,22 @@ Singleton {
             source = root.fuzzyQueryCache[longest];
         }
 
-        let results = source.map(obj => ({
-                    entry: obj,
-                    score: Levendist.distance(obj.name, search),
-                    lowered: obj.name.toLowerCase()
-                })).filter(item => item.score < root.scoreThreshold || item.lowered.startsWith(search)).sort((a, b) => b.score - a.score).map(item => item.entry).filter((entry, idx, arr) => arr.indexOf(entry) === idx);
+        const timeRnow = Date.now();
+        const results = source.map(item => {
+            const lower = item.name.toLowerCase();
+            const prefix = lower.startsWith(search);
+            const matched = [...search].reduce((pos, ch) => (pos >= 0 ? lower.indexOf(ch, pos) + 1 : -1), 0) > 0;
+            if (!matched)
+                return null;
+            return {
+                item,
+                prefix,
+                score: Levendist.distance(search, lower)
+            };
+        }).filter(Boolean).sort((a, b) => (b.prefix - a.prefix) || (a.score - b.score)).map(({
+                item
+            }) => item);
+        console.log(`Fuzzy query for "${search}" took ${Date.now() - timeRnow}ms`);
 
         root.fuzzyQueryCache[search] = results;
         return results;
