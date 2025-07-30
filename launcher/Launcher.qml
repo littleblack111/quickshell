@@ -23,7 +23,7 @@ ILauncher {
             property alias input: textInput.text
 
             height: searchBar.height + widgets.height + textInput.height / 2 // * 1.5
-            width: Math.max(widgets.width, Launcher.defaultWidth)
+            width: Math.max(widgets.implicitWidth, Launcher.defaultWidth)
 
             anchors.centerIn: parent
 
