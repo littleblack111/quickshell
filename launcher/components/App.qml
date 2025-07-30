@@ -31,6 +31,7 @@ IComponent {
         const isValid = query.length > 0;
         const isPriority = first?.name?.toLowerCase() === search;
         isValid ? selectedIndex = 0 : null;
+        updateActiveComponent();
         return {
             valid: isValid,
             priority: isPriority // TODO: maybe generic name as well, maybe 1 char fuzzy, also maybe case insensitive?
@@ -54,10 +55,13 @@ IComponent {
         selectedIndex++;
     }
 
-    onSelectedIndexChanged: {
+    function updateActiveComponent() {
         ActiveComponent.selected = repeater.itemAt(selectedIndex);
         ActiveComponent.exec = root.exec;
-        console.log("Selected index changed to", selectedIndex, "with entry", ActiveComponent.selected.modelData.name);
+    }
+
+    onSelectedIndexChanged: {
+        updateActiveComponent();
     }
 
     IInnerComponent {
