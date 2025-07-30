@@ -13,6 +13,8 @@ Singleton {
 
     readonly property int rectMargin: Style.spacing.small
 
+    readonly property int appIconSize: 25
+
     readonly property int fontSize: Style.font.size.larger
 
     readonly property int animationDuration: Style.anim.durations.normal
