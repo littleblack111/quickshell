@@ -60,7 +60,18 @@ ILauncher {
 
                 TextInput {
                     id: textInput
-                    opacity: 1
+                    Layout.fillWidth: true
+                    color: Colors.foreground1
+                    clip: true
+                    focus: true
+                    renderType: Text.CurveRendering
+                    antialiasing: true
+                    smooth: true
+                    font {
+                        pixelSize: Style.font.size.large
+                        family: Style.font.family.sans
+                        wordSpacing: 5
+                    }
                     // move to different file if we have more textinput
                     cursorDelegate: IRect {
                         id: cursor
@@ -106,18 +117,6 @@ ILauncher {
                                 }
                             }
                         }
-                    }
-                    Layout.fillWidth: true
-                    color: Colors.foreground1
-                    clip: true
-                    focus: true
-                    renderType: Text.CurveRendering
-                    antialiasing: true
-                    smooth: true
-                    font {
-                        pixelSize: Style.font.size.large
-                        family: Style.font.family.sans
-                        wordSpacing: 5
                     }
                     // onActiveFocusChanged: {
                     //     parentLoader.active = activeFocus;
