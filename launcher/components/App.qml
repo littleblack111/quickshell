@@ -8,10 +8,11 @@ import qs.services
 import qs.config
 
 IComponent {
-    property list<DesktopEntry> entries
+
     // TODO: presist how much times per app is opened on disk, routinely check if the app is still there
+    property list<DesktopEntry> entries
     name: "Applications"
-    implicitHeight: valid ? Math.min(layout.height, Launcher.widgetWidth) : 0 // more space for apps
+    implicitHeight: valid ? Math.min(layout.height, Launcher.widgetHeight) : 0
     preview: Component {
         IconImage {
             source: Quickshell.iconPath(answer, "image-missing")
@@ -41,30 +42,36 @@ IComponent {
     IInnerComponent {
         id: layout
         fromParent: false
-        ColumnLayout {
-            id: innerLayout
+        width: parent.width
+        height: Math.min(innerLayout.implicitHeight, Launcher.widgetHeight)
+        Flickable {
+            id: flickable
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 0
-            Repeater {
-                id: repeater
-                model: entries
+            clip: true
+            interactive: true
+            contentWidth: innerLayout.implicitWidth
+            contentHeight: innerLayout.implicitHeight
 
-                RowLayout {
-                    IconImage {
-                        source: Quickshell.iconPath(modelData.icon, "image-missing")
-                        implicitWidth: Bar.appIconSize
-                        implicitHeight: Bar.appIconSize
-                    }
-                    IText {
-                        text: modelData.name
+            ColumnLayout {
+                id: innerLayout
+                spacing: 0
+
+                Repeater {
+                    model: entries
+
+                    RowLayout {
+                        IconImage {
+                            source: Quickshell.iconPath(modelData.icon, "image-missing")
+                            implicitWidth: Bar.appIconSize
+                            implicitHeight: Bar.appIconSize
+                        }
+                        IText {
+                            text: modelData.name
+                        }
                     }
                 }
             }
-            // Item {
-            //     Layout.fillHeight: true
-            //     Layout.preferredHeight: 100
-            // }
         }
     }
 }
