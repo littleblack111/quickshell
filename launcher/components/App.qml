@@ -33,10 +33,13 @@ IComponent {
             valid: isValid,
             priority: isPriority // TODO: maybe generic name as well, maybe 1 char fuzzy, also maybe case insensitive?
             ,
-            answer: isPriority ? first.icon : null // would still work because if nothing else match, we defaultly promote APp
+            answer: first.icon  // would still work because if nothing else match, we defaultly promote APp
             ,
             preview: preview
         };
+    }
+    exec: function () {
+        ActiveComponent.__selected.parent.modelData.execute();
     }
 
     IInnerComponent {
@@ -61,6 +64,7 @@ IComponent {
                     model: entries
 
                     Item {
+                        required property DesktopEntry modelData
                         Layout.margins: Launcher.innerMargin
                         implicitWidth: root.width
                         implicitHeight: item.height
@@ -79,7 +83,8 @@ IComponent {
                             anchors.fill: parent
                             hoverEnabled: true
                             onPositionChanged: {
-                                root.selected = item;
+                                ActiveComponent.__selected = item;
+                                ActiveComponent.__exec = root.exec;
                             }
                         }
                     }

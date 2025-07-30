@@ -121,6 +121,9 @@ ILauncher {
                     // onActiveFocusChanged: {
                     //     parentLoader.active = activeFocus;
                     // }
+                    onAccepted: {
+                        ActiveComponent.exec();
+                    }
                     onTextChanged: {
                         root.input = text;
                     }
