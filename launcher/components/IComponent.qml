@@ -20,7 +20,19 @@ IRect {
         }
     }
     property var processed: process() // cached process, thought qml would do that automatically :/
-    property var process // function() -> {valid: bool, priority: bool} // use the current IRect if valid is set
+    property var process: () => ({
+                valid: valid,
+                priority: priority,
+                answer: answer,
+                preview: preview
+            })// use the current IRect if valid is set
+    property Item selected // for launcher
+    // actions
+    property var up: () => {}
+    property var down: () => {}
+    property var prev: () => {}
+    property var next: () => {}
+
     // visible: valid // no anim :/
     opacity: valid ? 1 : 0 // TODO: better anim, maybe slide in from bottom
 
