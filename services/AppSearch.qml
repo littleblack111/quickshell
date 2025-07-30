@@ -69,22 +69,31 @@ Singleton {
             source = root.fuzzyQueryCache[longest];
         }
 
-        const timeRnow = Date.now();
-        const results = source.map(item => {
-            const lower = item.name.toLowerCase();
-            const prefix = lower.startsWith(search);
-            const matched = [...search].reduce((pos, ch) => (pos >= 0 ? lower.indexOf(ch, pos) + 1 : -1), 0) > 0;
-            if (!matched)
-                return null;
-            return {
-                item,
-                prefix,
-                score: Levendist.distance(search, lower)
-            };
-        }).filter(Boolean).sort((a, b) => (b.prefix - a.prefix) || (a.score - b.score)).map(({
-                item
-            }) => item);
-        console.log(`Fuzzy query for "${search}" took ${Date.now() - timeRnow}ms`);
+        const p = [], f = [];
+        for (const s of source) {
+            const t = s.name.toLowerCase();
+            if (t.startsWith(search)) {
+                p.push(s);
+                continue;
+            }
+            let pos = 0;
+            for (const c of search) {
+                pos = t.indexOf(c, pos);
+                if (pos < 0) {
+                    pos = 0;
+                    break;
+                }
+                pos++;
+            }
+            if (pos)
+                f.push({
+                    s,
+                    score: Levendist.distance(search, t)
+                });
+        }
+        const results = p.concat(f.sort((a, b) => a.score - b.score).map(({
+                s
+            }) => s));
 
         root.fuzzyQueryCache[search] = results;
         return results;
