@@ -31,7 +31,7 @@ IComponent {
         const isValid = query.length > 0;
         // const isPriority = first?.name?.toLowerCase() === search;
         const predictiveCompletion = isValid ? first.name.slice(search.length) : "";
-        isValid ? selectedIndex = 0 : null;
+        isValid && selectedIndex === -1 ? selectedIndex = 0 : null; // default to first app if nothing is selected
         updateActiveComponent();
         return {
             valid: isValid,

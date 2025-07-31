@@ -24,6 +24,7 @@ IComponent {
             predictiveCompletion: isValid ? ' = ' + answer : ''
         };
     }
+    // todo: exec = clip.copy(answer)
 
     IInnerComponent {
         RowLayout {
