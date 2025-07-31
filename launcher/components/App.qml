@@ -29,14 +29,14 @@ IComponent {
         entries = query;
         const first = query.length > 0 && query[0];
         const isValid = query.length > 0;
-        const isPriority = first?.name?.toLowerCase() === search;
+        // const isPriority = first?.name?.toLowerCase() === search;
         const predictiveCompletion = isValid ? first.name.slice(search.length) : "";
         isValid ? selectedIndex = 0 : null;
         updateActiveComponent();
         return {
             valid: isValid,
-            priority: isPriority // TODO: maybe generic name as well, maybe 1 char fuzzy, also maybe case insensitive?
-            ,
+            priority: isValid,
+            // priority: isPriority // TODO: maybe generic name as well, maybe 1 char fuzzy, also maybe case insensitive?
             answer: first.icon  // would still work because if nothing else match, we defaultly promote APp
             ,
             // no need preview cuz it's already defined
