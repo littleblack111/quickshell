@@ -25,7 +25,7 @@ ILauncher {
 
         IRect {
             id: root
-            property alias input: textInput.text
+            // property alias input: textInput.text
 
             height: searchBar.height + widgets.height + textInput.height / 2 // * 1.5
             width: Math.max(widgets.implicitWidth, Launcher.defaultWidth)
@@ -122,6 +122,12 @@ ILauncher {
                                 }
                             }
                         }
+						onTextChanged: {
+							ActiveComponent.input = textInput.text; // TODO: find ways to optimize this, like how i was using an alias
+						}
+						onCursorPositionChanged: {
+							ActiveComponent.cursorPosition = textInput.cursorPosition;
+						}
                         // onActiveFocusChanged: {
                         //     parentLoader.active = activeFocus;
                         // }
@@ -168,19 +174,29 @@ ILauncher {
                     topMargin: Launcher.innerMargin * 1.5 // gap in between, maybe seperator FIXME
                 }
 
-                Calc {
-                    id: calc
-                    cursorPosition: textInput.cursorPosition
-                    Layout.rightMargin: Launcher.innerMargin
-                    Layout.leftMargin: Launcher.innerMargin
-                    input: root.input
+                Repeater {
+                    model: Launcher.widgets
+                    delegate: Loader {
+                        active: true
+                        sourceComponent: modelData
+						Component.onCompleted: {
+							ActiveComponent.widgets.push(item);
+						}
+                    }
                 }
-                App {
-                    id: app
-                    Layout.rightMargin: Launcher.innerMargin
-                    Layout.leftMargin: Launcher.innerMargin
-                    input: root.input
-                }
+                // Calc {
+                //     id: calc
+                //     cursorPosition: textInput.cursorPosition
+                //     Layout.rightMargin: Launcher.innerMargin
+                //     Layout.leftMargin: Launcher.innerMargin
+                //     input: root.input
+                // }
+                // App {
+                //     id: app
+                //     Layout.rightMargin: Launcher.innerMargin
+                //     Layout.leftMargin: Launcher.innerMargin
+                //     input: root.input
+                // }
             }
         }
 
