@@ -10,7 +10,7 @@ Singleton {
     readonly property int defaultWidth: 500
 
     readonly property int widgetWidth: 700
-    readonly property int widgetHeight: 200
+    readonly property int widgetHeight: 300
 
     readonly property int innerMargin: 5
 
