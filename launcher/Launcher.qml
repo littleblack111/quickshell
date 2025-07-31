@@ -25,7 +25,7 @@ ILauncher {
 
         IRect {
             id: root
-            // property alias input: textInput.text
+            property alias input: textInput.text
 
             height: searchBar.height + widgets.height + textInput.height / 2 // * 1.5
             width: Math.max(widgets.implicitWidth, Launcher.defaultWidth)
@@ -122,12 +122,12 @@ ILauncher {
                                 }
                             }
                         }
-						onTextChanged: {
-							ActiveComponent.input = textInput.text; // TODO: find ways to optimize this, like how i was using an alias
-						}
-						onCursorPositionChanged: {
-							ActiveComponent.cursorPosition = textInput.cursorPosition;
-						}
+                        onTextChanged: {
+                            ActiveComponent.input = textInput.text; // TODO: find ways to optimize this, like how i was using an alias
+                        }
+                        onCursorPositionChanged: {
+                            ActiveComponent.cursorPosition = textInput.cursorPosition;
+                        }
                         // onActiveFocusChanged: {
                         //     parentLoader.active = activeFocus;
                         // }
@@ -143,6 +143,7 @@ ILauncher {
                         color: Qt.rgba(Colors.background2.r, Colors.background2.g, Colors.background2.b, Launcher.widgetBgTransparency)
                         IText {
                             id: text
+                            visible: ActiveComponent?.priorities[0] || false
                             color: Colors.foreground3
                             renderType: Text.CurveRendering
                             antialiasing: true
@@ -152,15 +153,15 @@ ILauncher {
                                 family: Style.font.family.sans
                                 wordSpacing: 5
                             }
-                            text: app.predictiveCompletion
+                            text: ActiveComponent?.priorities[0]?.predictiveCompletion || ""
                         }
                     }
                     Item {
                         Layout.fillWidth: true
                     }
                     Loader {
-                        active: app.priority
-                        sourceComponent: app.preview
+                        active: ActiveComponent?.priorities[0]?.priority || false // .priority should always be true if it's in priorities
+                        sourceComponent: ActiveComponent?.priorities[0]?.preview
                     }
                 }
             }
@@ -179,9 +180,9 @@ ILauncher {
                     delegate: Loader {
                         active: true
                         sourceComponent: modelData
-						Component.onCompleted: {
-							ActiveComponent.widgets.push(item);
-						}
+                        Component.onCompleted: {
+                            ActiveComponent.widgets[index] = item;
+                        }
                     }
                 }
                 // Calc {

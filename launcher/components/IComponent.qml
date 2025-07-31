@@ -10,9 +10,9 @@ IRect {
     id: root
     // virtual properties
     property string name // Component/File name
-    property string input: ActiveComponent.input
+    readonly property string input: ActiveComponent.input
     property bool valid: processed?.valid || false
-    property bool priority: processed?.priority || false
+    property bool priority: valid && processed?.priority || false // please set priority to false if it's invalid
     property string answer: processed?.answer || ""
     property Component preview: Component {
         IText {
