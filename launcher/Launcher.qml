@@ -145,6 +145,7 @@ ILauncher {
                         color: Qt.rgba(Colors.background2.r, Colors.background2.g, Colors.background2.b, Launcher.widgetBgTransparency)
                         IText {
                             id: text
+                            // animate: true // too jumpy
                             visible: ActiveComponent?.priorities[0] || false
                             color: Colors.foreground3
                             renderType: Text.CurveRendering
@@ -156,6 +157,11 @@ ILauncher {
                                 wordSpacing: 5
                             }
                             text: ActiveComponent?.priorities[0]?.predictiveCompletion || ""
+                        }
+                        Behavior on Layout.preferredWidth {
+                            NumberAnimation {
+                                duration: General.animationDuration / 5
+                            }
                         }
                     }
                     Item {
