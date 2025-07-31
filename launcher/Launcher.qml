@@ -185,51 +185,118 @@ ILauncher {
                         Component.onCompleted: {
                             ActiveComponent.widgets[index] = item;
                             // FIXME: prev predictiveCompletion still exists here
+                            // workaround atm: just clear it or preserve the text manually
                         }
                     }
                 }
-                // Calc {
-                //     id: calc
-                //     cursorPosition: textInput.cursorPosition
-                //     Layout.rightMargin: Launcher.innerMargin
-                //     Layout.leftMargin: Launcher.innerMargin
-                //     input: root.input
-                // }
-                // App {
-                //     id: app
-                //     Layout.rightMargin: Launcher.innerMargin
-                //     Layout.leftMargin: Launcher.innerMargin
-                //     input: root.input
-                // }
             }
         }
 
-        Keys.onPressed: event => {
-            const item = ActiveComponent?.priorities[0];
-            if (!item && event.key !== Qt.Key_Escape)
-                return;
-            switch (event.key) {
-            case Qt.Key_Escape:
-                parentLoader.active = false;
-                break;
-            case Qt.Key_Down:
+        // not Keys.onPressed because textinput will steal it
+        Shortcut {
+            sequence: "Ctrl+H"
+            context: Qt.ApplicationShortcut
+            onActivated: {
+                const item = ActiveComponent?.priorities[0];
+                if (!item)
+                    return;
+                item.left();
+            }
+        }
+
+        Shortcut {
+            sequence: "Ctrl+J"
+            context: Qt.ApplicationShortcut
+            onActivated: {
+                const item = ActiveComponent?.priorities[0];
+                if (!item)
+                    return;
                 item.down();
-                break;
-            case Qt.Key_Up:
+            }
+        }
+
+        Shortcut {
+            sequence: "Ctrl+K"
+            context: Qt.ApplicationShortcut
+            onActivated: {
+                const item = ActiveComponent?.priorities[0];
+                if (!item)
+                    return;
                 item.up();
-                break;
-            //TODO: add pg down + up, home, end, ctrl hjkl(vim)
+            }
+        }
+
+        Shortcut {
+            sequence: "Ctrl+L"
+            context: Qt.ApplicationShortcut
+            onActivated: {
+                const item = ActiveComponent?.priorities[0];
+                if (!item)
+                    return;
+                item.right();
+            }
+        }
+
+        Shortcut {
+            sequence: "Escape"
+            context: Qt.ApplicationShortcut
+            onActivated: parentLoader.active = false
+        }
+
+        Shortcut {
+            sequence: "Down"
+            context: Qt.ApplicationShortcut
+            onActivated: {
+                const item = ActiveComponent?.priorities[0];
+                item?.down();
+            }
+        }
+
+        Shortcut {
+            sequence: "Up"
+            context: Qt.ApplicationShortcut
+            onActivated: {
+                const item = ActiveComponent?.priorities[0];
+                item?.up();
+            }
+        }
+
+        Shortcut {
+            sequence: "PageDown"
+            context: Qt.ApplicationShortcut
+            onActivated: {
+                const item = ActiveComponent?.priorities[0];
+                item?.pageDown();
+            }
+        }
+
+        Shortcut {
+            sequence: "PageUp"
+            context: Qt.ApplicationShortcut
+            onActivated: {
+                const item = ActiveComponent?.priorities[0];
+                item?.pageUp();
+            }
+        }
+
+        Shortcut {
+            sequence: "Home"
+            context: Qt.ApplicationShortcut
+            onActivated: {
+                const item = ActiveComponent?.priorities[0];
+                item?.home();
+            }
+        }
+
+        Shortcut {
+            sequence: "End"
+            context: Qt.ApplicationShortcut
+            onActivated: {
+                const item = ActiveComponent?.priorities[0];
+                item?.end();
             }
         }
     }
-    // MouseArea {
-    //     z: -1 // otherwise children mouseareas won't work
-    //     anchors.fill: parent
-    //     hoverEnabled: true
-    //     // onExited: {
-    //     //     parentLoader.active = false;
-    //     // }
-    // }
 
     implicitWidth: container.width
     implicitHeight: container.height
