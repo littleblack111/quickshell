@@ -141,6 +141,7 @@ ILauncher {
                         }
                     }
                     IRect {
+                        opacity: ActiveComponent?.priorities[0]?.predictiveCompletion ? 1 : 0
                         Layout.fillHeight: true
                         Layout.preferredWidth: text.width
                         radius: Launcher.predictiveCompletionRadius
@@ -148,7 +149,6 @@ ILauncher {
                         IText {
                             id: text
                             // animate: true // too jumpy
-                            visible: ActiveComponent?.priorities[0] || false
                             color: Colors.foreground3
                             renderType: Text.CurveRendering
                             antialiasing: true
@@ -165,6 +165,12 @@ ILauncher {
                             // NumberAnimation {
                             //     duration: General.animationDuration / 5
                             // }
+                        }
+                        Behavior on opacity {
+                            NumberAnimation {
+                                duration: General.animationDuration / 2
+                                easing.type: Easing.InOutQuad
+                            }
                         }
                     }
                     Item {
