@@ -11,7 +11,7 @@ IComponent {
     id: root
     // TODO: presist how much times per app is opened on disk, routinely check if the app is still there
     property list<DesktopEntry> entries
-    property int selectedIndex: -1
+    property int selectedIndex: 0
 
     implicitHeight: valid ? Math.min(layout.height, Launcher.widgetHeight * 1.5) : 0
 
@@ -33,8 +33,8 @@ IComponent {
         const first = query.length > 0 && query[0];
         const isValid = query.length > 0;
         // const isPriority = first?.name?.toLowerCase() === search;
-        isValid && selectedIndex === -1 ? selectedIndex = 0 : null; // default to first app if nothing is selected
         const predictiveCompletion = isValid ? repeater.itemAt(selectedIndex).modelData.name.slice(search.length) : ""; // we can technically use query[selectedIndex].name but for consistancy(idk maybe repeater might be different for whatever reason)
+        syncActiveComponent();
         return {
             valid: isValid,
             priority: isValid,
@@ -59,17 +59,13 @@ IComponent {
         selectedIndex++;
     }
 
-    onSelectedIndexChanged: {
-        // sync
+    function syncActiveComponent() {
         ActiveComponent.selected = repeater.itemAt(selectedIndex);
         ActiveComponent.exec = root.exec;
     }
 
-    // somehow fixes binding loop
-    onEntriesChanged: {
-        if (entries.length > 0 && selectedIndex === -1) {
-            selectedIndex = 0;
-        }
+    onSelectedIndexChanged: {
+        syncActiveComponent();
     }
 
     IInnerComponent {
