@@ -38,24 +38,4 @@ Singleton {
             Calc {}
         }
     ]
-    // readonly property list<IComponent> widgets: [
-    // 	App {},
-    // 	Calc {}
-    //    ]
-    // // should be the same as above commented list
-    // readonly property list<Component> widgetComponents
-
-    // IComponent derivatives
-    // readonly property list<IWidget> order: [
-    //     Flight {},
-    //     Math {},
-    //     Weather {},
-    //     Clip {},
-    //     Translate {},
-    //     Time {},
-    //     // above most of the time isn't visible
-    //     App {},
-    //     Web {},
-    //     Finder {}
-    // ]
 }
