@@ -13,8 +13,10 @@ IComponent {
     property list<DesktopEntry> entries
     property int selectedIndex: -1
 
+    implicitHeight: valid ? Math.min(layout.height, Launcher.widgetHeight * 1.5) : 0
+
     name: "Applications"
-    implicitHeight: valid ? Math.min(layout.height, Launcher.widgetHeight) : 0
+
     preview: Component {
         IconImage {
             source: Quickshell.iconPath(answer, "image-missing")
@@ -74,7 +76,7 @@ IComponent {
         id: layout
         fromParent: false
         width: parent.width
-        height: Math.min(innerLayout.height + titleBar.height, Launcher.widgetHeight) // childrenRect doesnt work...
+        height: innerLayout.height + titleBar.height// childrenRect doesnt work...
         Flickable {
             id: flickable
             Layout.fillWidth: true
