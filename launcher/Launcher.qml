@@ -182,6 +182,7 @@ ILauncher {
                         sourceComponent: modelData
                         Component.onCompleted: {
                             ActiveComponent.widgets[index] = item;
+                            // FIXME: prev predictiveCompletion still exists here
                         }
                     }
                 }
