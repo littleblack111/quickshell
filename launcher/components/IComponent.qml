@@ -40,11 +40,12 @@ IRect {
     property var next: () => {}
     property var exec: () => {}
 
-    // visible: valid // no anim :/
-    opacity: valid ? 1 : 0 // TODO: better anim, maybe slide in from bottom
+    opacity: valid ? 1 : 0
+    y: valid ? 0 : -Launcher.widgetHeight
 
     implicitWidth: valid ? Launcher.widgetWidth : 0
     implicitHeight: valid ? Launcher.widgetHeight : 0
+
     // implicitWidth: Launcher.widgetWidth
     // implicitHeight: Launcher.widgetHeight
 
@@ -53,5 +54,12 @@ IRect {
 
     onPriorityChanged: {
         ActiveComponent.priorities = [...[...ActiveComponent.priorities, root].reduce((s, x) => (s[(s.has(x) && 'delete') || 'add'](x), s), new Set())]; // sync with ActiveComponent.priorities
+    }
+
+    Behavior on y {
+        NumberAnimation {
+            duration: General.animationDuration / 4
+            easing.type: Easing.InOutQuad
+        }
     }
 }
