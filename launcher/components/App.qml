@@ -94,11 +94,12 @@ IComponent {
                     Item {
                         required property DesktopEntry modelData
                         required property int index
-                        Layout.margins: Launcher.innerMargin
+                        Layout.margins: Launcher.innerMargin * 2
                         implicitWidth: root.width
                         implicitHeight: item.height
                         RowLayout {
                             id: item
+                            spacing: Launcher.innerMargin * 2
                             IconImage {
                                 source: Quickshell.iconPath(modelData.icon, "image-missing")
                                 implicitWidth: General.appIconSize
