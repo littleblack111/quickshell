@@ -12,6 +12,7 @@ IComponent {
     // TODO: presist how much times per app is opened on disk, routinely check if the app is still there
     property list<DesktopEntry> entries
     property int selectedIndex: -1
+
     name: "Applications"
     implicitHeight: valid ? Math.min(layout.height, Launcher.widgetHeight) : 0
     preview: Component {
@@ -57,8 +58,16 @@ IComponent {
     }
 
     onSelectedIndexChanged: {
+        // sync
         ActiveComponent.selected = repeater.itemAt(selectedIndex);
         ActiveComponent.exec = root.exec;
+    }
+
+    // somehow fixes binding loop
+    onEntriesChanged: {
+        if (entries.length > 0 && selectedIndex === -1) {
+            selectedIndex = 0;
+        }
     }
 
     IInnerComponent {
