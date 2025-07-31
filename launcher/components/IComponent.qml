@@ -52,7 +52,6 @@ IRect {
     color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetBgTransparency) // TODO when prioritized, highlight
 
     onPriorityChanged: {
-        ActiveComponent.priorities = [...[...ActiveComponent.priorities, root].reduce((s, x) => (s[(s.has(x) && 'delete') || 'add'](x), s), new Set())];
-        // console.log(ActiveComponent.priorities[0] === ActiveComponent.widgets[0]);
+        ActiveComponent.priorities = [...[...ActiveComponent.priorities, root].reduce((s, x) => (s[(s.has(x) && 'delete') || 'add'](x), s), new Set())]; // sync with ActiveComponent.priorities
     }
 }

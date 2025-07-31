@@ -30,9 +30,8 @@ IComponent {
         const first = query.length > 0 && query[0];
         const isValid = query.length > 0;
         // const isPriority = first?.name?.toLowerCase() === search;
-        const predictiveCompletion = isValid ? first.name.slice(search.length) : "";
         isValid && selectedIndex === -1 ? selectedIndex = 0 : null; // default to first app if nothing is selected
-        updateActiveComponent();
+        const predictiveCompletion = isValid ? repeater.itemAt(selectedIndex).modelData.name.slice(search.length) : ""; // we can technically use query[selectedIndex].name but for consistancy(idk maybe repeater might be different for whatever reason)
         return {
             valid: isValid,
             priority: isValid,
@@ -57,13 +56,9 @@ IComponent {
         selectedIndex++;
     }
 
-    function updateActiveComponent() {
+    onSelectedIndexChanged: {
         ActiveComponent.selected = repeater.itemAt(selectedIndex);
         ActiveComponent.exec = root.exec;
-    }
-
-    onSelectedIndexChanged: {
-        updateActiveComponent();
     }
 
     IInnerComponent {
@@ -107,7 +102,11 @@ IComponent {
                         MouseArea {
                             anchors.fill: parent
                             hoverEnabled: true
-                            onPositionChanged: {
+                            // https://github.com/quickshell-mirror/quickshell/issues/118
+                            // onPositionChanged: {
+                            //     root.selectedIndex = index;
+                            // }
+                            onEntered: {
                                 root.selectedIndex = index;
                             }
                         }
