@@ -205,13 +205,21 @@ ILauncher {
         }
 
         Keys.onPressed: event => {
-            if (event.key === Qt.Key_Escape)
+            const item = ActiveComponent?.priorities[0];
+            if (!item && event.key !== Qt.Key_Escape)
+                return;
+            switch (event.key) {
+            case Qt.Key_Escape:
                 parentLoader.active = false;
-            if (event.key === Qt.Key_Down)
-                app.down();
-            if (event.key === Qt.Key_Up)
-                app.up();
+                break;
+            case Qt.Key_Down:
+                item.down();
+                break;
+            case Qt.Key_Up:
+                item.up();
+                break;
             //TODO: add pg down + up, home, end, ctrl hjkl(vim)
+            }
         }
     }
     // MouseArea {
