@@ -65,6 +65,7 @@ ILauncher {
                         Layout.fillHeight: true
                         // Layout.fillWidth: true
                         color: Colors.foreground1
+                        text: ActiveComponent?.input || ""
                         clip: true
                         focus: true
                         renderType: Text.CurveRendering
@@ -134,6 +135,7 @@ ILauncher {
                         onAccepted: {
                             ActiveComponent?.exec(); // TODO: kde like waiting animation for app to launch
                             parentLoader.active = false;
+                            textInput.text = "";
                         }
                     }
                     IRect {
