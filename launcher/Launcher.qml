@@ -6,6 +6,7 @@ import "components"
 import qs.components
 import qs.config
 
+// TODO: currently, we're relying on the compositor to provide the animation which ig is fine, but we should use our own in the future, however it might look weird combined with the compositors's
 ILauncher {
     id: launcher
     name: "quickshell::launcher::launcher"
@@ -46,9 +47,10 @@ ILauncher {
                     topMargin: widgets.height === 0 ? parent.height / 2 - textInput.height / 2 : Launcher.innerMargin // textInput or Icon is the height of this
 
                     Behavior on topMargin {
-                        NumberAnimation {
-                            duration: General.animationDuration / 2
-                        }
+                        ISpringAnimation {}
+                        // NumberAnimation {
+                        //     duration: General.animationDuration / 2
+                        // }
                     }
                 }
 
@@ -159,9 +161,10 @@ ILauncher {
                             text: ActiveComponent?.priorities[0]?.predictiveCompletion || ""
                         }
                         Behavior on Layout.preferredWidth {
-                            NumberAnimation {
-                                duration: General.animationDuration / 5
-                            }
+                            ISpringAnimation {}
+                            // NumberAnimation {
+                            //     duration: General.animationDuration / 5
+                            // }
                         }
                     }
                     Item {
