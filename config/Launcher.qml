@@ -1,6 +1,7 @@
 pragma Singleton
 
 import Quickshell
+import QtQuick
 import qs.launcher.components
 
 Singleton {
@@ -29,7 +30,22 @@ Singleton {
 
     readonly property int predictiveCompletionRadius: 6
 
-    readonly property list<IComponent> widgets: [Math,]
+    readonly property list<Component> widgets: [
+        Component {
+            App {}
+        },
+        Component {
+            Calc {}
+        }
+    ]
+    // readonly property list<IComponent> widgets: [
+    // 	App {},
+    // 	Calc {}
+    //    ]
+    // // should be the same as above commented list
+    // readonly property list<Component> widgetComponents
+
+    // IComponent derivatives
     // readonly property list<IWidget> order: [
     //     Flight {},
     //     Math {},

@@ -6,7 +6,7 @@ import qs.components
 import qs.config
 
 IComponent {
-    required property int cursorPosition
+    property int cursorPosition: ActiveComponent.cursorPosition
     name: "Calculator"
     preview: Component {
         Icon {
