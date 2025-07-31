@@ -22,16 +22,6 @@ Singleton {
         priorities.forEach((item, index) => {});
     }
 
-    Component.onCompleted: {
-        // reverify priorities as widgets may forgot to unset them
-        // console.log('input', input);
-        for (const item of widgets) {
-            item.processed = item.process();
-            // console.log('aasdsafasdfafsd', item.predictiveCompletion);
-        }
-        priorities = priorities.filter(item => item.priority === true);
-    }
-
     function exec() {
         if (exec) {
             exec();
