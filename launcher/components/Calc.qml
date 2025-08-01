@@ -6,7 +6,7 @@ import qs.components
 import qs.config
 
 IComponent {
-    property int cursorPosition: ActiveComponent.cursorPosition
+    property int cursorPosition: SelectionState.cursorPosition
     name: "Calculator"
     preview: Component {
         Icon {

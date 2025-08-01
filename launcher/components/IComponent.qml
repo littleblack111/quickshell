@@ -10,7 +10,7 @@ IRect {
     id: root
     // virtual properties
     property string name // Component/File name
-    readonly property string input: ActiveComponent.input
+    readonly property string input: SelectionState.input
     readonly property string inputCleaned: input.toLowerCase().trim()
     property bool valid: processed?.valid || false
     property bool priority: valid && processed?.priority || false // please set priority to false if it's invalid
@@ -54,7 +54,7 @@ IRect {
     color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetBgTransparency) // TODO when prioritized, highlight
 
     onPriorityChanged: {
-        ActiveComponent.priorities = [...[...ActiveComponent.priorities, root].reduce((s, x) => (s[(s.has(x) && 'delete') || 'add'](x), s), new Set())]; // sync with ActiveComponent.priorities
+        SelectionState.priorities = [...[...SelectionState.priorities, root].reduce((s, x) => (s[(s.has(x) && 'delete') || 'add'](x), s), new Set())]; // sync with SelectionState.priorities
     }
 
     Behavior on y {
