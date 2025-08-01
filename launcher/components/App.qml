@@ -33,7 +33,7 @@ IComponent {
             return;
         // const isPriority = first?.name?.toLowerCase() === search;
         const predictiveCompletion = query[selectedIndex].name.slice(inputCleaned.length);
-        syncActiveComponent();
+        syncSelectionState();
         return {
             valid: isValid,
             priority: isValid,
@@ -45,7 +45,7 @@ IComponent {
         };
     }
     exec: function () {
-        ActiveComponent.selected.modelData.execute();
+        SelectionState.selected.modelData.execute();
     }
     up: function () {
         if (selectedIndex <= 0)
@@ -58,13 +58,13 @@ IComponent {
         selectedIndex++;
     }
 
-    function syncActiveComponent() {
-        ActiveComponent.selected = repeater.itemAt(selectedIndex);
-        ActiveComponent.exec = root.exec;
+    function syncSelectionState() {
+        SelectionState.selected = repeater.itemAt(selectedIndex);
+        SelectionState.exec = root.exec;
     }
 
     onSelectedIndexChanged: {
-        syncActiveComponent();
+        syncSelectionState();
     }
 
     IInnerComponent {

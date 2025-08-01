@@ -68,7 +68,7 @@ ILauncher {
                         Layout.fillWidth: true
                         Layout.maximumWidth: implicitWidth
                         color: Colors.foreground1
-                        text: ActiveComponent?.input || ""
+                        text: SelectionState?.input || ""
                         clip: true
                         focus: true
                         renderType: Text.CurveRendering
@@ -127,16 +127,16 @@ ILauncher {
                             }
                         }
                         onTextChanged: {
-                            ActiveComponent.input = textInput.text; // TODO: find ways to optimize this, like how i was using an alias
+                            SelectionState.input = textInput.text; // TODO: find ways to optimize this, like how i was using an alias
                         }
                         onCursorPositionChanged: {
-                            ActiveComponent.cursorPosition = textInput.cursorPosition;
+                            SelectionState.cursorPosition = textInput.cursorPosition;
                         }
                         // onActiveFocusChanged: {
                         //     parentLoader.active = activeFocus;
                         // }
                         onAccepted: {
-                            ActiveComponent?.exec(); // TODO: kde like waiting animation for app to launch
+                            SelectionState?.exec(); // TODO: kde like waiting animation for app to launch
                             parentLoader.active = false;
                             textInput.text = "";
                         }
@@ -145,7 +145,7 @@ ILauncher {
                         }
                     }
                     IRect {
-                        opacity: ActiveComponent?.priorities[0]?.predictiveCompletion ? 1 : 0
+                        opacity: SelectionState?.priorities[0]?.predictiveCompletion ? 1 : 0
                         Layout.fillHeight: true
                         Layout.preferredWidth: text.width
                         radius: Launcher.predictiveCompletionRadius
@@ -162,7 +162,7 @@ ILauncher {
                                 family: Style.font.family.sans
                                 wordSpacing: 5
                             }
-                            text: ActiveComponent?.priorities[0]?.predictiveCompletion || ""
+                            text: SelectionState?.priorities[0]?.predictiveCompletion || ""
                         }
                         Behavior on Layout.preferredWidth {
                             ISpringAnimation {}
@@ -181,8 +181,8 @@ ILauncher {
                         Layout.fillWidth: true
                     }
                     Loader {
-                        active: ActiveComponent?.priorities[0]?.priority || false // .priority should always be true if it's in priorities
-                        sourceComponent: ActiveComponent?.priorities[0]?.preview
+                        active: SelectionState?.priorities[0]?.priority || false // .priority should always be true if it's in priorities
+                        sourceComponent: SelectionState?.priorities[0]?.preview
                     }
                 }
             }
@@ -203,7 +203,7 @@ ILauncher {
                         active: true
                         sourceComponent: modelData
                         Component.onCompleted: {
-                            ActiveComponent.widgets[index] = item;
+                            SelectionState.widgets[index] = item;
                             // FIXME: prev predictiveCompletion still exists here
                             // workaround atm: just clear it or preserve the text manually
                         }
@@ -217,7 +217,7 @@ ILauncher {
             sequence: "Ctrl+H"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = ActiveComponent?.priorities[0];
+                const item = SelectionState?.priorities[0];
                 if (!item)
                     return;
                 item.left();
@@ -228,7 +228,7 @@ ILauncher {
             sequence: "Ctrl+J"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = ActiveComponent?.priorities[0];
+                const item = SelectionState?.priorities[0];
                 if (!item)
                     return;
                 item.down();
@@ -239,7 +239,7 @@ ILauncher {
             sequence: "Ctrl+K"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = ActiveComponent?.priorities[0];
+                const item = SelectionState?.priorities[0];
                 if (!item)
                     return;
                 item.up();
@@ -250,7 +250,7 @@ ILauncher {
             sequence: "Ctrl+L"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = ActiveComponent?.priorities[0];
+                const item = SelectionState?.priorities[0];
                 if (!item)
                     return;
                 item.right();
@@ -267,7 +267,7 @@ ILauncher {
             sequence: "Down"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = ActiveComponent?.priorities[0];
+                const item = SelectionState?.priorities[0];
                 item?.down();
             }
         }
@@ -276,7 +276,7 @@ ILauncher {
             sequence: "Up"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = ActiveComponent?.priorities[0];
+                const item = SelectionState?.priorities[0];
                 item?.up();
             }
         }
@@ -285,7 +285,7 @@ ILauncher {
             sequence: "PageDown"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = ActiveComponent?.priorities[0];
+                const item = SelectionState?.priorities[0];
                 item?.pageDown();
             }
         }
@@ -294,7 +294,7 @@ ILauncher {
             sequence: "PageUp"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = ActiveComponent?.priorities[0];
+                const item = SelectionState?.priorities[0];
                 item?.pageUp();
             }
         }
@@ -303,7 +303,7 @@ ILauncher {
             sequence: "Home"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = ActiveComponent?.priorities[0];
+                const item = SelectionState?.priorities[0];
                 item?.home();
             }
         }
@@ -312,7 +312,7 @@ ILauncher {
             sequence: "End"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = ActiveComponent?.priorities[0];
+                const item = SelectionState?.priorities[0];
                 item?.end();
             }
         }
