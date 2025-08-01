@@ -25,15 +25,14 @@ IComponent {
         }
     }
     process: function () {
-        const search = input.toLowerCase();
-        if (!search)
-            return;
-        let query = AppSearch.fuzzyQuery(search);
+        let query = AppSearch.fuzzyQuery(inputCleaned);
         entries = query;
         const first = query.length > 0 && query[0];
         const isValid = query.length > 0;
+        if (!isValid)
+            return;
         // const isPriority = first?.name?.toLowerCase() === search;
-        const predictiveCompletion = isValid ? query[selectedIndex].name.slice(search.length) : "";
+        const predictiveCompletion = query[selectedIndex].name.slice(inputCleaned.length);
         syncActiveComponent();
         return {
             valid: isValid,
