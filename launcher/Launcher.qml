@@ -136,7 +136,7 @@ ILauncher {
                         //     parentLoader.active = activeFocus;
                         // }
                         onAccepted: {
-                            SelectionState?.exec(); // TODO: kde like waiting animation for app to launch
+                            SelectionState?.priorities[0]?.exec(); // TODO: kde like waiting animation for app to launch
                             parentLoader.active = false;
                             textInput.text = "";
                         }
