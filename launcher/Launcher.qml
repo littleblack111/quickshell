@@ -140,6 +140,9 @@ ILauncher {
                             parentLoader.active = false;
                             textInput.text = "";
                         }
+                        Component.onCompleted: {
+                            selectAll();
+                        }
                     }
                     IRect {
                         opacity: ActiveComponent?.priorities[0]?.predictiveCompletion ? 1 : 0
