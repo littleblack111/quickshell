@@ -65,6 +65,8 @@ ILauncher {
                     TextInput {
                         id: textInput
                         Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        Layout.maximumWidth: implicitWidth
                         color: Colors.foreground1
                         text: ActiveComponent?.input || ""
                         clip: true
