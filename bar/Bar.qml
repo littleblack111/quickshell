@@ -40,9 +40,12 @@ Scope {
                 color: "transparent"
 
                 IRect {
-                    anchors.left: parent.left
-                    width: leftRow.width + leftRow.anchors.leftMargin - leftSpacer.width
-                    height: leftRow.height
+                    id: leftRow
+                    anchors {
+                        left: parent.left
+                    }
+                    width: leftInnerRow.width + leftInnerRow.anchors.leftMargin - leftSpacer.width
+                    height: leftInnerRow.height
                     color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Bar.bgTransparency)
                     radius: Bar.moduleRadius
 
@@ -52,30 +55,28 @@ Scope {
                             easing.type: Easing.InOutQuad
                         }
                     }
-                }
+                    RowLayout {
+                        id: leftInnerRow
+                        height: child.height
+                        spacing: Bar.leftModuleSpacing
+                        anchors {
+                            left: parent.left
+                            leftMargin: Bar.moduleLeftMargin
+                        }
 
-                RowLayout {
-                    id: leftRow
-                    anchors {
-                        left: parent.left
-                        leftMargin: Bar.moduleLeftMargin
-                    }
-                    width: (child.width - centerRow.width) / 2
-                    height: child.height
-                    spacing: Bar.leftModuleSpacing
-
-                    Workspace {
-                        id: workspace
-                        // screen: barWindow.screen // multi monitor
-                        // Layout.minimumWidth: 400 // FIXME
-                    }
-                    Mpris {
-                        id: mpris
-                    }
-                    Item {
-                        id: leftSpacer
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
+                        Workspace {
+                            id: workspace
+                            // screen: barWindow.screen // multi monitor
+                            // Layout.minimumWidth: 400 // FIXME
+                        }
+                        Mpris {
+                            id: mpris
+                        }
+                        Item {
+                            id: leftSpacer
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                        }
                     }
                 }
 
@@ -89,57 +90,57 @@ Scope {
                 }
 
                 IRect {
+                    id: rightRow
                     anchors.right: parent.right
-                    width: rightRow.width + rightRow.anchors.rightMargin - rightSpacer.width
-                    height: rightRow.height
+                    width: rightInnerRow.width + rightInnerRow.anchors.rightMargin - rightSpacer.width
+                    height: rightInnerRow.height
                     color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Bar.bgTransparency)
                     radius: Bar.moduleRadius
+
+                    RowLayout {
+                        id: rightInnerRow
+                        anchors {
+                            right: parent.right
+                            rightMargin: Bar.moduleRightMargin
+                        }
+                        layoutDirection: Qt.RightToLeft
+                        height: child.height
+                        spacing: Bar.rightModuleSpacing
+
+                        Power {
+                            id: power
+                        }
+                        // Tray {
+                        //     id: tray
+                        // }
+                        TimeDate {}
+                        Network {}
+                        // Temp {
+                        //     id: temp
+                        // }
+                        // Gpu {
+                        //     id: gpu
+                        // }
+                        // Memory {
+                        //     id: memory
+                        // }
+                        // Cpu {
+                        //     id: cpu
+                        // }
+                        Resources {}
+
+                        Item {
+                            id: rightSpacer
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                        }
+                    }
 
                     Behavior on color {
                         ColorAnimation {
                             duration: General.animationDuration
                             easing.type: Easing.InOutQuad
                         }
-                    }
-                }
-
-                RowLayout {
-                    id: rightRow
-                    anchors {
-                        right: parent.right
-                        rightMargin: Bar.moduleRightMargin
-                    }
-                    layoutDirection: Qt.RightToLeft
-                    width: (child.width - centerRow.width) / 2
-                    height: child.height
-                    spacing: Bar.rightModuleSpacing
-
-                    Power {
-                        id: power
-                    }
-                    // Tray {
-                    //     id: tray
-                    // }
-                    TimeDate {}
-                    Network {}
-                    // Temp {
-                    //     id: temp
-                    // }
-                    // Gpu {
-                    //     id: gpu
-                    // }
-                    // Memory {
-                    //     id: memory
-                    // }
-                    // Cpu {
-                    //     id: cpu
-                    // }
-                    Resources {}
-
-                    Item {
-                        id: rightSpacer
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
                     }
                 }
             }
