@@ -184,6 +184,7 @@ ILauncher {
 
             ColumnLayout {
                 id: widgets
+                spacing: 0
                 anchors {
                     top: searchBar.bottom
                     left: parent.left
