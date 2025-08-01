@@ -44,7 +44,7 @@ ILauncher {
                     leftMargin: Launcher.innerMargin
                     rightMargin: Launcher.innerMargin
                     // try to center it when no widgets are present
-                    topMargin: widgets.height === 0 ? parent.height / 2 - textInput.height / 2 : Launcher.innerMargin // textInput or Icon is the height of this
+                    topMargin: widgets.height === Launcher.widgets.length * 5 - 5 ? parent.height / 2 - textInput.height / 2 : Launcher.innerMargin // textInput or Icon is the height of this
 
                     Behavior on topMargin {
                         ISpringAnimation {}
@@ -65,7 +65,6 @@ ILauncher {
                     TextInput {
                         id: textInput
                         Layout.fillHeight: true
-                        // Layout.fillWidth: true
                         color: Colors.foreground1
                         text: ActiveComponent?.input || ""
                         clip: true
