@@ -35,6 +35,11 @@ Item {
                 sourceComponent: !root.isAlt ? main : alt
                 readonly property Component main: Component {
                     RowLayout {
+                        id: root
+                        property int h: Services.TimeDate.hours
+                        property int m: Services.TimeDate.minutes
+                        property int s: Services.TimeDate.seconds
+
                         Item {
                             Layout.fillWidth: true
                         }
@@ -42,31 +47,28 @@ Item {
                         spacing: Bar.resourceIconTextSpacing
 
                         Icon {
-                            text: Icons.resource.clock
+                            text: Icons.resource.clock[root.h - 1]
                             font.pixelSize: Style.font.size.larger
                         }
                         RowLayout {
-                            property int h: Services.TimeDate.hours
-                            property int m: Services.TimeDate.minutes
-                            property int s: Services.TimeDate.seconds
                             spacing: 0
                             IText {
                                 animate: true
-                                text: (parent.h >= 10 ? "" : "0") + parent.h
+                                text: (root.h >= 10 ? "" : "0") + root.h
                             }
                             IText {
                                 text: ":"
                             }
                             IText {
                                 animate: true
-                                text: (parent.m >= 10 ? "" : "0") + parent.m
+                                text: (root.m >= 10 ? "" : "0") + root.m
                             }
                             IText {
                                 text: ":"
                             }
                             IText {
                                 animate: true
-                                text: (parent.s >= 10 ? "" : "0") + parent.s
+                                text: (root.s >= 10 ? "" : "0") + root.s
                                 renderType: Text.CurveRendering // it's not static and is rapidly updated
                             }
                         }

@@ -46,6 +46,8 @@ Singleton {
             wifi: wifi
         })
 
+    readonly property list<string> clock: ['', '', '', '', '', '', '', '', '', '', '', '']
+
     readonly property var resource: ({
             cpu: "",
             memory: "󰍛",
@@ -53,7 +55,7 @@ Singleton {
             gpu: "󱓞",
             temp: "",
             network: network,
-            clock: "",
+            clock: clock,
             calendar: ""
         })
 
