@@ -32,10 +32,13 @@ Singleton {
 
     readonly property list<Component> widgets: [
         Component {
-            App {}
+            Clock {}
         },
         Component {
             Calc {}
+        },
+        Component {
+            App {}
         }
     ]
 }
