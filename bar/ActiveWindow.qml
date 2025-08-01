@@ -40,6 +40,7 @@ IRect {
         id: rowLayout
         anchors.centerIn: parent
         spacing: Bar.resourceIconTextSpacing
+        width: Math.min(implicitWidth, root.width)
 
         IconImage {
             id: icon
@@ -56,16 +57,25 @@ IRect {
             }
         }
 
-        IText {
-            animate: true
-            font.pixelSize: General.fontSize
-            text: strip(root?.toplevel?.title) || ""
+        Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            implicitWidth: childrenRect.width
+            IText {
+                anchors.verticalCenter: parent.verticalCenter
+                width: Math.min(implicitWidth, rowLayout.width - icon.implicitWidth)
+                animate: true
+                clip: true
+                elide: Text.ElideRight
+                font.pixelSize: General.fontSize
+                text: strip(root?.toplevel?.title) || ""
 
-            // sync animation
-            opacity: root.activated ? 1 : 0
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: General.animationDuration / 4
+                // sync animation
+                opacity: root.activated ? 1 : 0
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: General.animationDuration / 4
+                    }
                 }
             }
         }
@@ -79,7 +89,7 @@ IRect {
         }
     }
 
-    Behavior on implicitWidth {
+    Behavior on width {
         ISpringAnimation {
             spring: General.springAnimationSpring * 2
             damping: General.springAnimationDamping * 1.3

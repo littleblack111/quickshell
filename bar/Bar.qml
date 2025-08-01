@@ -86,6 +86,7 @@ Scope {
 
                     ActiveWindow {
                         id: activeWindow
+                        width: Math.min(implicitWidth, child.width - Math.max(leftRow.width, rightRow.width) * 2 - Bar.leftMargin - Bar.rightMargin) // we don't do child.width - leftRow.width - rightRow.width because left and right width isn't symetric, and we're centered meaning we will colide into the larger width side
                     }
                 }
 
