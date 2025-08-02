@@ -68,6 +68,7 @@ ILauncher {
                         Layout.fillWidth: true
                         Layout.maximumWidth: implicitWidth
                         color: Colors.foreground1
+                        selectionColor: Colors.background3
                         text: SelectionState?.input || ""
                         clip: true
                         focus: true
