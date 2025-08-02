@@ -9,13 +9,13 @@ import qs.config
 
 IComponent {
     id: root
-    // TODO: presist how much times per app is opened on disk, routinely check if the app is still there
-    property list<DesktopEntry> entries
+
+    property list<DesktopEntry> entries: inputCleaned ? AppSearch.fuzzyQuery(inputCleaned) : []
     property int selectedIndex: 0
 
-    implicitHeight: valid ? Math.min(layout.height, Launcher.widgetHeight * 1.5) : 0
-
     name: "Applications"
+
+    implicitHeight: valid ? Math.min(layout.height, Launcher.widgetHeight * 1.5) : 0
 
     preview: Component {
         IconImage {
@@ -24,29 +24,23 @@ IComponent {
             implicitHeight: General.appIconSize
         }
     }
+
+    property string predictiveCompletion: (processed.valid && entries.length > selectedIndex) ? entries[selectedIndex].name.slice(inputCleaned.length) : ""
+
     process: function () {
-        let query = AppSearch.fuzzyQuery(inputCleaned);
-        entries = query;
-        const first = query.length > 0 && query[0];
-        const isValid = query.length > 0;
-        if (!isValid)
-            return;
-        // const isPriority = first?.name?.toLowerCase() === search;
-        const predictiveCompletion = query[selectedIndex].name.slice(inputCleaned.length);
-        syncSelectionState();
+        const first = entries.length > 0 && entries[0];
+        const isValid = entries.length > 0;
         return {
             valid: isValid,
             priority: isValid,
-            // priority: isPriority // TODO: maybe generic name as well, maybe 1 char fuzzy, also maybe case insensitive?
-            answer: first.icon  // would still work because if nothing else match, we defaultly promote APp
-            ,
-            // no need preview cuz it's already defined
-            predictiveCompletion: predictiveCompletion
+            answer: first ? first.icon : ""
         };
     }
+
     exec: function () {
         SelectionState.selected.modelData.execute();
     }
+
     up: function () {
         if (selectedIndex <= 0)
             return true;
@@ -58,20 +52,30 @@ IComponent {
         selectedIndex++;
     }
 
-    function syncSelectionState() {
-        SelectionState.selected = repeater.itemAt(selectedIndex);
-        SelectionState.exec = root.exec;
+    onEntriesChanged: {
+        selectedIndex = 0;
+    }
+
+    onValidChanged: {
+        if (valid)
+            syncSelectionState();
     }
 
     onSelectedIndexChanged: {
         syncSelectionState();
     }
 
+    function syncSelectionState() {
+        SelectionState.selected = repeater.itemAt(selectedIndex);
+        SelectionState.exec = root.exec;
+    }
+
     IInnerComponent {
         id: layout
         fromParent: false
         width: parent.width
-        height: innerLayout.height + titleBar.height// childrenRect doesnt work...
+        height: innerLayout.height + titleBar.height
+
         Flickable {
             id: flickable
             Layout.fillWidth: true
@@ -94,9 +98,11 @@ IComponent {
                         Layout.margins: Launcher.innerMargin * 2
                         implicitWidth: root.width
                         implicitHeight: item.height
+
                         RowLayout {
                             id: item
                             spacing: Launcher.innerMargin * 2
+
                             IconImage {
                                 source: Quickshell.iconPath(modelData.icon, "image-missing")
                                 implicitWidth: General.appIconSize
@@ -106,13 +112,10 @@ IComponent {
                                 text: modelData.name
                             }
                         }
+
                         MouseArea {
                             anchors.fill: parent
                             hoverEnabled: true
-                            // https://github.com/quickshell-mirror/quickshell/issues/118
-                            // onPositionChanged: {
-                            //     root.selectedIndex = index;
-                            // }
                             onEntered: {
                                 root.selectedIndex = index;
                             }
