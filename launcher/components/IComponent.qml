@@ -9,7 +9,7 @@ import qs.config
 IRect {
     id: root
     // virtual properties
-    property string name // Component/File name
+    property string name
     readonly property string input: SelectionState.input
     readonly property string inputCleaned: input.toLowerCase().trim()
     property bool valid: processed?.valid || false
@@ -21,8 +21,8 @@ IRect {
             text: answer
         }
     }
-    property string predictiveCompletion: processed?.predictiveCompletion || "" // would technically work with just from answer, but stuff like calc's answer wouldnt have anything to do with the input
-    property var processed: input ? process() : {} // cached process, thought qml would do that automatically :/
+    property string predictiveCompletion: processed?.predictiveCompletion || ""
+    property var processed: {} // fixed initialization
     property var process: () => ({
                 valid: valid,
                 priority: priority,
@@ -62,5 +62,9 @@ IRect {
             duration: General.animationDuration / 4
             easing.type: Easing.InOutQuad
         }
+    }
+
+    onInputChanged: {
+        root.processed = root.input ? root.process() : {};
     }
 }
