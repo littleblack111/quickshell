@@ -128,7 +128,8 @@ ILauncher {
                             }
                         }
                         onTextChanged: {
-                            SelectionState.input = textInput.text; // TODO: find ways to optimize this, like how i was using an alias
+                            if (SelectionState.input !== textInput.text)
+                                SelectionState.input = textInput.text; // TODO: find ways to optimize this, like how i was using an alias
                         }
                         onCursorPositionChanged: {
                             SelectionState.cursorPosition = textInput.cursorPosition;
