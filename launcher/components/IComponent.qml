@@ -41,6 +41,12 @@ IRect {
     property var next: () => {}
     property var exec: () => {}
 
+    function _update() {
+        Qt.callLater(() => {
+            root.processed = root.input ? root.process() : {};
+        });
+    }
+
     opacity: valid ? 1 : 0
     y: valid ? 0 : -Launcher.widgetHeight
 
@@ -65,6 +71,6 @@ IRect {
     }
 
     onInputChanged: {
-        root.processed = root.input ? root.process() : {};
+        _update();
     }
 }
