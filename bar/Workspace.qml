@@ -19,8 +19,6 @@ Item {
     property bool activeOccupied: false
     property bool toChild: false
 
-    property real activeRectX: layout.x + activeIndex * Bar.wsIconSize + activeIndex * Bar.wsSpacing
-
     function getWorkspaceStats(index) {
         const w = ws.values.find(i => i.id === index + 1);
         return {
@@ -59,7 +57,7 @@ Item {
     }
     IRect {
         id: activeRect
-        x: activeRectX
+        x: layout.x + activeIndex * Bar.wsIconSize + activeIndex * Bar.wsSpacing
         anchors.verticalCenter: layout.verticalCenter
         implicitWidth: Bar.wsActiveIconSize
         implicitHeight: Bar.wsIconSize - Bar.wsHorizontalSpacing
@@ -205,7 +203,6 @@ Item {
                     root.activeIndex = index;
                     root.activeOccupied = st.isOccupied;
                     activeRect.implicitWidth = Bar.wsActiveIconSize;
-                    activeRect.x = activeRectX;
                 }
             }
         }
