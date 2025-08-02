@@ -28,8 +28,8 @@ IComponent {
     property string predictiveCompletion: (processed.valid && entries.length > selectedIndex) ? entries[selectedIndex].name.slice(inputCleaned.length) : ""
 
     process: function () {
-        const first = entries.length > 0 && entries[0];
         const isValid = entries.length > 0;
+        const first = isValid && entries[0];
         return {
             valid: isValid,
             priority: isValid,
@@ -58,18 +58,16 @@ IComponent {
         syncSelectionState();
     }
 
-    onValidChanged: {
-        if (valid)
-            syncSelectionState();
-    }
-
     onSelectedIndexChanged: {
         syncSelectionState();
     }
 
     function syncSelectionState() {
-        SelectionState.selected = repeater.itemAt(selectedIndex);
-        SelectionState.exec = root.exec;
+        Qt.callLater(() => {
+            // fucking Qt why tf is repeater not ready when this is called
+            SelectionState.selected = repeater.itemAt(selectedIndex);
+            SelectionState.exec = root.exec;
+        });
     }
 
     IInnerComponent {
