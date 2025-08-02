@@ -19,11 +19,7 @@ Item {
     property bool activeOccupied: false
     property bool toChild: false
 
-    property real activeRectX: {
-        if (activeIndex < 0)
-            return 0;
-        return layout.x + activeIndex * Bar.wsIconSize + activeIndex * Bar.wsSpacing;
-    }
+    property real activeRectX: layout.x + activeIndex * Bar.wsIconSize + activeIndex * Bar.wsSpacing
 
     function getWorkspaceStats(index) {
         const w = ws.values.find(i => i.id === index + 1);
