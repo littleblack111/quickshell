@@ -11,7 +11,7 @@ IComponent {
     id: root
 
     property list<DesktopEntry> entries: inputCleaned ? AppSearch.fuzzyQuery(inputCleaned) : []
-    property int selectedIndex: 0
+    property int selectedIndex: -1
 
     name: "Applications"
 
@@ -54,6 +54,8 @@ IComponent {
 
     onEntriesChanged: {
         selectedIndex = 0;
+        // selectedIndexChanged dont get called somehow
+        syncSelectionState();
     }
 
     onValidChanged: {
