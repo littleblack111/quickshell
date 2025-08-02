@@ -65,7 +65,6 @@ IComponent {
 
     onSelectedIndexChanged: {
         syncSelectionState();
-        _update();
     }
 
     IInnerComponent {
