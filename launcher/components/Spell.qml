@@ -12,7 +12,7 @@ IComponent {
     property list<string> aspell
     property string word: inputCleaned.slice(prefix.length)
     name: "Spell"
-    prefix: name.toLowerCase() + ' '
+    prefix: name.toLowerCase() + " "
 
     onInputCleanedChanged: {
         if (!inputCleaned.startsWith(prefix) || !inputCleaned.slice(prefix.length)) {
@@ -30,8 +30,8 @@ IComponent {
         return {
             valid: isValid,
             priority: isValid,
-            answer: isValid && answer !== '*' ? answer : '',
-            predictiveCompletion: isValid && answer !== '*' ? answer.slice(word.length) : ''
+            answer: isValid && answer !== "*" ? answer : "",
+            predictiveCompletion: isValid && answer !== "*" ? answer.slice(word.length) : ""
         };
     }
     // todo: exec = clip.copy(answer)
@@ -41,25 +41,34 @@ IComponent {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.preferredHeight: parent.height
-            sourceComponent: aspell[0] === '*' ? correct : show
+            sourceComponent: aspell[0] === "*" ? correct : show
             readonly property Component show: Component {
-                Flow {
+                GridLayout {
+                    id: grid
+                    columns: Math.max(1, Math.floor(width / Math.max(1, Math.round(Launcher.widgetFontSize * 6))))
+                    rowSpacing: Launcher.innerMargin
+                    columnSpacing: Launcher.innerMargin
+                    Layout.fillWidth: true
+
                     Repeater {
                         Layout.fillWidth: true
                         model: aspell
 
-                        // Display each aspell suggestion
                         IRect {
-                            implicitWidth: item.width + Launcher.innerMargin * 2
-                            implicitHeight: item.height + Launcher.innerMargin * 2
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: Math.max(chipContent.implicitWidth + Launcher.innerMargin * 2, Math.floor(grid.width / grid.columns) - grid.columnSpacing)
+                            Layout.preferredHeight: chipContent.implicitHeight + Launcher.innerMargin * 2
+
                             color: Qt.rgba(Colors.background2.r, Colors.background2.g, Colors.background2.b, Launcher.widgetBgTransparency)
                             radius: Launcher.widgetRadius
+
                             IText {
-                                id: item
+                                id: chipContent
                                 anchors.centerIn: parent
                                 text: modelData
                                 font.pixelSize: Launcher.widgetFontSize
                                 anchors.horizontalCenter: parent.horizontalCenter
+                                elide: Text.ElideRight
                             }
                         }
                     }
@@ -90,10 +99,10 @@ IComponent {
         }
         stdout: SplitParser {
             onRead: data => {
-                if (data.startsWith('&'))
+                if (data.startsWith("&"))
                     aspell = data.split(/\W+/).filter(word => /^[A-Za-z]+$/.test(word)).slice(1);
-                else if (data.startsWith('*'))
-                    aspell = ['*'];
+                else if (data.startsWith("*"))
+                    aspell = ["*"];
             }
         }
     }
