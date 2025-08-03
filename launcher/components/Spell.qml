@@ -15,7 +15,8 @@ IComponent {
     prefix: name.toLowerCase() + ' '
 
     onInputCleanedChanged: {
-        if (!inputCleaned.startsWith(prefix)) {
+        if (!inputCleaned.startsWith(prefix) || !inputCleaned.slice(prefix.length)) {
+            aspell = [];
             return;
         }
         Qt.callLater(() => {
@@ -30,7 +31,7 @@ IComponent {
             valid: isValid,
             priority: isValid,
             answer: isValid && answer !== '*' ? answer : '',
-            predictiveCompletion: isValid ? answer.slice(word.length) : ''
+            predictiveCompletion: isValid && answer !== '*' ? answer.slice(word.length) : ''
         };
     }
     // todo: exec = clip.copy(answer)
