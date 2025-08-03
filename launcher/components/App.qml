@@ -54,14 +54,11 @@ IComponent {
 
     onEntriesChanged: {
         selectedIndex = 0;
-    }
-
-    onSelectedIndexChanged: {
+        // selectedIndexChanged dont get called somehow
         syncSelectionState();
     }
 
-    Component.onCompleted: {
-        // why does the selectedIndex = 0 in onEntriesChanged not trigger onSelectedIndexChanged?
+    onSelectedIndexChanged: {
         syncSelectionState();
     }
 
