@@ -15,7 +15,7 @@ IComponent {
 
     name: "Applications"
 
-    implicitHeight: valid ? Math.min(layout.height, Launcher.widgetHeight * 1.5) : 0
+    implicitHeight: valid ? layout.height : 0
 
     preview: Component {
         IconImage {
@@ -77,7 +77,7 @@ IComponent {
         id: layout
         fromParent: false
         width: parent.width
-        height: innerLayout.height + titleBar.height
+        height: Math.min(innerLayout.height + titleBar.height, Launcher.widgetHeight * 1.5)
 
         Flickable {
             id: flickable

@@ -20,8 +20,8 @@ Singleton {
     readonly property int widgetRadius: Style.rounding.small
     readonly property int widgetFontSize: Style.font.size.large
 
-    readonly property double bgTransparency: 0.5
-    readonly property double widgetBgTransparency: 0.4
+    readonly property double bgTransparency: 0.4
+    readonly property double widgetBgTransparency: 0.3
     readonly property double widgetTitleBgTransparency: 0.2 // as it's on top of it
 
     readonly property bool showWidgetTitle: true
@@ -31,6 +31,9 @@ Singleton {
     readonly property int predictiveCompletionRadius: 6
 
     readonly property list<Component> widgets: [
+        Component {
+            Spell {}
+        },
         Component {
             App {}
         },
