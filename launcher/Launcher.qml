@@ -24,7 +24,17 @@ ILauncher {
             // SelectionState?.selected may be slow.. smh qt
             // my guess is mapToItem is called when its not finished doing whatever it needs to do,
             // so it doesnt get the right vars, but it doesn't update after since it already triggered it
-            Qt.callLater(() => parent.mappedSelection = selection?.mapToItem(null, 0, 0));
+            selectionSync.running = true;
+        }
+        Timer {
+            id: selectionSync
+            running: false
+            repeat: false
+            // sync w/ IComponent y animation duration
+            interval: General.animationDuration / 4
+            onTriggered: {
+                parent.mappedSelection = SelectionState?.selected?.mapToItem(null, 0, 0);
+            }
         }
 
         IRect {
