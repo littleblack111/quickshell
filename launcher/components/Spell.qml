@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Layouts
 
 import qs.components
+import qs.services
 import qs.config
 
 IComponent {
@@ -75,7 +76,7 @@ IComponent {
 
     exec: function () {
         if (selectedIndex >= 0 && aspell[selectedIndex] !== "*") {
-            clip.copy(aspell[selectedIndex]);
+            Clip.copy(aspell[selectedIndex]);
         }
     }
 

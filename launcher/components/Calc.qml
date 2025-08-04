@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick.Layouts
 
 import qs.components
+import qs.services
 import qs.config
 
 IComponent {
@@ -24,7 +25,10 @@ IComponent {
             predictiveCompletion: isValid ? ' = ' + answer : ''
         };
     }
-    // todo: exec = clip.copy(answer)
+    exec: function () {
+        if (valid)
+            Clip.copy(answer);
+    }
 
     IInnerComponent {
         RowLayout {
