@@ -120,7 +120,7 @@ IComponent {
                                 root.selectedIndex = index;
                             }
                             onExited: {
-                                root.selectedIndex = -1;
+                                root.selectedIndex = 0;
                             }
                             onPressed: {
                                 root.exec();
