@@ -12,6 +12,7 @@ Singleton {
     property list<string> clipImgIds: clipImg.map(p => p.split("/").pop().split(".").shift())
 
     property string toDecode: ""
+    property string toCopy: ""
     property string decoded: ""
 
     property var clipHist: {
@@ -61,6 +62,16 @@ Singleton {
         property string data
     }
 
+    function decode(text) {
+        toDecode = text;
+        decodeProc.running = true;
+    }
+
+    function copy(text) {
+        toCopy = text;
+        copyProc.running = true;
+    }
+
     Process {
         id: decodeProc
         running: false
@@ -68,8 +79,13 @@ Singleton {
         stdout: StdioCollector {
             onStreamFinished: () => {
                 decoded = data;
-                toDecode = "";
             }
+        }
+        onStarted: {
+            decoded = "";
+        }
+        onExited: {
+            toDecode = "";
         }
     }
 
@@ -102,6 +118,15 @@ Singleton {
                 if (line)
                     clipImg.push(line);
             }
+        }
+    }
+
+    Process {
+        id: copyProc
+        running: false
+        command: ["wl-copy", toCopy]
+        onExited: {
+            toCopy = "";
         }
     }
 }
