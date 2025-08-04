@@ -18,6 +18,44 @@ ILauncher {
 
     IRect {
         id: container
+        property var selection: SelectionState?.selected || null
+        property var mappedSelection: selection?.mapToItem(null, 0, 0)
+        onSelectionChanged: {
+            // SelectionState?.selected may be slow.. smh qt
+            // my guess is mapToItem is called when its not finished doing whatever it needs to do,
+            // so it doesnt get the right vars, but it doesn't update after since it already triggered it
+            Qt.callLater(() => parent.mappedSelection = SelectionState?.selected?.mapToItem(null, 0, 0));
+            timer.running = true;
+        }
+
+        IRect {
+            id: activeRect
+            visible: parent.mappedSelection || false
+            y: parent.mappedSelection?.y || 0
+            x: parent.mappedSelection?.x || 0
+            implicitWidth: SelectionState?.selected?.width || 0
+            implicitHeight: SelectionState?.selected?.height || 0
+            radius: Launcher.borderRadius
+            color: Colors.foreground1
+            Behavior on x {
+                ISpringAnimation {}
+            }
+            Behavior on y {
+                ISpringAnimation {}
+            }
+            Behavior on width {
+                NumberAnimation {
+                    duration: General.animationDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on height {
+                NumberAnimation {
+                    duration: General.animationDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
         color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Bar.bgTransparency)
         radius: Launcher.borderRadius
 

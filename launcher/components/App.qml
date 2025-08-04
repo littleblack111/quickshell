@@ -96,7 +96,7 @@ IComponent {
                         required property DesktopEntry modelData
                         required property int index
                         Layout.margins: Launcher.innerMargin * 2
-                        implicitWidth: root.width
+                        implicitWidth: item.width
                         implicitHeight: item.height
 
                         RowLayout {
@@ -116,8 +116,14 @@ IComponent {
                         MouseArea {
                             anchors.fill: parent
                             hoverEnabled: true
-                            onEntered: {
+                            onPositionChanged: {
                                 root.selectedIndex = index;
+                            }
+                            onExited: {
+                                root.selectedIndex = -1;
+                            }
+                            onPressed: {
+                                root.exec();
                             }
                         }
                     }
