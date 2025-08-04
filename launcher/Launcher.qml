@@ -221,7 +221,7 @@ ILauncher {
                 const item = SelectionState?.priorities[0];
                 if (!item)
                     return;
-                item.left();
+                item.prev();
             }
         }
 
@@ -254,7 +254,7 @@ ILauncher {
                 const item = SelectionState?.priorities[0];
                 if (!item)
                     return;
-                item.right();
+                item.next();
             }
         }
 
