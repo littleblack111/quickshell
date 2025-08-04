@@ -35,7 +35,7 @@ ILauncher {
             implicitWidth: SelectionState?.selected?.width || 0
             implicitHeight: SelectionState?.selected?.height || 0
             radius: Launcher.borderRadius
-            color: Colors.foreground1
+            color: Qt.rgba(Colors.foreground2.r, Colors.foreground2.g, Colors.foreground2.b, Launcher.bgTransparency)
             Behavior on x {
                 ISpringAnimation {}
             }
@@ -55,7 +55,7 @@ ILauncher {
                 }
             }
         }
-        color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Bar.bgTransparency)
+        color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.bgTransparency)
         radius: Launcher.borderRadius
 
         width: Math.max(root.width, Launcher.defaultWidth) + Launcher.innerMargin
