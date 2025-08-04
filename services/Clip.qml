@@ -50,7 +50,8 @@ Singleton {
             arr.push({
                 index: idNum,
                 isImage: isImg,
-                data: isImg ? imgPath : payload
+                data: isImg ? imgPath : payload,
+                raw: raw
             });
         }
         return arr;
@@ -62,9 +63,9 @@ Singleton {
         property string data
     }
 
-    function decode(text) {
+    function decodeAndCopy(text) {
         toDecode = text;
-        decodeProc.running = true;
+        decodeAndCopyProc.running = true;
     }
 
     function copy(text) {
@@ -73,14 +74,14 @@ Singleton {
     }
 
     function _update() {
-        decodeProc.running = true;
+        clipProc.running = true;
         imgProc.running = true;
     }
 
     Process {
-        id: decodeProc
+        id: decodeAndCopyProc
         running: false
-        command: ["cliphist", "decode", toDecode]
+        command: ["sh", "-c", "cliphist decode" + toDecode + " | wl-copy"]
         stdout: StdioCollector {
             onStreamFinished: () => {
                 decoded = data;
