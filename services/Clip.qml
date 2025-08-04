@@ -7,9 +7,9 @@ import QtQuick
 Singleton {
     id: root
 
-    property list<string> rawClipHist: []
-    property list<string> clipImg: []
-    property list<string> clipImgIds: clipImg.map(p => p.split("/").pop().split(".").shift())
+    property list<string> _clipHist: []
+    property list<string> _clipImg: []
+    property list<string> _clipImgIds: _clipImg.map(p => p.split("/").pop().split(".").shift())
 
     property string toDecode: ""
     property string toCopy: ""
@@ -17,19 +17,19 @@ Singleton {
 
     property var clipHist: {
         const arr = [];
-        if (!rawClipHist?.length)
+        if (!_clipHist?.length)
             return arr;
 
         const imgMap = {};
-        const nimg = Math.min(clipImg.length, clipImgIds.length);
+        const nimg = Math.min(_clipImg.length, _clipImgIds.length);
         for (let i = 0; i < nimg; i++) {
-            const id = clipImgIds[i];
+            const id = _clipImgIds[i];
             if (id)
-                imgMap[id] = clipImg[i];
+                imgMap[id] = _clipImg[i];
         }
 
-        for (let i = 0; i < rawClipHist.length; i++) {
-            const raw = rawClipHist[i];
+        for (let i = 0; i < _clipHist.length; i++) {
+            const raw = _clipHist[i];
             if (!raw)
                 continue;
             const tab = raw.indexOf("\t");
@@ -72,6 +72,11 @@ Singleton {
         copyProc.running = true;
     }
 
+    function _update() {
+        decodeProc.running = true;
+        imgProc.running = true;
+    }
+
     Process {
         id: decodeProc
         running: false
@@ -97,11 +102,11 @@ Singleton {
         stdout: SplitParser {
             onRead: line => {
                 if (clipProc.finished) {
-                    rawClipHist = [];
+                    _clipHist = [];
                     clipProc.finished = false;
                 }
                 if (line)
-                    rawClipHist.push(line);
+                    _clipHist.push(line);
             }
         }
         onExited: {
@@ -116,7 +121,7 @@ Singleton {
         stdout: SplitParser {
             onRead: line => {
                 if (line)
-                    clipImg.push(line);
+                    _clipImg.push(line);
             }
         }
     }
@@ -127,6 +132,17 @@ Singleton {
         command: ["wl-copy", toCopy]
         onExited: {
             toCopy = "";
+        }
+    }
+
+    Process {
+        id: watchProc
+        running: true
+        command: ["wl-paste", "-w", "echo"]
+        stdout: SplitParser {
+            onRead: line => {
+                _update();
+            }
         }
     }
 }
