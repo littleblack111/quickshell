@@ -8,15 +8,19 @@ import qs.config
 
 IComponent {
     id: root
-    property int cursorPosition: SelectionState.cursorPosition
+
     property list<string> aspell
     property string word: inputCleaned.slice(prefix.length)
+    property int selectedIndex: -1
+
     name: "Spell"
     prefix: name.toLowerCase() + " "
 
     onInputCleanedChanged: {
         if (!inputCleaned.startsWith(prefix) || !inputCleaned.slice(prefix.length)) {
             aspell = [];
+            proc.running = false;
+            selectedIndex = -1;
             return;
         }
         Qt.callLater(() => {
@@ -24,24 +28,73 @@ IComponent {
         });
     }
 
+    onAspellChanged: {
+        selectedIndex = aspell.length > 0 ? 0 : -1;
+    }
+
+    onSelectedIndexChanged: {
+        syncSelectionState();
+    }
+
     process: function () {
-        const answer = aspell[0];
-        const isValid = answer && answer.length > 0;
+        const answer = selectedIndex >= 0 ? aspell[selectedIndex] : "";
+        const isValid = answer && answer.length > 0 && answer !== "*";
         return {
             valid: isValid,
             priority: isValid,
-            answer: isValid && answer !== "*" ? answer : "",
-            predictiveCompletion: isValid && answer !== "*" ? answer.slice(word.length) : ""
+            answer: isValid ? answer : "",
+            predictiveCompletion: isValid ? answer.slice(word.length) : ""
         };
     }
-    // todo: exec = clip.copy(answer)
+
+    prev: function () {
+        if (selectedIndex <= 0)
+            return true;
+        selectedIndex--;
+    }
+
+    next: function () {
+        if (selectedIndex + 1 >= aspell.length)
+            return true;
+        selectedIndex++;
+    }
+
+    up: function () {
+        const cols = Math.max(1, Math.floor(innerLoader.width / Math.max(1, Math.round(Launcher.widgetFontSize * 6))));
+        if (selectedIndex - cols < 0)
+            return true;
+        selectedIndex -= cols;
+    }
+
+    down: function () {
+        const cols = Math.max(1, Math.floor(innerLoader.width / Math.max(1, Math.round(Launcher.widgetFontSize * 6))));
+        if (selectedIndex + cols >= aspell.length)
+            return true;
+        selectedIndex += cols;
+    }
+
+    exec: function () {
+        if (selectedIndex >= 0 && aspell[selectedIndex] !== "*") {
+            clip.copy(aspell[selectedIndex]);
+        }
+    }
+
+    function syncSelectionState() {
+        Qt.callLater(() => {
+            SelectionState.selected = loader.repeater.itemAt(selectedIndex);
+            SelectionState.exec = root.exec;
+        });
+    }
 
     IInnerComponent {
+        id: innerLoader
         Loader {
+            id: loader
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.preferredHeight: parent.height
             sourceComponent: aspell[0] === "*" ? correct : show
+            property var repeater: null
             readonly property Component show: Component {
                 GridLayout {
                     id: grid
@@ -51,6 +104,7 @@ IComponent {
                     Layout.fillWidth: true
 
                     Repeater {
+                        id: repeater
                         Layout.fillWidth: true
                         model: aspell
 
@@ -58,7 +112,6 @@ IComponent {
                             Layout.fillWidth: true
                             Layout.preferredWidth: Math.max(chipContent.implicitWidth + Launcher.innerMargin * 2, Math.floor(grid.width / grid.columns) - grid.columnSpacing)
                             Layout.preferredHeight: chipContent.implicitHeight + Launcher.innerMargin * 2
-
                             color: Qt.rgba(Colors.background2.r, Colors.background2.g, Colors.background2.b, Launcher.widgetBgTransparency)
                             radius: Launcher.widgetRadius
 
@@ -70,6 +123,20 @@ IComponent {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 elide: Text.ElideRight
                             }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                onPositionChanged: {
+                                    root.selectedIndex = index;
+                                }
+                                onPressed: {
+                                    root.exec();
+                                }
+                            }
+                        }
+                        Component.onCompleted: {
+                            loader.repeater = repeater;
                         }
                     }
                 }
@@ -90,7 +157,6 @@ IComponent {
         }
     }
 
-    // TODO move to services/ if we need this in other places
     Process {
         id: proc
         command: ["sh", "-c", "echo " + word + " | aspell -a"]
