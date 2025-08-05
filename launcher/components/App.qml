@@ -25,7 +25,7 @@ IComponent {
         }
     }
 
-    property string predictiveCompletion: valid ? entries[selectedIndex].name.slice(inputCleaned.length) : ""
+    property string predictiveCompletion: valid ? entries[selectedIndex].name.slice(input.length) : ""
 
     process: function () {
         const isValid = entries.length > 0;

@@ -11,7 +11,7 @@ IComponent {
     id: root
 
     property list<string> aspell
-    property string word: inputCleaned.slice(prefix.length)
+    property string word: input.slice(prefix.length)
     property int selectedIndex: -1
 
     name: "Spell"
