@@ -39,6 +39,7 @@ IComponent {
 
     process: function () {
         proc.running = true;
+
         const isValid = selectedIndex >= 0 && aspell.length > 0;
         const selected = isValid ? aspell[selectedIndex] : 'n';
         const answer = selected === '*' ? word : selected;
