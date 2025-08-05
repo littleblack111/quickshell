@@ -11,7 +11,7 @@ IComponent {
     id: root
 
     property list<DesktopEntry> entries: inputCleaned ? AppSearch.fuzzyQuery(inputCleaned) : []
-    property DesktopEntry selected
+    property var selected
     property int selectedIndex: -1
 
     name: "Applications"
@@ -26,7 +26,7 @@ IComponent {
         }
     }
 
-    property string predictiveCompletion: processed.valid ? selected.name.slice(inputCleaned.length) : ""
+    property string predictiveCompletion: valid ? selected.name.slice(inputCleaned.length) : ""
 
     process: function () {
         const isValid = entries.length > 0;
