@@ -15,6 +15,8 @@ Singleton {
 
     readonly property int appIconSize: 25
 
+    readonly property int appSearchFuzzySearchThreshold: 5
+
     readonly property int fontSize: Style.font.size.larger
 
     readonly property int animationDuration: Style.anim.durations.normal

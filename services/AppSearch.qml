@@ -12,7 +12,7 @@ import qs.config
 Singleton {
     id: root
 
-    property int scoreThreshold: 5
+    property int scoreThreshold: General.appSearchFuzzySearchThreshold
 
     property var substitutions: ({
             "code-url-handler": "visual-studio-code",
