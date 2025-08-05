@@ -7,6 +7,7 @@ Singleton {
     property string input: ""
     property int cursorPosition: 0
     property var priorities: []
+    property int selectedPriority: 0
     property var widgets: []
 
     // order them based on widgets(which came from order from config)

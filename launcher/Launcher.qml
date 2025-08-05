@@ -265,10 +265,7 @@ ILauncher {
             sequence: "Ctrl+H"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = SelectionState?.priorities[0];
-                if (!item)
-                    return;
-                item.prev();
+                changePos(1);
             }
         }
 
@@ -276,10 +273,7 @@ ILauncher {
             sequence: "Ctrl+J"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = SelectionState?.priorities[0];
-                if (!item)
-                    return;
-                item.down();
+                changePos(-2);
             }
         }
 
@@ -287,10 +281,7 @@ ILauncher {
             sequence: "Ctrl+K"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = SelectionState?.priorities[0];
-                if (!item)
-                    return;
-                item.up();
+                changePos(2);
             }
         }
 
@@ -298,10 +289,7 @@ ILauncher {
             sequence: "Ctrl+L"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = SelectionState?.priorities[0];
-                if (!item)
-                    return;
-                item.next();
+                changePos(-1);
             }
         }
 
@@ -315,8 +303,7 @@ ILauncher {
             sequence: "Down"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = SelectionState?.priorities[0];
-                item?.down();
+                changePos(-2);
             }
         }
 
@@ -324,46 +311,99 @@ ILauncher {
             sequence: "Up"
             context: Qt.ApplicationShortcut
             onActivated: {
-                const item = SelectionState?.priorities[0];
-                item?.up();
+                changePos(2);
             }
         }
 
         Shortcut {
             sequence: "PageDown"
             context: Qt.ApplicationShortcut
-            onActivated: {
-                const item = SelectionState?.priorities[0];
-                item?.pageDown();
-            }
+            onActivated:
+            // changePos(1);
+            {}
         }
 
         Shortcut {
             sequence: "PageUp"
             context: Qt.ApplicationShortcut
-            onActivated: {
-                const item = SelectionState?.priorities[0];
-                item?.pageUp();
-            }
+            onActivated:
+            // changePos(-1);
+            {}
         }
 
         Shortcut {
             sequence: "Home"
             context: Qt.ApplicationShortcut
-            onActivated: {
-                const item = SelectionState?.priorities[0];
-                item?.home();
-            }
+            onActivated:
+            //
+            {}
         }
 
         Shortcut {
             sequence: "End"
             context: Qt.ApplicationShortcut
-            onActivated: {
-                const item = SelectionState?.priorities[0];
-                item?.end();
-            }
+            onActivated:
+            //
+            {}
         }
+    }
+    // 1 = left
+    // -1 = right
+    // 2 = up
+    // -2 = down
+    function changePos(direction: int) {
+        const item = SelectionState?.priorities[SelectionState.selectedPriority] || null;
+        if (!item)
+            return;
+
+        let set = 0;
+
+        // normalize to keep selectedPriority within bounds
+        function clampPriority() {
+            const max = Math.max(0, SelectionState.priorities.length - 1);
+            if (SelectionState.selectedPriority < 0)
+                SelectionState.selectedPriority = max;
+            else if (SelectionState.selectedPriority > max)
+                SelectionState.selectedPriority = 0;
+        }
+
+        switch (direction) {
+        case 1:
+            if (item.prev())
+                set = -1;
+            break;
+        case -1:
+            if (item.next())
+                set = 1;
+            break;
+        case 2:
+            if (item.up())
+                set = -1;
+            break;
+        case -2:
+            if (item.down())
+                set = 1;
+            break;
+        }
+
+        switch (set) {
+        case 1:
+            SelectionState.selectedPriority++;
+            clampPriority();
+            break;
+        case -1:
+            SelectionState.selectedPriority--;
+            clampPriority();
+            break;
+        }
+
+        // try focus handoff to the new item if it exposes focus/select API
+        const newItem = SelectionState?.priorities[SelectionState.selectedPriority] || null;
+        if (newItem && newItem.focus)
+            newItem.focus();
+
+        // sync selection rectangle after priority change
+        selectionSync.running = true;
     }
 
     implicitWidth: container.width
