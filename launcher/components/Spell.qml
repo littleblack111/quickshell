@@ -17,20 +17,20 @@ IComponent {
     name: "Spell"
     prefix: name.toLowerCase() + " "
 
-    onInputCleanedChanged: {
-        if (!inputCleaned.startsWith(prefix) || !inputCleaned.slice(prefix.length)) {
-            aspell = [];
-            proc.running = false;
-            selectedIndex = -1;
+    onValidChanged: {
+        if (valid)
             return;
-        }
-        Qt.callLater(() => {
-            proc.running = true;
-        });
+
+        aspell = [];
+        proc.running = false;
+        selectedIndex = -1;
+        return;
     }
 
     onAspellChanged: {
         selectedIndex = aspell.length > 0 ? 0 : -1;
+        // selectedIndexChanged dont get called somehow
+        syncSelectionState();
     }
 
     onSelectedIndexChanged: {
@@ -40,6 +40,10 @@ IComponent {
     process: function () {
         const answer = selectedIndex >= 0 ? aspell[selectedIndex] : "";
         const isValid = answer && answer.length > 0;
+        Qt.callLater(() => {
+            proc.running = true;
+        });
+
         return {
             valid: isValid,
             priority: isValid,
@@ -163,9 +167,6 @@ IComponent {
     Process {
         id: proc
         command: ["sh", "-c", "echo " + word + " | aspell -a"]
-        onStarted: {
-            aspell = [];
-        }
         stdout: SplitParser {
             onRead: data => {
                 if (data.startsWith("&"))
