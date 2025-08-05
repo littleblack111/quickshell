@@ -52,17 +52,11 @@ ILauncher {
             Behavior on y {
                 ISpringAnimation {}
             }
-            Behavior on width {
-                NumberAnimation {
-                    duration: General.animationDuration
-                    easing.type: Easing.InOutQuad
-                }
+            Behavior on implicitWidth {
+                ISpringAnimation {}
             }
             Behavior on height {
-                NumberAnimation {
-                    duration: General.animationDuration
-                    easing.type: Easing.InOutQuad
-                }
+                ISpringAnimation {}
             }
         }
         color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.bgTransparency)
