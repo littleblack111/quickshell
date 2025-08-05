@@ -38,11 +38,10 @@ IComponent {
     }
 
     process: function () {
-        const answer = selectedIndex >= 0 ? aspell[selectedIndex] : "";
-        const isValid = answer && answer.length > 0;
-        Qt.callLater(() => {
-            proc.running = true;
-        });
+        proc.running = true;
+        const isValid = selectedIndex >= 0 && aspell.length > 0;
+        const selected = isValid ? aspell[selectedIndex] : 'n';
+        const answer = selected === '*' ? word : selected;
 
         return {
             valid: isValid,
@@ -170,13 +169,22 @@ IComponent {
     Process {
         id: proc
         command: ["sh", "-c", "echo " + word + " | aspell -a"]
+        property bool found: false
         stdout: SplitParser {
             onRead: data => {
-                if (data.startsWith("&"))
+                if (data.startsWith("&")) {
+                    proc.found = true;
                     aspell = data.split(/\W+/).filter(word => /^[A-Za-z]+$/.test(word)).slice(1);
-                else if (data.startsWith("*"))
+                } else if (data.startsWith("*"))
                     aspell = ["*"];
             }
+        }
+        onStarted: {
+            found = false;
+        }
+        onExited: {
+            if (!found)
+                aspell = [];
         }
     }
 }
