@@ -1,9 +1,9 @@
 when finished:
-- [ ] reloads dynamically while typing in
-- [ ] prefix: ... for certain ambiguous queries such as "pi" or "e" for math
+- [x] reloads dynamically while typing in
+- [x] prefix: ... for certain ambiguous queries such as "pi" or "e" for math
 - [ ] bang (like ddg's)
 - [ ] web search catch all
-- [ ] height dynamically shrink/grow according to content
+- [x] height dynamically shrink/grow according to content
 
 - [ ] web:
     - [ ] show multiple options:
@@ -13,6 +13,7 @@ when finished:
             - [ ] e.g. wikipedia: (also stuff like spotify, youtube)
                 - [ ] match title
                 - [ ] match first paragraph/description
+
 - [ ] files:
     - [ ] latest modified date
     - [ ] file size
@@ -29,4 +30,4 @@ when finished:
         - [ ] currency
         - [ ] color
         - [ ] time
-    
+
