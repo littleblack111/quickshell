@@ -31,18 +31,38 @@ IComponent {
         selectedIndex = aspell.length > 0 ? 0 : -1;
         // selectedIndexChanged dont get called somehow
         syncSelectionState();
+        if (loader.item && loader.item.flickable) {
+            loader.item.flickable.contentY = 0;
+        }
     }
 
     onSelectedIndexChanged: {
         syncSelectionState();
+        if (!loader.repeater || !loader.item || !loader.item.flickable)
+            return;
+        if (selectedIndex < 0 || selectedIndex >= loader.repeater.count)
+            return;
+        Qt.callLater(() => {
+            const flickable = loader.item.flickable;
+            const i = loader.repeater.itemAt(selectedIndex);
+            if (!i)
+                return;
+            const t = i.y;
+            const b = i.y + i.height;
+            const v = flickable.contentY;
+            const vb = v + flickable.height;
+            const maxY = Math.max(0, flickable.contentHeight - flickable.height);
+            const y = t < v ? t : b > vb ? b - flickable.height : v;
+            flickable.contentY = Math.max(0, Math.min(maxY, y));
+        });
     }
 
     process: function () {
         proc.running = true;
 
         const isValid = selectedIndex >= 0 && aspell.length > 0;
-        const selected = isValid ? aspell[selectedIndex] : 'n';
-        const answer = selected === '*' ? word : selected;
+        const selected = isValid ? aspell[selectedIndex] : "n";
+        const answer = selected === "*" ? word : selected;
 
         return {
             valid: isValid,
@@ -105,52 +125,65 @@ IComponent {
             Layout.preferredHeight: parent.height
             sourceComponent: aspell[0] === "*" ? correct : show
             property var repeater: null
+
             readonly property Component show: Component {
-                GridLayout {
-                    id: grid
-                    columns: Math.max(1, Math.floor(width / Math.max(1, Math.round(Launcher.widgetFontSize * 6))))
-                    rowSpacing: Launcher.innerMargin
-                    columnSpacing: Launcher.innerMargin
-                    Layout.fillWidth: true
+                Item {
+                    property alias flickable: flickable
 
-                    Repeater {
-                        id: repeater
-                        Layout.fillWidth: true
-                        model: aspell
+                    Flickable {
+                        id: flickable
+                        anchors.fill: parent
+                        clip: true
+                        contentWidth: grid.width
+                        contentHeight: grid.height
 
-                        IRect {
-                            Layout.fillWidth: true
-                            Layout.preferredWidth: Math.max(chipContent.implicitWidth + Launcher.innerMargin * 2, Math.floor(grid.width / grid.columns) - grid.columnSpacing)
-                            Layout.preferredHeight: chipContent.implicitHeight + Launcher.innerMargin * 2
-                            color: Qt.rgba(Colors.background2.r, Colors.background2.g, Colors.background2.b, Launcher.widgetBgTransparency)
-                            radius: Launcher.widgetRadius
+                        GridLayout {
+                            id: grid
+                            width: flickable.width
+                            columns: Math.max(1, Math.floor(width / Math.max(1, Math.round(Launcher.widgetFontSize * 6))))
+                            rowSpacing: Launcher.innerMargin
+                            columnSpacing: Launcher.innerMargin
 
-                            IText {
-                                id: chipContent
-                                anchors.centerIn: parent
-                                text: modelData
-                                font.pixelSize: Launcher.widgetFontSize
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                elide: Text.ElideRight
-                            }
+                            Repeater {
+                                id: repeater
+                                model: aspell
 
-                            MouseArea {
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                onPositionChanged: {
-                                    root.selectedIndex = index;
+                                IRect {
+                                    Layout.fillWidth: true
+                                    Layout.preferredWidth: Math.max(chipContent.implicitWidth + Launcher.innerMargin * 2, Math.floor(grid.width / grid.columns) - grid.columnSpacing)
+                                    Layout.preferredHeight: chipContent.implicitHeight + Launcher.innerMargin * 2
+                                    color: Qt.rgba(Colors.background2.r, Colors.background2.g, Colors.background2.b, Launcher.widgetBgTransparency)
+                                    radius: Launcher.widgetRadius
+
+                                    IText {
+                                        id: chipContent
+                                        anchors.centerIn: parent
+                                        text: modelData
+                                        font.pixelSize: Launcher.widgetFontSize
+                                        elide: Text.ElideRight
+                                    }
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        onPositionChanged: {
+                                            root.selectedIndex = index;
+                                        }
+                                        onPressed: {
+                                            root._exec();
+                                        }
+                                    }
                                 }
-                                onPressed: {
-                                    root._exec();
+
+                                Component.onCompleted: {
+                                    loader.repeater = repeater;
                                 }
                             }
-                        }
-                        Component.onCompleted: {
-                            loader.repeater = repeater;
                         }
                     }
                 }
             }
+
             readonly property Component correct: Component {
                 IRect {
                     Layout.fillWidth: true
