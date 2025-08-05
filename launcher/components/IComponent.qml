@@ -1,5 +1,3 @@
-// TODO: find better ways to do OOP in qml
-
 import Quickshell
 import QtQuick
 
