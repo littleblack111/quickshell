@@ -79,14 +79,17 @@ IComponent {
     }
 
     exec: function () {
-        if (selectedIndex >= 0 && aspell[selectedIndex] !== "*") {
-            Clip.copy(aspell[selectedIndex]);
-        }
+        if (selectedIndex >= 0)
+            if (aspell[selectedIndex] !== "*")
+                Clip.copy(aspell[selectedIndex]);
+            else
+                Clip.copy(word);
     }
 
     function syncSelectionState() {
         if (!loader.repeater)
             return;
+
         Qt.callLater(() => {
             SelectionState.selected = loader.repeater.itemAt(selectedIndex);
             SelectionState.exec = root.exec;

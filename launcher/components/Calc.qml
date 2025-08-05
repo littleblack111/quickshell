@@ -26,8 +26,7 @@ IComponent {
         };
     }
     exec: function () {
-        if (valid)
-            Clip.copy(answer);
+        Clip.copy(answer);
     }
 
     IInnerComponent {
