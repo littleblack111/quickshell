@@ -185,7 +185,7 @@ ILauncher {
                         //     parentLoader.active = activeFocus;
                         // }
                         onAccepted: {
-                            SelectionState?.priorities[0]?.exec(); // TODO: kde like waiting animation for app to launch
+                            SelectionState?.priorities[0]?._exec(); // TODO: kde like waiting animation for app to launch
                             parentLoader.active = false;
                             textInput.text = "";
                         }
@@ -254,6 +254,12 @@ ILauncher {
                             SelectionState.widgets[index] = item;
                             // FIXME: prev predictiveCompletion still exists here
                             // workaround atm: just clear it or preserve the text manually
+                        }
+                        Connections {
+                            target: item
+                            function onClose() {
+                                parentLoader.active = false;
+                            }
                         }
                     }
                 }

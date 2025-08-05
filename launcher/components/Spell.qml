@@ -141,7 +141,7 @@ IComponent {
                                     root.selectedIndex = index;
                                 }
                                 onPressed: {
-                                    root.exec();
+                                    root._exec();
                                 }
                             }
                         }

@@ -42,6 +42,13 @@ IRect {
     property var next: () => {}
     property var exec: () => {}
 
+    signal close
+
+    function _exec() {
+        exec();
+        close();
+    }
+
     opacity: valid ? 1 : 0
     y: valid ? 0 : -Launcher.widgetHeight
 

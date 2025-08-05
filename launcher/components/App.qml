@@ -123,7 +123,7 @@ IComponent {
                                 root.selectedIndex = 0;
                             }
                             onPressed: {
-                                root.exec();
+                                root._exec();
                             }
                         }
                     }
