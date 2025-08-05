@@ -358,15 +358,6 @@ ILauncher {
 
         let set = 0;
 
-        // normalize to keep selectedPriority within bounds
-        function clampPriority() {
-            const max = Math.max(0, SelectionState.priorities.length - 1);
-            if (SelectionState.selectedPriority < 0)
-                SelectionState.selectedPriority = max;
-            else if (SelectionState.selectedPriority > max)
-                SelectionState.selectedPriority = 0;
-        }
-
         switch (direction) {
         case 1:
             if (item.prev())
@@ -388,21 +379,15 @@ ILauncher {
 
         switch (set) {
         case 1:
-            SelectionState.selectedPriority++;
-            clampPriority();
+            if (SelectionState.selectedPriority < SelectionState.priorities.length - 1)
+                SelectionState.selectedPriority++;
             break;
         case -1:
-            SelectionState.selectedPriority--;
-            clampPriority();
+            if (SelectionState.selectedPriority > 0)
+                SelectionState.selectedPriority--;
             break;
         }
 
-        // try focus handoff to the new item if it exposes focus/select API
-        const newItem = SelectionState?.priorities[SelectionState.selectedPriority] || null;
-        if (newItem && newItem.focus)
-            newItem.focus();
-
-        // sync selection rectangle after priority change
         selectionSync.running = true;
     }
 
