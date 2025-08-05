@@ -39,7 +39,7 @@ IComponent {
 
     process: function () {
         const answer = selectedIndex >= 0 ? aspell[selectedIndex] : "";
-        const isValid = answer && answer.length > 0 && answer !== "*";
+        const isValid = answer && answer.length > 0;
         return {
             valid: isValid,
             priority: isValid,
@@ -81,6 +81,8 @@ IComponent {
     }
 
     function syncSelectionState() {
+        if (!loader.repeater)
+            return;
         Qt.callLater(() => {
             SelectionState.selected = loader.repeater.itemAt(selectedIndex);
             SelectionState.exec = root.exec;
