@@ -5,8 +5,6 @@ import Quickshell
 Singleton {
     id: root
 
-    readonly property bool sloopySearch: false
-
     readonly property int resourceUpdateInterval: 1
 
     readonly property real iconSize: Style.font.size.larger ?? 16
@@ -14,6 +12,10 @@ Singleton {
     readonly property string cpuThermalPath: "/sys/class/thermal/thermal_zone0/temp"
 
     readonly property int rectMargin: Style.spacing.small
+
+    readonly property int appIconSize: 25
+
+    readonly property int appSearchFuzzySearchThreshold: 5
 
     readonly property int fontSize: Style.font.size.larger
 

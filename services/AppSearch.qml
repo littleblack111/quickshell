@@ -1,6 +1,5 @@
 pragma Singleton
 
-import "../utils/fuzzysort.js" as Fuzzy
 import "../utils/levendist.js" as Levendist
 import Quickshell
 import Quickshell.Io
@@ -13,8 +12,7 @@ import qs.config
 Singleton {
     id: root
 
-    property bool sloppySearch: General.sloppySearch ?? false
-    property real scoreThreshold: 0.2
+    property int scoreThreshold: General.appSearchFuzzySearchThreshold
 
     property var substitutions: ({
             "code-url-handler": "visual-studio-code",
@@ -53,40 +51,54 @@ Singleton {
 
     readonly property list<DesktopEntry> list: Array.from(DesktopEntries.applications.values).sort((a, b) => a.name.localeCompare(b.name))
 
-    readonly property var preppedNames: list.map(a => ({
-                name: Fuzzy.prepare(`${a.name} `),
-                entry: a
-            }))
-
     /**
    * Returns an Array<DesktopEntry> for a given search.
-   * Results are cached by exact search string.
+   * Results are cached by exact search string and, if the
+   * search starts with a previously cached key, uses that
+   * cached result as the source for filtering.
    */
-    function fuzzyQuery(search) {
+    function fuzzyQuery(search) { // search is expected to be .toLowerCase()
         if (root.fuzzyQueryCache[search]) {
             return root.fuzzyQueryCache[search];
         }
 
-        let results;
-        if (root.sloppySearch) {
-            results = list.map(obj => ({
-                        entry: obj,
-                        score: Levendist.computeScore(obj.name.toLowerCase(), search.toLowerCase())
-                    })).filter(item => item.score > root.scoreThreshold).sort((a, b) => b.score - a.score).map(item => item.entry);
-        } else {
-            results = Fuzzy.go(search, preppedNames, {
-                all: true,
-                key: "name"
-            }).map(r => r.obj.entry);
+        let source = list;
+        let previousLists = Object.keys(root.fuzzyQueryCache).filter(key => key && search.startsWith(key));
+        if (previousLists.length > 0) {
+            var longest = previousLists.reduce((a, b) => a.length >= b.length ? a : b);
+            source = root.fuzzyQueryCache[longest];
         }
+
+        const p = [], f = [];
+        for (const s of source) {
+            const t = s.name.toLowerCase();
+            if (t.startsWith(search)) {
+                p.push(s);
+                continue;
+            }
+            let pos = 0;
+            for (const c of search) {
+                pos = t.indexOf(c, pos);
+                if (pos < 0) {
+                    pos = 0;
+                    break;
+                }
+                pos++;
+            }
+            if (pos)
+                f.push({
+                    s,
+                    score: Levendist.distance(search, t)
+                });
+        }
+        const results = p.concat(f.sort((a, b) => a.score - b.score).map(({
+                s
+            }) => s));
 
         root.fuzzyQueryCache[search] = results;
         return results;
     }
 
-    /**
-   * Caches whether an icon actually exists on disk.
-   */
     function iconExists(iconName) {
         if (!iconName || iconName.length === 0) {
             return false;
@@ -99,10 +111,6 @@ Singleton {
         return exists;
     }
 
-    /**
-   * Heavy logic to guess an icon name.  We memoize results by the
-   * exact input string.
-   */
     function guessIcon(str) {
         if (!str || str.length === 0) {
             return "image-missing";
@@ -111,21 +119,18 @@ Singleton {
             return root.guessIconCache[str];
         }
 
-        let result;
+        var result;
 
-        // 1) direct substitution table
         if (substitutions[str]) {
             result = substitutions[str];
-        } else
-        // 2) regex rules
-        {
+        } else {
             result = null;
-            for (let i = 0; i < regexSubstitutions.length; i++) {
-                const {
+            for (var i = 0; i < regexSubstitutions.length; i++) {
+                var {
                     regex,
                     replace
                 } = regexSubstitutions[i];
-                const replaced = str.replace(regex, replace);
+                var replaced = str.replace(regex, replace);
                 if (replaced !== str) {
                     result = replaced;
                     break;
@@ -133,30 +138,24 @@ Singleton {
             }
         }
 
-        // 3) if still not found, see if the original exists
-        if (!result) {
-            if (root.iconExists(str)) {
-                result = str;
-            }
+        if (!result && root.iconExists(str)) {
+            result = str;
         }
 
-        // 4) try domain-reverse name
         if (!result) {
-            let guessStr = str.split(".").slice(-1)[0].toLowerCase();
+            var guessStr = str.split(".").slice(-1)[0].toLowerCase();
             if (root.iconExists(guessStr)) {
                 result = guessStr;
             }
         }
 
-        // 5) kebab-case
         if (!result) {
-            let guessStr = str.toLowerCase().replace(/\s+/g, "-");
-            if (root.iconExists(guessStr)) {
-                result = guessStr;
+            var kebab = str.toLowerCase().replace(/\s+/g, "-");
+            if (root.iconExists(kebab)) {
+                result = kebab;
             }
         }
 
-        // 6) fallback to first fuzzy match’s icon
         if (!result) {
             const matches = root.fuzzyQuery(str);
             if (matches.length > 0) {
@@ -167,7 +166,6 @@ Singleton {
             }
         }
 
-        // 7) give up
         if (!result) {
             result = str;
         }

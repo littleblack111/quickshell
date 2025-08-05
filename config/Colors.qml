@@ -22,6 +22,7 @@ Singleton {
     readonly property color foreground1: WallustColors.foreground
     readonly property color foreground2: WallustColors.color15
     readonly property color foreground3: WallustColors.color7
+    readonly property color cursor: WallustColors.cursor
 
     readonly property color accent: background2
     readonly property color accentAlt: background1

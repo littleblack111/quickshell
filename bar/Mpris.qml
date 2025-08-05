@@ -99,8 +99,8 @@ Item {
             Item {
                 Layout.preferredWidth: childrenRect.width
                 Layout.preferredHeight: childrenRect.height
-                width: Bar.appIconSize
-                height: Bar.appIconSize
+                width: General.appIconSize
+                height: General.appIconSize
 
                 opacity: activePlayer?.playbackState === MprisPlaybackState.Playing ? 1 : Bar.mediaPausedOpacity
 

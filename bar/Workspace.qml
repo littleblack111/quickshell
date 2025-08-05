@@ -79,7 +79,7 @@ Item {
                 easing.type: Easing.InOutQuad
             }
         }
-        Behavior on implicitWidth {
+        Behavior on width {
             NumberAnimation {
                 duration: Bar.wsAnimationDuration
                 easing.type: Easing.InOutQuad
