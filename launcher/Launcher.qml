@@ -262,89 +262,57 @@ ILauncher {
 
         // not Keys.onPressed because textinput will steal it
         Shortcut {
-            sequence: "Ctrl+H"
-            context: Qt.ApplicationShortcut
-            onActivated: {
-                changePos(1);
-            }
-        }
-
-        Shortcut {
-            sequence: "Ctrl+J"
-            context: Qt.ApplicationShortcut
-            onActivated: {
-                changePos(-2);
-            }
-        }
-
-        Shortcut {
-            sequence: "Ctrl+K"
-            context: Qt.ApplicationShortcut
-            onActivated: {
-                changePos(2);
-            }
-        }
-
-        Shortcut {
-            sequence: "Ctrl+L"
-            context: Qt.ApplicationShortcut
-            onActivated: {
-                changePos(-1);
-            }
-        }
-
-        Shortcut {
             sequence: "Escape"
             context: Qt.ApplicationShortcut
             onActivated: parentLoader.active = false
         }
 
         Shortcut {
+            sequence: "Ctrl+H"
+            context: Qt.ApplicationShortcut
+            onActivated: changePos(1)
+        }
+
+        Shortcut {
+            sequence: "Ctrl+J"
+            context: Qt.ApplicationShortcut
+            onActivated: changePos(-2)
+        }
+
+        Shortcut {
+            sequence: "Ctrl+K"
+            context: Qt.ApplicationShortcut
+            onActivated: changePos(2)
+        }
+
+        Shortcut {
+            sequence: "Ctrl+L"
+            context: Qt.ApplicationShortcut
+            onActivated: changePos(-1)
+        }
+
+        Shortcut {
             sequence: "Down"
             context: Qt.ApplicationShortcut
-            onActivated: {
-                changePos(-2);
-            }
+            onActivated: changePos(-2)
         }
 
         Shortcut {
             sequence: "Up"
             context: Qt.ApplicationShortcut
-            onActivated: {
-                changePos(2);
-            }
+            onActivated: changePos(2)
         }
 
         Shortcut {
             sequence: "PageDown"
             context: Qt.ApplicationShortcut
-            onActivated:
-            // changePos(1);
-            {}
+            onActivated: changePos(-20)
         }
 
         Shortcut {
             sequence: "PageUp"
             context: Qt.ApplicationShortcut
-            onActivated:
-            // changePos(-1);
-            {}
-        }
-
-        Shortcut {
-            sequence: "Home"
-            context: Qt.ApplicationShortcut
-            onActivated:
-            //
-            {}
-        }
-
-        Shortcut {
-            sequence: "End"
-            context: Qt.ApplicationShortcut
-            onActivated:
-            //
-            {}
+            onActivated: changePos(20)
         }
     }
     // 1 = left
@@ -373,6 +341,14 @@ ILauncher {
             break;
         case -2:
             if (item.down())
+                set = 1;
+            break;
+        case 20:
+            if (item.pgup())
+                set = -1;
+            break;
+        case -20:
+            if (item.pgdn())
                 set = 1;
             break;
         }

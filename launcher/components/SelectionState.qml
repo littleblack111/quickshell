@@ -8,7 +8,17 @@ Singleton {
     property int cursorPosition: 0
     property var priorities: []
     property int selectedPriority: 0
+    property int previousSelectedPriority: 0
     property var widgets: []
+
+    onSelectedPriorityChanged: {
+        if (selectedPriority > previousSelectedPriority)
+            priorities[selectedPriority].home();
+        else
+            priorities[selectedPriority].end();
+
+        previousSelectedPriority = selectedPriority;
+    }
 
     // order them based on widgets(which came from order from config)
     onPrioritiesChanged: {

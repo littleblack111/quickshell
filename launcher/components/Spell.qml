@@ -72,6 +72,19 @@ IComponent {
         };
     }
 
+    home: function () {
+        if (loader.repeater.count === 0)
+            return true;
+        selectedIndex = -1;
+        selectedIndex = 0;
+    }
+    end: function () {
+        if (loader.repeater.count === 0)
+            return true;
+        selectedIndex = loader.repeater.count;
+        selectedIndex = loader.repeater.count - 1;
+    }
+
     prev: function () {
         if (selectedIndex <= 0)
             return true;

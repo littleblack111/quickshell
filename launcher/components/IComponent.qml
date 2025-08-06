@@ -39,6 +39,10 @@ IRect {
     property var prev: () => {}
     property var next: () => {}
     property var exec: () => {}
+    property var home: () => {}
+    property var end: () => {}
+    property var pgup: () => {}
+    property var pgdn: () => {}
 
     signal close
 

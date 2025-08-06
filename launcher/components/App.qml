@@ -53,6 +53,41 @@ IComponent {
         selectedIndex++;
     }
 
+    home: function () {
+        if (repeater.count === 0)
+            return true;
+        selectedIndex = -1;
+        selectedIndex = 0;
+    }
+    end: function () {
+        if (repeater.count === 0)
+            return true;
+        selectedIndex = repeater.count;
+        selectedIndex = repeater.count - 1;
+    }
+
+    pgup: function () {
+        if (repeater.count === 0)
+            return true;
+        const pageSize = Math.floor(flickable.height / (General.appIconSize + Launcher.innerMargin * 2));
+        if (selectedIndex - pageSize < 0) {
+            selectedIndex = 0;
+        } else {
+            selectedIndex -= pageSize;
+        }
+    }
+
+    pgdn: function () {
+        if (repeater.count === 0)
+            return true;
+        const pageSize = Math.floor(flickable.height / (General.appIconSize + Launcher.innerMargin * 2));
+        if (selectedIndex + pageSize >= repeater.count) {
+            selectedIndex = repeater.count - 1;
+        } else {
+            selectedIndex += pageSize;
+        }
+    }
+
     onEntriesChanged: {
         selectedIndex = 0;
         flickable.contentY = 0;
