@@ -35,6 +35,9 @@ Singleton {
             Clip {}
         },
         Component {
+            Emoji {}
+        },
+        Component {
             Spell {}
         },
         Component {
