@@ -3,6 +3,7 @@ pragma Singleton
 import Quickshell
 import Quickshell.Io
 import QtQuick
+import "../utils/levendist.js" as Levendist
 
 Singleton {
     id: root
@@ -14,6 +15,8 @@ Singleton {
     property string toDecode: ""
     property string toCopy: ""
     property string decoded: ""
+
+    property var fuzzyQueryCache: ({});
 
     property var clipHist: {
         const arr = [];
@@ -55,6 +58,45 @@ Singleton {
             });
         }
         return arr;
+    }
+
+    function fuzzyQuery(search) {
+        if (!search)
+            return root.clipHist;
+        if (root.fuzzyQueryCache[search]) {
+            return root.fuzzyQueryCache[search];
+        }
+        let source = root.clipHist;
+        let previousLists = Object.keys(root.fuzzyQueryCache).filter(key => key && search.startsWith(key));
+        if (previousLists.length > 0) {
+            var longest = previousLists.reduce((a, b) => a.length >= b.length ? a : b);
+            source = root.fuzzyQueryCache[longest];
+        }
+        const p = [], f = [];
+        for (const s of source) {
+            const t = (s.isImage ? "image" : (s.data || "")).toLowerCase();
+            if (t.startsWith(search)) {
+                p.push(s);
+                continue;
+            }
+            let pos = 0;
+            for (const c of search) {
+                pos = t.indexOf(c, pos);
+                if (pos < 0) {
+                    pos = 0;
+                    break;
+                }
+                pos++;
+            }
+            if (pos)
+                f.push({
+                    s,
+                    score: Levendist.distance(search, t)
+                });
+        }
+        const results = p.concat(f.sort((a, b) => a.score - b.score).map(({s}) => s));
+        root.fuzzyQueryCache[search] = results;
+        return results;
     }
 
     component SClip_t: QtObject {

@@ -31,3 +31,5 @@ when finished:
         - [ ] color
         - [ ] time
 
+emoji picker
+desktopentry action

@@ -32,6 +32,9 @@ Singleton {
 
     readonly property list<Component> widgets: [
         Component {
+            Clip {}
+        },
+        Component {
             Spell {}
         },
         Component {
