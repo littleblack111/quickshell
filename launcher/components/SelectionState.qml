@@ -30,8 +30,4 @@ Singleton {
 
         priorities.forEach((item, index) => {});
     }
-
-    function clear() {
-        selected = null;
-    }
 }
