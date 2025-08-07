@@ -244,6 +244,7 @@ ILauncher {
                     delegate: Loader {
                         active: true
                         sourceComponent: modelData
+                        asynchronous: true
                         Component.onCompleted: {
                             SelectionState.widgets[index] = item;
                             // FIXME: prev predictiveCompletion still exists here
