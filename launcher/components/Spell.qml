@@ -14,7 +14,7 @@ IComponent {
     property int selectedIndex: -1
 
     name: "Spell"
-    prefix: name.toLowerCase() + " "
+    prefix: name.toLowerCase() + ' '
 
     onValidChanged: {
         if (valid)

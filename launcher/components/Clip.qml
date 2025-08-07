@@ -15,7 +15,7 @@ IComponent {
 
     name: "Clipboard"
 
-    prefix: "clip "
+    prefix: "clip"
 
     implicitHeight: valid ? layout.height : 0
 
