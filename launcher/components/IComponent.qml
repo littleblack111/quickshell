@@ -8,9 +8,11 @@ IRect {
     id: root
     // virtual properties
     property string name // Component/File name
-    readonly property string input: SelectionState.input
+    readonly property string _input: SelectionState.input
+    readonly property string input: _input.slice(prefix.length)
     readonly property string inputCleaned: input.toLowerCase().trim()
     property string prefix
+    property bool active: input && _input.startsWith(prefix)
     property bool valid: processed?.valid || false
     property bool priority: valid && processed?.priority || false // please set priority to false if it's invalid
     property string answer: processed?.answer || ""
@@ -21,7 +23,7 @@ IRect {
         }
     }
     property string predictiveCompletion: processed?.predictiveCompletion || "" // would technically work with just from answer, but stuff like calc's answer wouldnt have anything to do with the input
-    property var processed: input && input.startsWith(prefix) ? process() : {} // cached process, thought qml would do that automatically :/
+    property var processed: active ? process() : {} // cached process, thought qml would do that automatically :/
     property var process: () => ({
                 valid: valid,
                 priority: priority,

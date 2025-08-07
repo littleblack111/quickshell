@@ -11,7 +11,6 @@ IComponent {
     id: root
 
     property list<string> aspell
-    property string word: input.slice(prefix.length)
     property int selectedIndex: -1
 
     name: "Spell"
@@ -58,17 +57,19 @@ IComponent {
     }
 
     process: function () {
-        proc.running = true;
+        Qt.callLater(() => {
+            proc.running = true;
+        });
 
         const isValid = selectedIndex >= 0 && aspell.length > 0;
-        const selected = isValid ? aspell[selectedIndex] : "n";
-        const answer = selected === "*" ? word : selected;
+        const selected = isValid ? aspell[selectedIndex] : "";
+        const answer = selected === "*" ? input : selected;
 
         return {
             valid: isValid,
             priority: isValid,
             answer: isValid ? answer : "",
-            predictiveCompletion: isValid ? answer.slice(word.length) : ""
+            predictiveCompletion: isValid ? answer.slice(input.length) : ""
         };
     }
 
@@ -116,7 +117,7 @@ IComponent {
             if (aspell[selectedIndex] !== "*")
                 Clip.copy(aspell[selectedIndex]);
             else
-                Clip.copy(word);
+                Clip.copy(input);
     }
 
     function syncSelectionState() {
@@ -215,15 +216,17 @@ IComponent {
 
     Process {
         id: proc
-        command: ["sh", "-c", "echo " + word + " | aspell -a"]
+        command: ["sh", "-c", "echo " + input + " | aspell -a"]
         property bool found: false
         stdout: SplitParser {
             onRead: data => {
                 if (data.startsWith("&")) {
                     proc.found = true;
-                    aspell = data.split(/\W+/).filter(word => /^[A-Za-z]+$/.test(word)).slice(1);
-                } else if (data.startsWith("*"))
+                    aspell = data.split(/\W+/).filter(input => /^[A-Za-z]+$/.test(input)).slice(1);
+                } else if (data.startsWith("*")) {
+                    proc.found = true;
                     aspell = ["*"];
+                }
             }
         }
         onStarted: {
