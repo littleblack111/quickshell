@@ -99,19 +99,10 @@ Singleton {
         id: clipProc
         running: true
         command: ["cliphist", "-preview-width", 9 ** 9, "-max-items", 9 ** 9, "list"]
-        property bool finished: false
-        stdout: SplitParser {
-            onRead: line => {
-                if (clipProc.finished) {
-                    _clipHist = [];
-                    clipProc.finished = false;
-                }
-                if (line)
-                    _clipHist.push(line);
+        stdout: StdioCollector {
+            onStreamFinished: () => {
+                _clipHist = this.text.split(/\r?\n/);
             }
-        }
-        onExited: {
-            finished = true;
         }
     }
 
@@ -119,10 +110,9 @@ Singleton {
         id: imgProc
         running: true
         command: ["sh", Quickshell.shellDir + "/utils/cliphist-img.sh"]
-        stdout: SplitParser {
-            onRead: line => {
-                if (line)
-                    _clipImg.push(line);
+        stdout: StdioCollector {
+            onStreamFinished: () => {
+                _clipImg = this.text.split(/\r?\n/);
             }
         }
     }
