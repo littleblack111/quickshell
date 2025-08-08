@@ -12,18 +12,11 @@ Singleton {
     property list<string> _clipImg: []
     property list<string> _clipImgIds: _clipImg.map(p => p.split("/").pop().split(".").shift())
 
-
-    function _invalidateFuzzyCache() {
-        root.fuzzyQueryCache = ({});
-        root.clipVersion++;
-    }
-
     property string toDecode: ""
     property string toCopy: ""
     property string decoded: ""
 
     property var fuzzyQueryCache: ({});
-    property int clipVersion: 0;
 
     property var clipHist: {
         const arr = [];
@@ -68,51 +61,41 @@ Singleton {
     }
 
     function fuzzyQuery(search) {
-        // Use a cache key that includes the clipboard version
-        const cacheKey = search + "::" + root.clipVersion;
-        if (root.fuzzyQueryCache[cacheKey]) {
-            return root.fuzzyQueryCache[cacheKey];
+        if (!search)
+            return root.clipHist;
+        if (root.fuzzyQueryCache[search]) {
+            return root.fuzzyQueryCache[search];
         }
-        const hist = root.clipHist;
-        // Short-circuit for empty query: just return latest N
-        if (!search) {
-            const results = hist.slice(0, 20);
-            root.fuzzyQueryCache[cacheKey] = results;
-            return results;
+        let source = root.clipHist;
+        let previousLists = Object.keys(root.fuzzyQueryCache).filter(key => key && search.startsWith(key));
+        if (previousLists.length > 0) {
+            var longest = previousLists.reduce((a, b) => a.length >= b.length ? a : b);
+            source = root.fuzzyQueryCache[longest];
         }
-        const q = search.toLowerCase();
-        // For single-char queries, only do fast substring/prefix
-        if (q.length === 1) {
-            const results = hist.filter(s => {
-                const t = (s.isImage ? "image" : (s.data || "")).toLowerCase();
-                return t.indexOf(q) !== -1;
-            }).slice(0, 20);
-            root.fuzzyQueryCache[cacheKey] = results;
-            return results;
-        }
-        // For longer queries, do fast substring first, then fuzzy on top 20
-        const fast = [];
-        for (let i = 0; i < hist.length; ++i) {
-            const s = hist[i];
+        const p = [], f = [];
+        for (const s of source) {
             const t = (s.isImage ? "image" : (s.data || "")).toLowerCase();
-            if (t.indexOf(q) !== -1) fast.push(s);
-            if (fast.length >= 20) break;
+            if (t.startsWith(search)) {
+                p.push(s);
+                continue;
+            }
+            let pos = 0;
+            for (const c of search) {
+                pos = t.indexOf(c, pos);
+                if (pos < 0) {
+                    pos = 0;
+                    break;
+                }
+                pos++;
+            }
+            if (pos)
+                f.push({
+                    s,
+                    score: Levendist.distance(search, t)
+                });
         }
-        // If enough fast matches, skip fuzzy
-        if (fast.length >= 10) {
-            root.fuzzyQueryCache[cacheKey] = fast;
-            return fast;
-        }
-        // Otherwise, do Levenshtein on top 20
-        const fuzzy = [];
-        for (let i = 0; i < hist.length && fuzzy.length < 20; ++i) {
-            const s = hist[i];
-            const t = (s.isImage ? "image" : (s.data || "")).toLowerCase();
-            fuzzy.push({s, score: Levendist.distance(q, t)});
-        }
-        fuzzy.sort((a, b) => a.score - b.score);
-        const results = fast.concat(fuzzy.map(x => x.s).filter(x => fast.indexOf(x) === -1)).slice(0, 20);
-        root.fuzzyQueryCache[cacheKey] = results;
+        const results = p.concat(f.sort((a, b) => a.score - b.score).map(({s}) => s));
+        root.fuzzyQueryCache[search] = results;
         return results;
     }
 
@@ -161,7 +144,6 @@ Singleton {
         stdout: StdioCollector {
             onStreamFinished: () => {
                 _clipHist = this.text.split(/\r?\n/);
-                root._invalidateFuzzyCache();
             }
         }
     }
@@ -173,7 +155,6 @@ Singleton {
         stdout: StdioCollector {
             onStreamFinished: () => {
                 _clipImg = this.text.split(/\r?\n/);
-                root._invalidateFuzzyCache();
             }
         }
     }
