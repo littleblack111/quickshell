@@ -46,12 +46,20 @@ IComponent {
 
     onClipHistChanged: {
         selectedIndex = 0;
+        flickable.contentY = 0;
         // selectedIndexChanged dont get called somehow
         syncSelectionState();
     }
 
     onSelectedIndexChanged: {
         syncSelectionState();
+        if (selectedIndex < 0 || selectedIndex >= repeater.count)
+            return;
+        Qt.callLater(() => {
+            const i = repeater.itemAt(selectedIndex), t = i.y, b = i.y + i.height, v = flickable.contentY, vb = v + flickable.height, maxY = Math.max(0, flickable.contentHeight - flickable.height);
+            const y = t < v ? t : b > vb ? b - flickable.height : v;
+            flickable.contentY = Math.max(0, Math.min(maxY, y));
+        });
     }
 
     function syncSelectionState() {
