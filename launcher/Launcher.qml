@@ -245,7 +245,7 @@ ILauncher {
                         active: true
                         sourceComponent: modelData
                         asynchronous: true
-                        Component.onCompleted: {
+                        onLoaded: {
                             SelectionState.widgets[index] = item;
                             // FIXME: prev predictiveCompletion still exists here
                             // workaround atm: just clear it or preserve the text manually
