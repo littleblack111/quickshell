@@ -10,7 +10,7 @@ import qs.config
 IComponent {
     id: root
 
-    property var clipHist: active ? Clip.fuzzyQuery(inputCleaned) : []
+    property var clipHist: active ? Clip.query(inputCleaned) : []
     property int selectedIndex: -1
 
     name: "Clipboard"

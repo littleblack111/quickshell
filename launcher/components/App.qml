@@ -10,7 +10,7 @@ import qs.config
 IComponent {
     id: root
 
-    property list<DesktopEntry> entries: active ? AppSearch.fuzzyQuery(inputCleaned) : []
+    property list<DesktopEntry> entries: active ? AppSearch.query(inputCleaned) : []
     property int selectedIndex: -1
 
     name: "Applications"

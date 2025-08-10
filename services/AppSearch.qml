@@ -1,18 +1,16 @@
 pragma Singleton
 
-import "../utils/levendist.js" as Levendist
 import Quickshell
 import Quickshell.Io
 import qs.config
+import qs.components
 
-/**
- * - Eases fuzzy searching for applications by name
- * - Guesses icon name for window class name
- */
-Singleton {
+Searchable {
     id: root
 
-    property int scoreThreshold: General.appSearchFuzzySearchThreshold
+    list: Array.from(DesktopEntries.applications.values).sort((a, b) => a.name.localeCompare(b.name))
+    scoreThreshold: General.appSearchFuzzySearchThreshold
+    algorithm: Searchable.SearchAlgorithm.Levendist
 
     property var substitutions: ({
             "code-url-handler": "visual-studio-code",
@@ -45,59 +43,8 @@ Singleton {
         }
     ]
 
-    property var fuzzyQueryCache: ({})
     property var iconExistsCache: ({})
     property var guessIconCache: ({})
-
-    readonly property list<DesktopEntry> list: Array.from(DesktopEntries.applications.values).sort((a, b) => a.name.localeCompare(b.name))
-
-    /**
-   * Returns an Array<DesktopEntry> for a given search.
-   * Results are cached by exact search string and, if the
-   * search starts with a previously cached key, uses that
-   * cached result as the source for filtering.
-   */
-    function fuzzyQuery(search) { // search is expected to be .toLowerCase()
-        if (root.fuzzyQueryCache[search]) {
-            return root.fuzzyQueryCache[search];
-        }
-
-        let source = list;
-        let previousLists = Object.keys(root.fuzzyQueryCache).filter(key => key && search.startsWith(key));
-        if (previousLists.length > 0) {
-            var longest = previousLists.reduce((a, b) => a.length >= b.length ? a : b);
-            source = root.fuzzyQueryCache[longest];
-        }
-
-        const p = [], f = [];
-        for (const s of source) {
-            const t = s.name.toLowerCase();
-            if (t.startsWith(search)) {
-                p.push(s);
-                continue;
-            }
-            let pos = 0;
-            for (const c of search) {
-                pos = t.indexOf(c, pos);
-                if (pos < 0) {
-                    pos = 0;
-                    break;
-                }
-                pos++;
-            }
-            if (pos)
-                f.push({
-                    s,
-                    score: Levendist.distance(search, t)
-                });
-        }
-        const results = p.concat(f.sort((a, b) => a.score - b.score).map(({
-                s
-            }) => s));
-
-        root.fuzzyQueryCache[search] = results;
-        return results;
-    }
 
     function iconExists(iconName) {
         if (!iconName || iconName.length === 0) {
@@ -157,7 +104,7 @@ Singleton {
         }
 
         if (!result) {
-            const matches = root.fuzzyQuery(str);
+            const matches = root.query(str);
             if (matches.length > 0) {
                 const candidate = matches[0].icon;
                 if (root.iconExists(candidate)) {

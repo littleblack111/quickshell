@@ -33,3 +33,5 @@ when finished:
 
 emoji picker
 desktopentry action
+
+stop querying if prev hav no results
