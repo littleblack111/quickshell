@@ -11,6 +11,7 @@ Searchable {
     list: Array.from(DesktopEntries.applications.values).sort((a, b) => a.name.localeCompare(b.name))
     scoreThreshold: General.appSearchFuzzySearchThreshold
     algorithm: Searchable.SearchAlgorithm.Levendist
+    keys: ["name", "genericName", "execString", "keywords"]
 
     property var substitutions: ({
             "code-url-handler": "visual-studio-code",
