@@ -9,6 +9,10 @@ import qs.config
 // TODO: currently, we're relying on the compositor to provide the animation which ig is fine, but we should use our own in the future, however it might look weird combined with the compositors's
 ILauncher {
     id: launcher
+
+    property list<Component> widgetItems: Launcher.widgets
+    property var state: SelectionState
+
     name: "quickshell::launcher::launcher"
 
     anchors.top: true
@@ -18,10 +22,10 @@ ILauncher {
 
     IRect {
         id: container
-        property var selection: SelectionState?.selected || null
+        property var selection: launcher.state?.selected || null
         property var mappedSelection: selection?.mapToItem(null, 0, 0)
         onMappedSelectionChanged: {
-            // SelectionState?.selected may be slow.. smh qt
+            // launcher.state?.selected may be slow.. smh qt
             // my guess is mapToItem is called when its not finished doing whatever it needs to do,
             // so it doesnt get the right vars, but it doesn't update after since it already triggered it
             selectionSync.running = true;
@@ -33,7 +37,7 @@ ILauncher {
             // sync w/ IComponent y animation duration
             interval: General.animationDuration / 4
             onTriggered: {
-                parent.mappedSelection = SelectionState?.selected?.mapToItem(null, 0, 0);
+                parent.mappedSelection = launcher.state?.selected?.mapToItem(null, 0, 0);
             }
         }
 
@@ -42,8 +46,8 @@ ILauncher {
             visible: parent.mappedSelection || false
             y: parent.mappedSelection?.y || 0
             x: parent.mappedSelection?.x || 0
-            implicitWidth: SelectionState?.selected?.width || 0
-            implicitHeight: SelectionState?.selected?.height || 0
+            implicitWidth: launcher.state?.selected?.width || 0
+            implicitHeight: launcher.state?.selected?.height || 0
             radius: Launcher.borderRadius
             color: Qt.rgba(Colors.foreground2.r, Colors.foreground2.g, Colors.foreground2.b, Launcher.bgTransparency)
             Behavior on x {
@@ -110,7 +114,7 @@ ILauncher {
                         Layout.maximumWidth: implicitWidth
                         color: Colors.foreground1
                         selectionColor: Colors.background3
-                        text: SelectionState?.input || ""
+                        text: launcher.state?.input || ""
                         clip: true
                         focus: true
                         renderType: Text.CurveRendering
@@ -169,17 +173,17 @@ ILauncher {
                             }
                         }
                         onTextChanged: {
-                            if (SelectionState.input !== textInput.text)
-                                SelectionState.input = textInput.text; // TODO: find ways to optimize this, like how i was using an alias
+                            if (launcher.state.input !== textInput.text)
+                                launcher.state.input = textInput.text; // TODO: find ways to optimize this, like how i was using an alias
                         }
                         onCursorPositionChanged: {
-                            SelectionState.cursorPosition = textInput.cursorPosition;
+                            launcher.state.cursorPosition = textInput.cursorPosition;
                         }
                         // onActiveFocusChanged: {
                         //     parentLoader.active = activeFocus;
                         // }
                         onAccepted: {
-                            SelectionState?.priorities[SelectionState.selectedPriority]?._exec(); // TODO: kde like waiting animation for app to launch
+                            launcher.state?.priorities[launcher.state.selectedPriority]?._exec(); // TODO: kde like waiting animation for app to launch
                             parentLoader.active = false;
                             textInput.text = "";
                         }
@@ -188,7 +192,7 @@ ILauncher {
                         }
                     }
                     IRect {
-                        opacity: SelectionState?.priorities[0]?.predictiveCompletion ? 1 : 0
+                        opacity: launcher.state?.priorities[0]?.predictiveCompletion ? 1 : 0
                         Layout.fillHeight: true
                         Layout.preferredWidth: text.width
                         radius: Launcher.predictiveCompletionRadius
@@ -205,7 +209,7 @@ ILauncher {
                                 family: Style.font.family.sans
                                 wordSpacing: 5
                             }
-                            text: SelectionState?.priorities[0]?.predictiveCompletion || ""
+                            text: launcher.state?.priorities[0]?.predictiveCompletion || ""
                         }
                         Behavior on Layout.preferredWidth {
                             ISpringAnimation {}
@@ -224,8 +228,8 @@ ILauncher {
                         Layout.fillWidth: true
                     }
                     Loader {
-                        active: SelectionState?.priorities[0]?.priority || false // .priority should always be true if it's in priorities
-                        sourceComponent: SelectionState?.priorities[0]?.preview
+                        active: launcher.state?.priorities[0]?.priority || false // .priority should always be true if it's in priorities
+                        sourceComponent: launcher.state?.priorities[0]?.preview
                     }
                 }
             }
@@ -240,13 +244,13 @@ ILauncher {
                 }
 
                 Repeater {
-                    model: Launcher.widgets
+                    model: launcher.widgetItems
                     delegate: Loader {
                         active: true
                         sourceComponent: modelData
                         asynchronous: true
                         onLoaded: {
-                            SelectionState.widgets[index] = item;
+                            launcher.state.widgets[index] = item;
                             // FIXME: prev predictiveCompletion still exists here
                             // workaround atm: just clear it or preserve the text manually
                         }
@@ -321,7 +325,7 @@ ILauncher {
     // 2 = up
     // -2 = down
     function changePos(direction: int) {
-        const item = SelectionState?.priorities[SelectionState.selectedPriority] || null;
+        const item = launcher.state?.priorities[launcher.state.selectedPriority] || null;
         if (!item)
             return;
 
@@ -356,12 +360,12 @@ ILauncher {
 
         switch (set) {
         case 1:
-            if (SelectionState.selectedPriority < SelectionState.priorities.length - 1)
-                SelectionState.selectedPriority++;
+            if (launcher.state.selectedPriority < launcher.state.priorities.length - 1)
+                launcher.state.selectedPriority++;
             break;
         case -1:
-            if (SelectionState.selectedPriority > 0)
-                SelectionState.selectedPriority--;
+            if (launcher.state.selectedPriority > 0)
+                launcher.state.selectedPriority--;
             break;
         }
 
