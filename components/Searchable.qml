@@ -54,7 +54,6 @@ Singleton {
     }
 
     function levendistQuery(search: string): list<var> {
-        // console.log(list);
         if (queryCache[search])
             return queryCache[search];
 
