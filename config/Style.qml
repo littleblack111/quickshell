@@ -38,7 +38,7 @@ Singleton {
     }
 
     component FontFamily: QtObject {
-        readonly property string sans: "SF Compact"
+        readonly property string sans: "SF Pro Text"
         readonly property string symbols: "Symbols Nerd Font Mono"
         readonly property string iosevka: "Iosevka Nerd Font"
         readonly property string mono: "JetBrains Mono"
