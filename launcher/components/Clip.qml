@@ -10,7 +10,7 @@ import qs.config
 IComponent {
     id: root
 
-    property var clipHist: active ? Clip.query(inputCleaned) : []
+    property var clipHist: Clip.query(inputCleaned)
     property int selectedIndex: -1
 
     name: "Clipboard"
@@ -21,11 +21,9 @@ IComponent {
 
     process: function () {
         const isValid = clipHist.length > 0;
-        const selected = isValid && clipHist[selectedIndex];
         return {
             valid: isValid,
-            priority: isValid,
-            answer: selected.data || ""
+            priority: isValid
         };
     }
 
@@ -65,8 +63,8 @@ IComponent {
     function syncSelectionState() {
         Qt.callLater(() => {
             // fucking Qt why tf is repeater not ready when this is called
-            SelectionState.selected = repeater.itemAt(selectedIndex);
-            SelectionState.exec = root.exec;
+            state.selected = repeater.itemAt(selectedIndex);
+            state.exec = root.exec;
         });
     }
 
