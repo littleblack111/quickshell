@@ -225,9 +225,8 @@ Singleton {
             return out;
         }
 
-        if (algorithm === Searchable.SearchAlgorithm.Include) {
-            return list.filter(item => keys.some(k => fieldString(item, k).toLowerCase().includes(search)));
-        }
+        if (algorithm === Searchable.SearchAlgorithm.Include)
+            return list.filter(item => keys.some(k => transformSearch(fieldString(item, k)).includes(search)));
 
         return [];
     }

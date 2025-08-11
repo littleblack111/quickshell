@@ -326,6 +326,7 @@ ILauncher {
     // -2 = down
     function changePos(direction: int) {
         const item = launcher.state?.priorities[launcher.state.selectedPriority] || null;
+        console.log(launcher.state.selectedPriority, launcher.state.priorities);
         if (!item)
             return;
 

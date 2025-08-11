@@ -68,7 +68,11 @@ IRect {
     color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetBgTransparency) // TODO when prioritized, highlight
 
     onPriorityChanged: {
-        state.priorities = [...[...state.priorities, root].reduce((s, x) => (s[(s.has(x) && 'delete') || 'add'](x), s), new Set())]; // sync with state.priorities
+        // sync with state.priorities
+        if (!standalone)
+            state.priorities = [...[...state.priorities, root].reduce((s, x) => (s[(s.has(x) && 'delete') || 'add'](x), s), new Set())];
+        else
+            state.priorities = [this];
     }
 
     Behavior on y {
