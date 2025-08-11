@@ -69,10 +69,12 @@ IRect {
 
     onPriorityChanged: {
         // sync with state.priorities
-        if (!standalone)
-            state.priorities = [...[...state.priorities, root].reduce((s, x) => (s[(s.has(x) && 'delete') || 'add'](x), s), new Set())];
-        else
-            state.priorities = [this];
+        Qt.callLater(() => {
+            if (!standalone)
+                state.priorities = [...[...state.priorities, root].reduce((s, x) => (s[(s.has(x) && 'delete') || 'add'](x), s), new Set())];
+            else
+                state.priorities = [root];
+        });
     }
 
     Behavior on y {
