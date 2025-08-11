@@ -7,12 +7,14 @@ import qs.config
 IRect {
     id: root
     // virtual properties
+    property bool standalone: false
+    property var state: SelectionState
     property string name // Component/File name
-    readonly property string _input: SelectionState.input
-    readonly property string input: _input.slice(prefix.length)
+    readonly property string _input: state.input
+    readonly property string input: !standalone ? _input.slice(prefix.length) : _input
     readonly property string inputCleaned: input.toLowerCase().trim()
     property string prefix
-    property bool active: input && _input.startsWith(prefix)
+    property bool active: !standalone ? input && _input.startsWith(prefix) : true
     property bool valid: processed?.valid || false
     property bool priority: valid && processed?.priority || false // please set priority to false if it's invalid
     property string answer: processed?.answer || ""
@@ -66,7 +68,11 @@ IRect {
     color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetBgTransparency) // TODO when prioritized, highlight
 
     onPriorityChanged: {
-        SelectionState.priorities = [...[...SelectionState.priorities, root].reduce((s, x) => (s[(s.has(x) && 'delete') || 'add'](x), s), new Set())]; // sync with SelectionState.priorities
+        // sync with state.priorities
+        if (!standalone)
+            state.priorities = [...[...state.priorities, root].reduce((s, x) => (s[(s.has(x) && 'delete') || 'add'](x), s), new Set())];
+        else
+            state.priorities = [this];
     }
 
     Behavior on y {

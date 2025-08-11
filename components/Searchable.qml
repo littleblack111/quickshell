@@ -12,7 +12,8 @@ Singleton {
     enum SearchAlgorithm {
         Levendist,
         Fzf,
-        Fuzzysort
+        Fuzzysort,
+        Include
     }
     property int algorithm: Searchable.SearchAlgorithm.Levendist
     property int scoreThreshold: 50
@@ -223,6 +224,9 @@ Singleton {
             }
             return out;
         }
+
+        if (algorithm === Searchable.SearchAlgorithm.Include)
+            return list.filter(item => keys.some(k => transformSearch(fieldString(item, k)).includes(search)));
 
         return [];
     }

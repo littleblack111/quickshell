@@ -7,6 +7,7 @@ import QtQuick
 import QtQuick.Layouts
 
 Scope {
+    id: root
     Bar {}
     LazyLoader {
         id: launcherLoader
@@ -27,6 +28,47 @@ Scope {
 
         function toggle() {
             launcherLoader.active = !launcherLoader.active;
+        }
+
+        function standalone(component: string): void {
+            // NOTE: 'component' must be a QML type name (e.g., 'Calc'), not a 'Component { ... }' block.
+            // Passing a full Component block will cause a QML error.
+            Qt.createQmlObject(`
+        import Quickshell
+        import QtQuick
+        import "launcher"
+        import "launcher/components"
+
+        LazyLoader {
+			property QtObject selectionState: QtObject {
+				property Item selected: null
+				property string input: ""
+				property int cursorPosition: 0
+				property var priorities: []
+				property int selectedPriority: 0
+				property int previousSelectedPriority: 0
+				property var widgets: []
+			}
+			readonly property list<Component> widgets: [
+				Component {
+					Loader {
+						sourceComponent: Qt.createComponent("launcher/components/" + "${component}.qml")
+						onLoaded: {
+							item.standalone = true
+							item.state = selectionState;
+						}
+					}
+				}
+			]
+            id: root
+            active: true
+            component: Launcher {
+				widgetItems: widgets
+				state: selectionState
+                parentLoader: root
+            }
+        }
+    `, root);
         }
     }
 
