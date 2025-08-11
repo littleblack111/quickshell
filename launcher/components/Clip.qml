@@ -21,11 +21,9 @@ IComponent {
 
     process: function () {
         const isValid = clipHist.length > 0;
-        const selected = isValid && clipHist[selectedIndex];
         return {
             valid: isValid,
-            priority: isValid,
-            answer: selected.data || ""
+            priority: isValid
         };
     }
 

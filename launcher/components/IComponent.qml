@@ -8,8 +8,9 @@ IRect {
     id: root
     // virtual properties
     property bool standalone: false
+    property var state: SelectionState
     property string name // Component/File name
-    readonly property string _input: SelectionState.input
+    readonly property string _input: state.input
     readonly property string input: !standalone ? _input.slice(prefix.length) : _input
     readonly property string inputCleaned: input.toLowerCase().trim()
     property string prefix
@@ -67,7 +68,7 @@ IRect {
     color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetBgTransparency) // TODO when prioritized, highlight
 
     onPriorityChanged: {
-        SelectionState.priorities = [...[...SelectionState.priorities, root].reduce((s, x) => (s[(s.has(x) && 'delete') || 'add'](x), s), new Set())]; // sync with SelectionState.priorities
+        state.priorities = [...[...state.priorities, root].reduce((s, x) => (s[(s.has(x) && 'delete') || 'add'](x), s), new Set())]; // sync with state.priorities
     }
 
     Behavior on y {

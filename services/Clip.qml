@@ -9,7 +9,7 @@ Searchable {
     id: root
 
     key: "data"
-    algorithm: Searchable.SearchAlgorithm.Levendist
+    algorithm: Searchable.SearchAlgorithm.Include
 
     property list<string> _clipHist: []
     property list<string> _clipImg: []
