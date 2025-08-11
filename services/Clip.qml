@@ -15,30 +15,24 @@ Searchable {
     property list<string> _clipImg: []
     property list<string> _clipImgIds: _clipImg.map(p => p.split("/").pop().split(".").shift())
 
-    property string toDecode: ""
+    property var toDecode: ""
     property string toCopy: ""
-    property string decoded: ""
 
     list: {
-        const arr = [];
         if (!_clipHist?.length)
-            return arr;
+            return [];
 
-        const imgMap = {};
-        const nimg = Math.min(_clipImg.length, _clipImgIds.length);
-        for (let i = 0; i < nimg; i++) {
-            const id = _clipImgIds[i];
+        const imgMap = _clipImgIds.slice(0, Math.min(_clipImg.length, _clipImgIds.length)).reduce((map, id, i) => {
             if (id)
-                imgMap[id] = _clipImg[i];
-        }
+                map[id] = _clipImg[i];
+            return map;
+        }, {});
 
-        for (let i = 0; i < _clipHist.length; i++) {
-            const raw = _clipHist[i];
-            if (!raw)
-                continue;
+        return _clipHist.filter(raw => raw).map(raw => {
             const tab = raw.indexOf("\t");
             let idNum = -1;
             let payload = raw;
+
             if (tab > 0) {
                 const n = parseInt(raw.slice(0, tab), 10);
                 if (!Number.isNaN(n)) {
@@ -51,17 +45,16 @@ Searchable {
             const imgPath = idStr ? imgMap[idStr] || "" : "";
             const isImg = !!imgPath;
 
-            arr.push({
+            return {
                 index: idNum,
                 isImage: isImg,
                 data: isImg ? imgPath : payload,
                 raw: raw
-            });
-        }
-        return arr;
+            };
+        });
     }
 
-    function transformSearch(search: string): string {
+    function transformSearch(search) {
         return search.toLowerCase();
     }
 
@@ -83,15 +76,7 @@ Searchable {
     Process {
         id: decodeAndCopyProc
         running: false
-        command: ["sh", "-c", "cliphist decode" + toDecode + " | wl-copy"]
-        stdout: StdioCollector {
-            onStreamFinished: () => {
-                decoded = data;
-            }
-        }
-        onStarted: {
-            decoded = "";
-        }
+        command: ["sh", "-c", "cliphist decode " + toDecode + " | wl-copy"]
         onExited: {
             toDecode = "";
         }
