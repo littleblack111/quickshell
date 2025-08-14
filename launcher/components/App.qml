@@ -29,8 +29,7 @@ IComponent {
 
     process: function () {
         const isValid = entries.length > 0;
-        const selected = isValid ? entries[selectedIndex] : '';
-
+        const selected = isValid ? entries[selectedIndex] : "";
         return {
             valid: isValid,
             priority: isValid,
@@ -48,28 +47,28 @@ IComponent {
         selectedIndex--;
     }
     down: function () {
-        if (selectedIndex + 1 > repeater.count - 1)
+        if (selectedIndex + 1 > listView.count - 1)
             return true;
         selectedIndex++;
     }
 
     home: function () {
-        if (repeater.count === 0)
+        if (listView.count === 0)
             return true;
         selectedIndex = -1;
         selectedIndex = 0;
     }
     end: function () {
-        if (repeater.count === 0)
+        if (listView.count === 0)
             return true;
-        selectedIndex = repeater.count;
-        selectedIndex = repeater.count - 1;
+        selectedIndex = listView.count;
+        selectedIndex = listView.count - 1;
     }
 
     pgup: function () {
-        if (repeater.count === 0)
+        if (listView.count === 0)
             return true;
-        const pageSize = Math.floor(flickable.height / (General.appIconSize + Launcher.innerMargin * 2));
+        const pageSize = Math.floor(listView.height / (General.appIconSize + Launcher.innerMargin * 2));
         if (selectedIndex - pageSize < 0) {
             selectedIndex = 0;
         } else {
@@ -78,11 +77,11 @@ IComponent {
     }
 
     pgdn: function () {
-        if (repeater.count === 0)
+        if (listView.count === 0)
             return true;
-        const pageSize = Math.floor(flickable.height / (General.appIconSize + Launcher.innerMargin * 2));
-        if (selectedIndex + pageSize >= repeater.count) {
-            selectedIndex = repeater.count - 1;
+        const pageSize = Math.floor(listView.height / (General.appIconSize + Launcher.innerMargin * 2));
+        if (selectedIndex + pageSize >= listView.count) {
+            selectedIndex = listView.count - 1;
         } else {
             selectedIndex += pageSize;
         }
@@ -90,27 +89,30 @@ IComponent {
 
     onEntriesChanged: {
         selectedIndex = 0;
-        flickable.contentY = 0;
-        // selectedIndexChanged dont get called somehow
+        listView.contentY = 0;
         syncSelectionState();
     }
 
     onSelectedIndexChanged: {
         syncSelectionState();
-        if (selectedIndex < 0 || selectedIndex >= repeater.count)
+        if (selectedIndex < 0 || selectedIndex >= listView.count)
             return;
         Qt.callLater(() => {
-            const i = repeater.itemAt(selectedIndex), t = i.y, b = i.y + i.height, v = flickable.contentY, vb = v + flickable.height, maxY = Math.max(0, flickable.contentHeight - flickable.height);
-            const y = t < v ? t : b > vb ? b - flickable.height : v;
-            flickable.contentY = Math.max(0, Math.min(maxY, y));
+            listView.positionViewAtIndex(selectedIndex, ListView.Contain);
         });
     }
 
     function syncSelectionState() {
         Qt.callLater(() => {
-            // fucking Qt why tf is repeater not ready when this is called
-            SelectionState.selected = repeater.itemAt(selectedIndex);
-            SelectionState.exec = root.exec;
+            const item = listView.itemAtIndex(selectedIndex);
+            if (item) {
+                state.selected = item;
+                state.exec = root.exec;
+            } else {
+                // wait until it's created
+                listView.forceLayout(); // forces creation if in view
+                Qt.callLater(syncSelectionState);
+            }
         });
     }
 
@@ -118,59 +120,51 @@ IComponent {
         id: layout
         fromParent: false
         width: parent.width
-        height: Math.min(innerLayout.height + titleBar.height, Launcher.widgetHeight * 1.5)
+        height: Math.min(listView.contentHeight + titleBar.height, Launcher.widgetHeight * 1.5)
 
-        Flickable {
-            id: flickable
+        ListView {
+            id: listView
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-            contentWidth: innerLayout.width
-            contentHeight: innerLayout.height
+            model: entries
+            spacing: 0
 
-            ColumnLayout {
-                id: innerLayout
-                spacing: 0
+            delegate: Item {
+                required property DesktopEntry modelData
+                required property int index
+                width: listView.width
+                height: item.height + Launcher.innerMargin * 4
 
-                Repeater {
-                    id: repeater
-                    model: entries
+                RowLayout {
+                    id: item
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.margins: Launcher.innerMargin * 2
+                    spacing: Launcher.innerMargin * 2
 
-                    Item {
-                        required property DesktopEntry modelData
-                        required property int index
-                        Layout.margins: Launcher.innerMargin * 2
-                        implicitWidth: item.width
-                        implicitHeight: item.height
+                    IconImage {
+                        source: Quickshell.iconPath(modelData.icon, "image-missing")
+                        implicitWidth: General.appIconSize
+                        implicitHeight: General.appIconSize
+                    }
+                    IText {
+                        text: modelData.name
+                        renderType: Text.QtRendering
+                    }
+                }
 
-                        RowLayout {
-                            id: item
-                            spacing: Launcher.innerMargin * 2
-
-                            IconImage {
-                                source: Quickshell.iconPath(modelData.icon, "image-missing")
-                                implicitWidth: General.appIconSize
-                                implicitHeight: General.appIconSize
-                            }
-                            IText {
-                                text: modelData.name
-                                renderType: Text.QtRendering
-                            }
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            onPositionChanged: {
-                                root.selectedIndex = index;
-                            }
-                            onExited: {
-                                root.selectedIndex = 0;
-                            }
-                            onPressed: {
-                                root._exec();
-                            }
-                        }
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onPositionChanged: {
+                        root.selectedIndex = index;
+                    }
+                    onExited: {
+                        root.selectedIndex = 0;
+                    }
+                    onPressed: {
+                        root.exec();
                     }
                 }
             }
