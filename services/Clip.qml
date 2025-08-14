@@ -117,8 +117,12 @@ Searchable {
         id: watchProc
         running: true
         command: ["wl-paste", "-w", "echo"]
+        onRunningChanged: if (!running)
+            running = true
+
         stdout: SplitParser {
             onRead: line => {
+                console.log('h');
                 _update();
             }
         }
