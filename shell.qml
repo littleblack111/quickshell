@@ -4,7 +4,6 @@ import "bar"
 import "launcher"
 
 import QtQuick
-import QtQuick.Layouts
 
 Scope {
     id: root

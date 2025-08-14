@@ -97,7 +97,7 @@ IComponent {
                         implicitWidth: item.width
                         implicitHeight: item.height
 
-                        RowLayout {
+                        Row {
                             id: item
                             spacing: Launcher.innerMargin * 2
 

@@ -18,7 +18,7 @@ Item {
         color: Config.Colors.accent
         radius: Config.Style.rounding.large
 
-        RowLayout {
+        Row {
             id: layout
             anchors.centerIn: parent
             SimpleResource {
