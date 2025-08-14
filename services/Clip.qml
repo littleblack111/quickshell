@@ -15,9 +15,6 @@ Searchable {
     property list<string> _clipImg: []
     property list<string> _clipImgIds: _clipImg.map(p => p.split("/").pop().split(".").shift())
 
-    property var toDecode: ""
-    property string toCopy: ""
-
     list: {
         if (!_clipHist?.length)
             return [];
@@ -59,27 +56,16 @@ Searchable {
     }
 
     function decodeAndCopy(text) {
-        toDecode = text;
-        decodeAndCopyProc.running = true;
+        Quickshell.execDetached(["sh", "-c", `cliphist decode ${text} | wl-copy`]);
     }
 
     function copy(text) {
-        toCopy = text;
-        copyProc.running = true;
+        Quickshell.execDetached(["wl-copy", text]);
     }
 
     function _update() {
         clipProc.running = true;
         imgProc.running = true;
-    }
-
-    Process {
-        id: decodeAndCopyProc
-        running: false
-        command: ["sh", "-c", "cliphist decode " + toDecode + " | wl-copy"]
-        onExited: {
-            toDecode = "";
-        }
     }
 
     Process {
@@ -115,15 +101,6 @@ Searchable {
                     }
                 });
             }
-        }
-    }
-
-    Process {
-        id: copyProc
-        running: false
-        command: ["wl-copy", toCopy]
-        onExited: {
-            toCopy = "";
         }
     }
 
