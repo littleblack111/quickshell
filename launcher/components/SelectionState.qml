@@ -12,10 +12,13 @@ Singleton {
     property var widgets: []
 
     onSelectedPriorityChanged: {
-        if (selectedPriority > previousSelectedPriority)
+        if (selectedPriority > previousSelectedPriority) {
             priorities[selectedPriority].home();
-        else
+            priorities[selectedPriority].syncSelectionState();
+        } else {
             priorities[selectedPriority].end();
+            priorities[selectedPriority].syncSelectionState();
+        }
 
         previousSelectedPriority = selectedPriority;
     }
