@@ -15,6 +15,8 @@ Searchable {
     property list<string> _clipImg: []
     property list<string> _clipImgIds: _clipImg.map(p => p.split("/").pop().split(".").shift())
 
+    property var _clipMetadata: ({})
+
     list: {
         if (!_clipHist?.length)
             return [];
