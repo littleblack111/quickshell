@@ -64,7 +64,6 @@ IComponent {
                 selectedItem = listView.itemAtIndex(selectedIndex);
             }
             state.selected = selectedItem;
-            state.exec = root.exec;
         });
     }
 

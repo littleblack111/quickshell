@@ -105,10 +105,9 @@ IComponent {
     syncSelectionState: function () {
         Qt.callLater(() => {
             const item = listView.itemAtIndex(selectedIndex);
-            if (item) {
+            if (item)
                 state.selected = item;
-                state.exec = root.exec;
-            } else {
+            else {
                 // wait until it's created
                 listView.forceLayout(); // forces creation if in view
                 Qt.callLater(syncSelectionState);

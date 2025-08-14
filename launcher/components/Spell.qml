@@ -125,8 +125,7 @@ IComponent {
             return;
 
         Qt.callLater(() => {
-            SelectionState.selected = loader.repeater.itemAt(selectedIndex);
-            SelectionState.exec = root.exec;
+            state.selected = loader.repeater.itemAt(selectedIndex);
         });
     }
 
