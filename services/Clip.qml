@@ -87,8 +87,15 @@ Searchable {
         running: true
         command: ["cliphist", "-preview-width", 9 ** 9, "-max-items", 9 ** 9, "list"]
         stdout: StdioCollector {
+            property bool pending: false
             onStreamFinished: () => {
-                _clipHist = this.text.split(/\r?\n/);
+                pending = true;
+                Qt.callLater(() => {
+                    if (pending) {
+                        pending = false;
+                        _clipHist = this.text.split(/\r?\n/);
+                    }
+                });
             }
         }
     }
@@ -98,8 +105,15 @@ Searchable {
         running: true
         command: ["sh", Quickshell.shellDir + "/utils/cliphist-img.sh"]
         stdout: StdioCollector {
+            property bool pending: false
             onStreamFinished: () => {
-                _clipImg = this.text.split(/\r?\n/);
+                pending = true;
+                Qt.callLater(() => {
+                    if (pending) {
+                        pending = false;
+                        _clipImg = this.text.split(/\r?\n/);
+                    }
+                });
             }
         }
     }
@@ -122,7 +136,6 @@ Searchable {
 
         stdout: SplitParser {
             onRead: line => {
-                console.log('h');
                 _update();
             }
         }

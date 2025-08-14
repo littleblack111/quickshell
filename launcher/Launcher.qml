@@ -109,15 +109,19 @@ ILauncher {
                     spacing: 0
                     TextInput {
                         id: textInput
+                        property bool pendingUpdate: false
+
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                         Layout.maximumWidth: implicitWidth
+
                         color: Colors.foreground1
                         selectionColor: Colors.background3
+
                         text: launcher.state?.input || ""
                         clip: true
                         focus: true
-                        renderType: Text.CurveRendering
+
                         antialiasing: true
                         smooth: true
                         font {
@@ -174,7 +178,13 @@ ILauncher {
                         }
                         onTextChanged: {
                             if (launcher.state.input !== textInput.text)
-                                launcher.state.input = textInput.text; // TODO: find ways to optimize this, like how i was using an alias
+                                pendingUpdate = true;
+                            Qt.callLater(() => {
+                                if (pendingUpdate) {
+                                    pendingUpdate = false;
+                                    launcher.state.input = textInput.text; // TODO: find ways to optimize this, like how i was using an alias
+                                }
+                            });
                         }
                         onCursorPositionChanged: {
                             launcher.state.cursorPosition = textInput.cursorPosition;
