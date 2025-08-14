@@ -154,6 +154,7 @@ IComponent {
                             }
                             IText {
                                 text: modelData.name
+                                renderType: Text.QtRendering
                             }
                         }
 

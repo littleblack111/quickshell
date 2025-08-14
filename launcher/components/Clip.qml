@@ -103,9 +103,11 @@ IComponent {
 
                             IText {
                                 text: modelData?.isImage ? "Image" : "Text" || ""
+                                renderType: Text.QtRendering
                             }
                             IText {
                                 text: modelData?.data || ""
+                                renderType: Text.QtRendering
                             }
                         }
 

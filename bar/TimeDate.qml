@@ -58,6 +58,7 @@ Item {
                             }
                             IText {
                                 text: ":"
+                                renderType: Text.CurveRendering
                             }
                             IText {
                                 animate: true
@@ -65,11 +66,12 @@ Item {
                             }
                             IText {
                                 text: ":"
+                                renderType: Text.CurveRendering
                             }
                             IText {
                                 animate: true
                                 text: (root.s >= 10 ? "" : "0") + root.s
-                                renderType: Text.CurveRendering // it's not static and is rapidly updated
+                                renderType: Text.QtRendering // it's not static and is rapidly updated
                             }
                         }
                         Item {
