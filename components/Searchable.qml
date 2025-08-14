@@ -54,16 +54,29 @@ Singleton {
         return fieldString(item, keys[0]);
     }
 
-    function levendistQuery(search: string): list<var> {
+    function getCachedSource(search) {
         if (queryCache[search])
-            return queryCache[search];
-
+            return {
+                hit: true,
+                data: queryCache[search]
+            };
         let source = list;
         let previousLists = Object.keys(queryCache).filter(key => key && search.startsWith(key));
         if (previousLists.length > 0) {
             var longest = previousLists.reduce((a, b) => a.length >= b.length ? a : b);
             source = queryCache[longest];
         }
+        return {
+            hit: false,
+            data: source
+        };
+    }
+
+    function levendistQuery(search: string): list<var> {
+        const cacheCheck = getCachedSource(search);
+        if (cacheCheck.hit)
+            return cacheCheck.data;
+        let source = cacheCheck.data;
 
         const prefixGroups = keys.map(() => []);
         const fuzzyGroups = keys.map(() => []);
@@ -147,57 +160,57 @@ Singleton {
         return results;
     }
 
-    function query(search: string): list<var> {
-        search = transformSearch(search);
-        if (!search)
-            return [...list];
+    function fuzzysortQuery(search: string): list<var> {
+        const cacheCheck = getCachedSource(search);
+        if (cacheCheck.hit)
+            return cacheCheck.data;
+        const res = Fuzzy.go(search, fuzzyPrepped, Object.assign({
+            all: true,
+            keys,
+            scoreFn: r => weights.reduce((a, w, i) => a + r[i].score * w, 0)
+        }, extraOpts));
 
-        if (algorithm === Searchable.SearchAlgorithm.Levendist)
-            return levendistQuery(search.toLowerCase());
-
-        if (algorithm === Searchable.SearchAlgorithm.Fuzzysort) {
-            const res = Fuzzy.go(search, fuzzyPrepped, Object.assign({
-                all: true,
-                keys,
-                scoreFn: r => weights.reduce((a, w, i) => a + r[i].score * w, 0)
-            }, extraOpts));
-
-            const groups = keys.map(() => []);
-            const noMatch = [];
-            for (const r of res) {
-                let idx = -1;
-                for (let i = 0; i < keys.length; i++) {
-                    const kr = r[i];
-                    if (kr && kr.score !== -Infinity) {
-                        idx = i;
-                        break;
-                    }
+        const groups = keys.map(() => []);
+        const noMatch = [];
+        for (const r of res) {
+            let idx = -1;
+            for (let i = 0; i < keys.length; i++) {
+                const kr = r[i];
+                if (kr && kr.score !== -Infinity) {
+                    idx = i;
+                    break;
                 }
-                if (idx === -1)
-                    noMatch.push(r);
-                else
-                    groups[idx].push(r);
             }
-
-            const ordered = [];
-            for (let i = 0; i < groups.length; i++) {
-                for (const r of groups[i])
-                    ordered.push(r.obj._item);
-            }
-            for (const r of noMatch)
-                ordered.push(r.obj._item);
-            return ordered;
+            if (idx === -1)
+                noMatch.push(r);
+            else
+                groups[idx].push(r);
         }
 
-        if (algorithm === Searchable.SearchAlgorithm.Fzf) {
-            if (keys.length <= 1) {
-                return fzf.find(search).sort((a, b) => {
-                    if (a.score === b.score)
-                        return (selector(a.item).trim().length - selector(b.item).trim().length);
-                    return b.score - a.score;
-                }).map(r => r.item);
-            }
+        const ordered = [];
+        for (let i = 0; i < groups.length; i++) {
+            for (const r of groups[i])
+                ordered.push(r.obj._item);
+        }
+        for (const r of noMatch)
+            ordered.push(r.obj._item);
 
+        queryCache[search] = ordered;
+        return ordered;
+    }
+
+    function fzfQuery(search: string): list<var> {
+        const cacheCheck = getCachedSource(search);
+        if (cacheCheck.hit)
+            return cacheCheck.data;
+        let results;
+        if (keys.length <= 1) {
+            results = fzf.find(search).sort((a, b) => {
+                if (a.score === b.score)
+                    return (selector(a.item).trim().length - selector(b.item).trim().length);
+                return b.score - a.score;
+            }).map(r => r.item);
+        } else {
             const groups = keys.map((_, i) => {
                 const arr = fzfFinders[i].find(search);
                 arr.sort((a, b) => {
@@ -222,11 +235,37 @@ Singleton {
                     }
                 }
             }
-            return out;
+            results = out;
         }
+        queryCache[search] = results;
+        return results;
+    }
+
+    function includeQuery(search: string): list<var> {
+        const cacheCheck = getCachedSource(search);
+        if (cacheCheck.hit)
+            return cacheCheck.data;
+        const results = list.filter(item => keys.some(k => transformSearch(fieldString(item, k)).includes(search)));
+        queryCache[search] = results;
+        return results;
+    }
+
+    function query(search: string): list<var> {
+        search = transformSearch(search);
+        if (!search)
+            return [...list];
+
+        if (algorithm === Searchable.SearchAlgorithm.Levendist)
+            return levendistQuery(search.toLowerCase());
+
+        if (algorithm === Searchable.SearchAlgorithm.Fuzzysort)
+            return fuzzysortQuery(search);
+
+        if (algorithm === Searchable.SearchAlgorithm.Fzf)
+            return fzfQuery(search);
 
         if (algorithm === Searchable.SearchAlgorithm.Include)
-            return list.filter(item => keys.some(k => transformSearch(fieldString(item, k)).includes(search)));
+            return includeQuery(search);
 
         return [];
     }
