@@ -30,26 +30,20 @@ Text {
         }
     }
 
-    Behavior on text {
-        enabled: root.animate
-
-        SequentialAnimation {
-            Anim {
-                to: root.animateFrom
-                easing.bezierCurve: Style.anim.curves.standardAccel
-            }
-            PropertyAction {}
-            Anim {
-                to: root.animateTo
-                easing.bezierCurve: Style.anim.curves.standardDecel
-            }
-        }
-    }
-
-    component Anim: NumberAnimation {
+    NumberAnimation {
+        id: scaleAnim
         target: root
         property: "scale"
         duration: General.animationDuration / 4
         easing.type: Easing.BezierSpline
+    }
+
+    onTextChanged: {
+        if (animate) {
+            root.scale = animateFrom;
+            scaleAnim.to = animateTo;
+            scaleAnim.easing.bezierCurve = Style.anim.curves.standardAccel;
+            scaleAnim.start();
+        }
     }
 }
