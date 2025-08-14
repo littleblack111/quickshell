@@ -37,33 +37,33 @@ IComponent {
         selectedIndex--;
     }
     down: function () {
-        if (selectedIndex + 1 > repeater.count - 1)
+        if (selectedIndex + 1 > listView.count - 1)
             return true;
         selectedIndex++;
     }
 
     onClipHistChanged: {
         selectedIndex = 0;
-        flickable.contentY = 0;
-        // selectedIndexChanged dont get called somehow
+        listView.positionViewAtBeginning();
         syncSelectionState();
     }
 
     onSelectedIndexChanged: {
+        if (selectedIndex >= 0 && selectedIndex < listView.count) {
+            listView.positionViewAtIndex(selectedIndex, ListView.Contain);
+        }
         syncSelectionState();
-        if (selectedIndex < 0 || selectedIndex >= repeater.count)
-            return;
-        Qt.callLater(() => {
-            const i = repeater.itemAt(selectedIndex), t = i.y, b = i.y + i.height, v = flickable.contentY, vb = v + flickable.height, maxY = Math.max(0, flickable.contentHeight - flickable.height);
-            const y = t < v ? t : b > vb ? b - flickable.height : v;
-            flickable.contentY = Math.max(0, Math.min(maxY, y));
-        });
     }
 
     function syncSelectionState() {
         Qt.callLater(() => {
-            // fucking Qt why tf is repeater not ready when this is called
-            state.selected = repeater.itemAt(selectedIndex);
+            let selectedItem = listView.itemAtIndex(selectedIndex);
+            if (!selectedItem && selectedIndex >= 0 && selectedIndex < listView.count) {
+                // Item not visible, force it to be created
+                listView.positionViewAtIndex(selectedIndex, ListView.Contain);
+                selectedItem = listView.itemAtIndex(selectedIndex);
+            }
+            state.selected = selectedItem;
             state.exec = root.exec;
         });
     }
@@ -72,58 +72,48 @@ IComponent {
         id: layout
         fromParent: false
         width: parent.width
-        height: Math.min(innerLayout.height + titleBar.height, Launcher.widgetHeight * 1.5)
+        height: Math.min(listView.contentHeight + titleBar.height, Launcher.widgetHeight * 1.5)
 
-        Flickable {
-            id: flickable
+        ListView {
+            id: listView
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-            contentWidth: innerLayout.width
-            contentHeight: innerLayout.height
+            model: clipHist
+            spacing: 0
 
-            ColumnLayout {
-                id: innerLayout
-                spacing: 0
+            delegate: Item {
+                required property var modelData
+                required property int index
+                width: listView.width
+                height: item.height + Launcher.innerMargin * 4
 
-                Repeater {
-                    id: repeater
-                    model: clipHist
+                Row {
+                    id: item
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.margins: Launcher.innerMargin * 2
+                    spacing: Launcher.innerMargin * 2
 
-                    Item {
-                        required property var modelData
-                        required property int index
-                        Layout.margins: Launcher.innerMargin * 2
-                        implicitWidth: item.width
-                        implicitHeight: item.height
+                    IText {
+                        text: modelData?.isImage ? "Image" : "Text" || ""
+                    }
+                    IText {
+                        text: modelData?.data || ""
+                    }
+                }
 
-                        Row {
-                            id: item
-                            spacing: Launcher.innerMargin * 2
-
-                            IText {
-                                text: modelData?.isImage ? "Image" : "Text" || ""
-                                renderType: Text.QtRendering
-                            }
-                            IText {
-                                text: modelData?.data || ""
-                                renderType: Text.QtRendering
-                            }
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            onPositionChanged: {
-                                root.selectedIndex = index;
-                            }
-                            onExited: {
-                                root.selectedIndex = 0;
-                            }
-                            onPressed: {
-                                root.exec();
-                            }
-                        }
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onPositionChanged: {
+                        root.selectedIndex = index;
+                    }
+                    onExited: {
+                        root.selectedIndex = 0;
+                    }
+                    onPressed: {
+                        root.exec();
                     }
                 }
             }
