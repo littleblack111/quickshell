@@ -55,7 +55,7 @@ IComponent {
         syncSelectionState();
     }
 
-    function syncSelectionState() {
+    syncSelectionState: function () {
         Qt.callLater(() => {
             let selectedItem = listView.itemAtIndex(selectedIndex);
             if (!selectedItem && selectedIndex >= 0 && selectedIndex < listView.count) {

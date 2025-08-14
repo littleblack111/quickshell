@@ -120,7 +120,7 @@ IComponent {
                 Clip.copy(input);
     }
 
-    function syncSelectionState() {
+    syncSelectionState: function () {
         if (!loader.repeater)
             return;
 

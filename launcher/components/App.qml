@@ -102,7 +102,7 @@ IComponent {
         });
     }
 
-    function syncSelectionState() {
+    syncSelectionState: function () {
         Qt.callLater(() => {
             const item = listView.itemAtIndex(selectedIndex);
             if (item) {

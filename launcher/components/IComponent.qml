@@ -33,6 +33,7 @@ IRect {
                 preview: preview,
                 predictiveCompletion: predictiveCompletion
             })// use the current IRect if valid is set
+    property var syncSelectionState: () => {}
     // actions
     property var up: () => ({
                 top: false
@@ -82,5 +83,11 @@ IRect {
             duration: General.animationDuration / 4
             easing.type: Easing.InOutQuad
         }
+    }
+
+    Component.onCompleted: {
+        Qt.callLater(() => {
+            syncSelectionState();
+        });
     }
 }
