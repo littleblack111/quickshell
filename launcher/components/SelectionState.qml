@@ -33,6 +33,6 @@ Singleton {
 
         priorities.forEach((item, index) => {});
 
-        priorities[selectedPriority].syncSelectionState();
+        priorities[selectedPriority]?.syncSelectionState();
     }
 }
