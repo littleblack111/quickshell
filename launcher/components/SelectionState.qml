@@ -32,5 +32,7 @@ Singleton {
         priorities.sort((a, b) => (widgets.indexOf(a) - widgets.indexOf(b)) || 0);
 
         priorities.forEach((item, index) => {});
+
+        priorities[selectedPriority].syncSelectionState();
     }
 }
