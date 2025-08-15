@@ -45,8 +45,7 @@ IRect {
         IconImage {
             id: icon
             source: root.icon
-            implicitWidth: General.appIconSize
-            implicitHeight: General.appIconSize
+            implicitSize: General.appIconSize
 
             // sync animation
             opacity: root.activated ? 1 : 0
