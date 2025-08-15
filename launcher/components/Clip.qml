@@ -98,6 +98,9 @@ IComponent {
                         text: modelData?.isImage ? "Image" : "Text" || ""
                     }
                     IText {
+                        text: modelData?.timestamp || ""
+                    }
+                    IText {
                         text: modelData?.data || ""
                     }
                 }

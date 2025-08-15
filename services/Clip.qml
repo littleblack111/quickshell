@@ -4,7 +4,10 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import QtQuick
+
 import qs.components
+import qs.utils
+import qs.services
 
 Searchable {
     id: root
@@ -56,6 +59,24 @@ Searchable {
                 appTitle: metadata.appTitle || ""
             };
         });
+    }
+
+    Persistent {
+        id: clipMetaStore
+        filePath: Directories.clipHistMetaDataPath
+        adapter: JsonAdapter {
+            property var metadata: ({})
+        }
+        fileView.onLoaded: {
+            root._clipMetadata = adapter.metadata;
+        }
+        // fileView.onAdapterUpdated: {
+        //     root._clipMetadata = adapter.metadata;
+        // }
+    }
+
+    on_ClipMetadataChanged: {
+        clipMetaStore.adapter.metadata = _clipMetadata;
     }
 
     function transformSearch(search) {
