@@ -81,7 +81,7 @@ Singleton {
         var ampm = h24 < 12 ? "AM" : "PM";
         var hhmm = (h12 < 10 ? "0" : "") + h12 + (m < 10 ? "0" : "") + m + " " + ampm;
 
-        return ymd + " hour:" + hhmm;
+        return ymd + " at " + hhmm;
     }
 
     SystemClock {
