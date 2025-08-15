@@ -1,5 +1,6 @@
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Wayland
 import QtQuick.Controls
 import QtQuick
 
@@ -11,6 +12,8 @@ IWindow {
     required property var parentLoader
     // TODO: optional only display on focused screen
     focusable: true
+
+    layer: WlrLayer.Overlay
 
     anchors {
         top: false
