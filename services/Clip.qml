@@ -2,6 +2,7 @@ pragma Singleton
 
 import Quickshell
 import Quickshell.Io
+import Quickshell.Wayland
 import QtQuick
 import qs.components
 
@@ -43,12 +44,16 @@ Searchable {
             const idStr = idNum >= 0 ? "" + idNum : "";
             const imgPath = idStr ? imgMap[idStr] || "" : "";
             const isImg = !!imgPath;
+            const metadata = _clipMetadata[idStr] || {};
 
             return {
                 index: idNum,
                 isImage: isImg,
                 data: isImg ? imgPath : payload,
-                raw: raw
+                raw: raw,
+                timestamp: metadata.timestamp || "",
+                appId: metadata.appId || "",
+                appTitle: metadata.appTitle || ""
             };
         });
     }
@@ -70,18 +75,56 @@ Searchable {
         imgProc.running = true;
     }
 
+    function _captureMetadata() {
+        const now = new Date();
+        const activeToplevel = ToplevelManager.activeToplevel;
+
+        Qt.callLater(() => {
+            clipProc.running = true;
+            clipProc.stdout.onceFinished = () => {
+                const lines = clipProc.stdout.text.split(/\r?\n/);
+                const firstLine = lines[0] || "";
+                const tab = firstLine.indexOf("\t");
+
+                if (tab > 0) {
+                    const idStr = firstLine.slice(0, tab);
+                    const n = parseInt(idStr, 10);
+                    if (!Number.isNaN(n)) {
+                        var newMetadata = {};
+                        for (var k in _clipMetadata) {
+                            if (_clipMetadata.hasOwnProperty(k))
+                                newMetadata[k] = _clipMetadata[k];
+                        }
+                        newMetadata[idStr] = {
+                            timestamp: now,
+                            appId: activeToplevel ? activeToplevel.appId : "",
+                            appTitle: activeToplevel ? activeToplevel.title : ""
+                        };
+                        _clipMetadata = newMetadata;
+                    }
+                }
+            };
+        });
+    }
+
     Process {
         id: clipProc
         running: true
         command: ["cliphist", "-preview-width", 9 ** 9, "-max-items", 9 ** 9, "list"]
         stdout: StdioCollector {
             property bool pending: false
+            property var onceFinished: null
+
             onStreamFinished: () => {
                 pending = true;
                 Qt.callLater(() => {
                     if (pending) {
                         pending = false;
                         _clipHist = this.text.split(/\r?\n/);
+                        if (onceFinished) {
+                            onceFinished();
+                            onceFinished = null;
+                        }
                     }
                 });
             }
@@ -115,6 +158,7 @@ Searchable {
 
         stdout: SplitParser {
             onRead: line => {
+                _captureMetadata();
                 _update();
             }
         }
