@@ -1,4 +1,4 @@
-tmp_dir="/tmp/cliphist-img"
+tmp_dir="${XDG_CACHE_HOME:-$HOME/.cache}/quickshell/cliphist-img"
 
 mkdir -p "$tmp_dir"
 
