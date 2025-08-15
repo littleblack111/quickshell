@@ -37,22 +37,13 @@ IComponent {
 
     onSelectedIndexChanged: {
         syncSelectionState();
-        if (!loader.repeater || !loader.item || !loader.item.flickable)
+        if (!loader.view || !loader.item || !loader.item.flickable)
             return;
-        if (selectedIndex < 0 || selectedIndex >= loader.repeater.count)
+        if (selectedIndex < 0 || selectedIndex >= loader.view.count)
             return;
         Qt.callLater(() => {
-            const flickable = loader.item.flickable;
-            const i = loader.repeater.itemAt(selectedIndex);
-            if (!i)
-                return;
-            const t = i.y;
-            const b = i.y + i.height;
-            const v = flickable.contentY;
-            const vb = v + flickable.height;
-            const maxY = Math.max(0, flickable.contentHeight - flickable.height);
-            const y = t < v ? t : b > vb ? b - flickable.height : v;
-            flickable.contentY = Math.max(0, Math.min(maxY, y));
+            loader.view.currentIndex = selectedIndex;
+            loader.view.positionViewAtIndex(selectedIndex, GridView.Contain);
         });
     }
 
@@ -74,16 +65,16 @@ IComponent {
     }
 
     home: function () {
-        if (loader.repeater.count === 0)
+        if (loader.view.count === 0)
             return true;
         selectedIndex = -1;
         selectedIndex = 0;
     }
     end: function () {
-        if (loader.repeater.count === 0)
+        if (loader.view.count === 0)
             return true;
-        selectedIndex = loader.repeater.count;
-        selectedIndex = loader.repeater.count - 1;
+        selectedIndex = loader.view.count;
+        selectedIndex = loader.view.count - 1;
     }
 
     prev: function () {
@@ -121,11 +112,11 @@ IComponent {
     }
 
     syncSelectionState: function () {
-        if (!loader.repeater)
+        if (!loader.view)
             return;
 
         Qt.callLater(() => {
-            state.selected = loader.repeater.itemAt(selectedIndex);
+            state.selected = loader.view.currentItem;
         });
     }
 
@@ -137,61 +128,63 @@ IComponent {
             Layout.fillHeight: true
             Layout.preferredHeight: parent.height
             sourceComponent: aspell[0] === "*" ? correct : show
-            property var repeater: null
+            property var view: null
 
             readonly property Component show: Component {
                 Item {
-                    property alias flickable: flickable
+                    property alias flickable: grid
 
-                    Flickable {
-                        id: flickable
+                    GridView {
+                        id: grid
                         anchors.fill: parent
                         clip: true
-                        contentWidth: grid.width
-                        contentHeight: grid.height
+                        boundsBehavior: Flickable.StopAtBounds
+                        cacheBuffer: 0
+                        model: aspell
+                        interactive: true
+                        flow: GridView.FlowLeftToRight
+                        snapMode: GridView.NoSnap
 
-                        GridLayout {
-                            id: grid
-                            width: flickable.width
-                            columns: Math.max(1, Math.floor(width / Math.max(1, Math.round(Launcher.widgetFontSize * 6))))
-                            rowSpacing: Launcher.innerMargin
-                            columnSpacing: Launcher.innerMargin
+                        // Compute a reasonable cell width based on font size, keeping
+                        // roughly the same behavior as before.
+                        cellWidth: Math.floor(width / Math.max(1, Math.floor(width / Math.max(1, Math.round(Launcher.widgetFontSize * 6)))))
+                        cellHeight: Math.ceil(Launcher.widgetFontSize * 1.6) + Launcher.innerMargin * 2
 
-                            Repeater {
-                                id: repeater
-                                model: aspell
+                        delegate: Item {
+                            required property var modelData
+                            required property int index
 
-                                IRect {
-                                    Layout.fillWidth: true
-                                    Layout.preferredWidth: Math.max(chipContent.implicitWidth + Launcher.innerMargin * 2, Math.floor(grid.width / grid.columns) - grid.columnSpacing)
-                                    Layout.preferredHeight: chipContent.implicitHeight + Launcher.innerMargin * 2
-                                    color: Qt.rgba(Colors.background2.r, Colors.background2.g, Colors.background2.b, Launcher.widgetBgTransparency)
-                                    radius: Launcher.widgetRadius
+                            width: grid.cellWidth
+                            height: chipContent.implicitHeight + Launcher.innerMargin * 2
 
-                                    IText {
-                                        id: chipContent
-                                        anchors.centerIn: parent
-                                        text: modelData
-                                        font.pixelSize: Launcher.widgetFontSize
-                                        elide: Text.ElideRight
-                                    }
+                            IRect {
+                                anchors.fill: parent
+                                color: Qt.rgba(Colors.background2.r, Colors.background2.g, Colors.background2.b, Launcher.widgetBgTransparency)
+                                radius: Launcher.widgetRadius
 
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        hoverEnabled: true
-                                        onPositionChanged: {
-                                            root.selectedIndex = index;
-                                        }
-                                        onPressed: {
-                                            root._exec();
-                                        }
-                                    }
+                                IText {
+                                    id: chipContent
+                                    anchors.centerIn: parent
+                                    text: modelData
+                                    font.pixelSize: Launcher.widgetFontSize
+                                    elide: Text.ElideRight
                                 }
 
-                                Component.onCompleted: {
-                                    loader.repeater = repeater;
+                                MouseArea {
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    onPositionChanged: {
+                                        root.selectedIndex = index;
+                                    }
+                                    onPressed: {
+                                        root._exec();
+                                    }
                                 }
                             }
+                        }
+
+                        Component.onCompleted: {
+                            loader.view = grid;
                         }
                     }
                 }
