@@ -56,7 +56,8 @@ Searchable {
                 raw: raw,
                 timestamp: metadata.timestamp || "",
                 appId: metadata.appId || "",
-                appTitle: metadata.appTitle || ""
+                appTitle: metadata.appTitle || "",
+                appIcon: Quickshell.iconPath(AppSearch.guessIcon(metadata.appId), "image-missing")
             };
         });
     }
@@ -68,7 +69,13 @@ Searchable {
             property var metadata: ({})
         }
         fileView.onLoaded: {
-            root._clipMetadata = adapter.metadata;
+            const meta = adapter.metadata;
+            for (const k in meta) {
+                if (meta[k].timestamp && typeof meta[k].timestamp === "string") {
+                    meta[k].timestamp = new Date(meta[k].timestamp);
+                }
+            }
+            root._clipMetadata = meta;
         }
         // fileView.onAdapterUpdated: {
         //     root._clipMetadata = adapter.metadata;
@@ -116,6 +123,7 @@ Searchable {
                             if (_clipMetadata.hasOwnProperty(k))
                                 newMetadata[k] = _clipMetadata[k];
                         }
+
                         newMetadata[idStr] = {
                             timestamp: now,
                             appId: activeToplevel ? activeToplevel.appId : "",

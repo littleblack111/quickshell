@@ -55,9 +55,6 @@ Singleton {
 
     // Cleanup on init
     Component.onCompleted: {
-        Quickshell.execDetached(["sh", "-c", `mkdir -p '${shellConfig}'`]);
-        Quickshell.execDetached(["sh", "-c", `mkdir -p '${favicons}'`]);
-        Quickshell.execDetached(["sh", "-c", `rm -rf '${cliphistDecode}'; mkdir -p '${cliphistDecode}'`]);
         Quickshell.execDetached(["touch", trimFileProtocol(clipHistMetaDataPath)]);
     }
 }

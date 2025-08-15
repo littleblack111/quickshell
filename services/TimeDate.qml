@@ -27,7 +27,10 @@ Singleton {
 
     readonly property string date: Qt.formatDateTime(clock.date, "dddd dd/MM")
 
-    function sinceWhen(d: Date) {
+    function sinceWhen(d) {
+        if (typeof d === "string")
+            return;
+
         var now = clock.date;
 
         function startOfDay(x) {

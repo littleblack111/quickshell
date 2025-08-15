@@ -94,14 +94,29 @@ IComponent {
                     anchors.margins: Launcher.innerMargin * 2
                     spacing: Launcher.innerMargin * 2
 
-                    IText {
-                        text: modelData?.isImage ? "Image" : "Text" || ""
+                    IconImage {
+                        source: modelData?.appIcon
+                        implicitSize: parent.height
                     }
-                    IText {
-                        text: modelData?.timestamp || ""
-                    }
-                    IText {
-                        text: modelData?.data || ""
+
+                    Column {
+                        IText {
+                            text: modelData?.data || ""
+                            font.pixelSize: Style.font.size.largerr
+                        }
+                        Row {
+                            spacing: Launcher.innerMargin
+                            IText {
+                                text: modelData.isImage ? "Image" : "Text"
+                                color: Colors.foreground3
+                                font.pixelSize: Style.font.size.normal
+                            }
+                            IText {
+                                text: TimeDate.sinceWhen(modelData?.timestamp) || ""
+                                color: Colors.foreground3
+                                font.pixelSize: Style.font.size.normal
+                            }
+                        }
                     }
                 }
 
