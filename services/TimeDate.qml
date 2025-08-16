@@ -27,6 +27,54 @@ Singleton {
 
     readonly property string date: Qt.formatDateTime(clock.date, "dddd dd/MM")
 
+    function sinceWhen(d) {
+        if (typeof d === "string")
+            return;
+
+        var now = clock.date;
+
+        function startOfDay(x) {
+            return new Date(x.getFullYear(), x.getMonth(), x.getDate(), 0, 0, 0, 0);
+        }
+
+        function startOfWeek(x) {
+            var dow = x.getDay();
+            var mondayOffset = (dow + 6) % 7;
+            var sod = startOfDay(x);
+            sod.setDate(sod.getDate() - mondayOffset);
+            return sod;
+        }
+
+        function fmt12h(dateObj) {
+            var h24 = dateObj.getHours();
+            var m = dateObj.getMinutes();
+            var h12 = h24 % 12;
+            if (h12 === 0)
+                h12 = 12;
+            var ampm = h24 < 12 ? "AM" : "PM";
+            return ((h12 < 10 ? "0" : "") + h12 + ":" + (m < 10 ? "0" : "") + m + " " + ampm);
+        }
+
+        function weekdayName(dateObj) {
+            return Qt.formatDateTime(dateObj, "dddd");
+        }
+
+        var nowSOD = startOfDay(now).getTime();
+        var dSOD = startOfDay(d).getTime();
+        if (nowSOD === dSOD) {
+            return fmt12h(d);
+        }
+
+        var nowSOW = startOfWeek(now).getTime();
+        var dSOW = startOfWeek(d).getTime();
+        if (nowSOW === dSOW) {
+            return weekdayName(d) + " " + fmt12h(d);
+        }
+
+        var ymd = Qt.formatDateTime(d, "yyyy-MM-dd");
+        return ymd + " at " + fmt12h(d);
+    }
+
     SystemClock {
         id: clock
         precision: SystemClock.Seconds
