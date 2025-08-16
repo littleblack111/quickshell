@@ -36,12 +36,12 @@ IComponent {
     }
 
     onSelectedIndexChanged: {
-        syncSelectionState();
         if (!loader.view || !loader.item || !loader.item.flickable)
             return;
         if (selectedIndex < 0 || selectedIndex >= loader.view.count)
             return;
         Qt.callLater(() => {
+            syncSelectionState();
             loader.view.currentIndex = selectedIndex;
             loader.view.positionViewAtIndex(selectedIndex, GridView.Contain);
         });
