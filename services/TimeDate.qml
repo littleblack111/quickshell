@@ -72,16 +72,7 @@ Singleton {
         }
 
         var ymd = Qt.formatDateTime(d, "yyyy-MM-dd");
-        var h24 = d.getHours();
-        var m = d.getMinutes();
-
-        var h12 = h24 % 12;
-        if (h12 === 0)
-            h12 = 12;
-        var ampm = h24 < 12 ? "AM" : "PM";
-        var hhmm = (h12 < 10 ? "0" : "") + h12 + (m < 10 ? "0" : "") + m + " " + ampm;
-
-        return ymd + " at " + hhmm;
+        return ymd + " at " + fmt12h(d);
     }
 
     SystemClock {
