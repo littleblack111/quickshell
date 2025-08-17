@@ -120,7 +120,7 @@ IComponent {
                                 readonly property Component text: IText {
                                     text: modelData?.data || ""
                                     color: index === root.selectedIndex ? Colors.foreground1 : Colors.foreground2
-                                    font.pixelSize: Style.font.size.largerr
+                                    font.pixelSize: Launcher.widgetFontSize
                                 }
                                 readonly property Component img: Image {
                                     source: modelData?.data || ""
@@ -132,18 +132,18 @@ IComponent {
                                 IText {
                                     text: modelData.type
                                     color: index === root.selectedIndex ? Colors.foreground2 : Colors.foreground3
-                                    font.pixelSize: Style.font.size.normal
+                                    font.pixelSize: Launcher.widgetFontSize / 1.35
                                 }
                                 IText {
                                     visible: parent.sinceWhen
                                     text: '·'
                                     color: index === root.selectedIndex ? Colors.foreground2 : Colors.foreground3
-                                    font.pixelSize: Style.font.size.normal
+                                    font.pixelSize: Launcher.widgetFontSize / 1.35
                                 }
                                 IText {
                                     text: parent.sinceWhen || ""
                                     color: index === root.selectedIndex ? Colors.foreground2 : Colors.foreground3
-                                    font.pixelSize: Style.font.size.normal
+                                    font.pixelSize: Launcher.widgetFontSize / 1.35
                                 }
                             }
                         }
