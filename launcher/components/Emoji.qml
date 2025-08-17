@@ -127,6 +127,7 @@ IComponent {
                             required property int index
                             width: grid.cellWidth
                             height: chipContent.implicitHeight + Launcher.innerMargin * 2
+                            scale: index === selectedIndex ? 1.03 : 0.97
 
                             IRect {
                                 anchors.fill: parent
@@ -138,7 +139,7 @@ IComponent {
                                     anchors.centerIn: parent
                                     spacing: 2
 
-                                    IText {
+                                    Icon {
                                         anchors.horizontalCenter: parent.horizontalCenter
                                         text: modelData.emoji
                                         font.pixelSize: Launcher.widgetFontSize * 1.2
@@ -147,7 +148,7 @@ IComponent {
                                         anchors.horizontalCenter: parent.horizontalCenter
                                         text: modelData.name
                                         font.pixelSize: Launcher.widgetFontSize * 0.7
-                                        color: Qt.rgba(Colors.foreground3.r, Colors.foreground3.g, Colors.foreground3.b, 0.7)
+                                        color: index === selectedIndex ? Colors.foreground1 : Colors.foreground2
                                         elide: Text.ElideRight
                                         width: parent.parent.width - Launcher.innerMargin * 2
                                     }
@@ -159,6 +160,10 @@ IComponent {
                                     onPositionChanged: root.selectedIndex = index
                                     onPressed: root._exec()
                                 }
+                            }
+
+                            Behavior on scale {
+                                ISpringAnimation {}
                             }
                         }
 
