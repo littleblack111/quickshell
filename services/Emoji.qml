@@ -15,7 +15,7 @@ Searchable {
     }
 
     list: _emojis
-    key: "searchText"
+    keys: ["name", "keywords", "category", "subcategory", "emoji"]
     algorithm: Searchable.SearchAlgorithm.Include
 
     function transformSearch(search) {
@@ -42,8 +42,7 @@ Searchable {
                 category: category,
                 subcategory: subcategory,
                 name: name,
-                keywords: keywords,
-                searchText: (name + " " + keywords).toLowerCase()
+                keywords: keywords
             });
         }
         _emojis = out;
