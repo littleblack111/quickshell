@@ -17,6 +17,7 @@ Searchable {
 
     list: _emojis
     key: "searchText"
+    algorithm: Searchable.SearchAlgorithm.Include
 
     function transformSearch(search) {
         return search.toLowerCase();
@@ -48,8 +49,6 @@ Searchable {
         }
         _emojis = out;
     }
-
-    Component.onCompleted: _parseEmojis()
 
     function copy(emoji) {
         Clip.copy(emoji);

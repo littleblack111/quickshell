@@ -10,7 +10,7 @@ import qs.config
 IComponent {
     id: root
 
-    property var emojis: active ? Emoji.query(input) : []
+    property var emojis: Emoji.query(input)
     property int selectedIndex: -1
 
     property int cols: Math.max(1, Math.floor(innerLoader.width / Math.max(1, Math.round(Launcher.widgetFontSize * 4))))
@@ -42,13 +42,12 @@ IComponent {
     }
 
     process: function () {
-        const ok = selectedIndex >= 0 && emojis.length > 0;
-        const sel = ok ? emojis[selectedIndex] : null;
+        const isValid = selectedIndex >= 0 && emojis.length > 0;
+        const select = isValid ? emojis[selectedIndex] : null;
         return {
-            valid: ok,
-            priority: ok,
-            answer: ok ? sel.emoji : "",
-            predictiveCompletion: ""
+            valid: isValid,
+            priority: isValid,
+            answer: isValid ? select.emoji : ""
         };
     }
 
