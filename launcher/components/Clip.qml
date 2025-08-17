@@ -182,7 +182,7 @@ IComponent {
                         width: preview.width
                         color: Colors.foreground1
                         selectionColor: Colors.background3
-                        text: clipHist[selectedIndex]?.decoded.trim() || ""
+                        text: clipHist[selectedIndex]?.decoded || ""
                     }
                     property Component img: Image {
                         id: image
