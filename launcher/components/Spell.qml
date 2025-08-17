@@ -145,8 +145,6 @@ IComponent {
                         flow: GridView.FlowLeftToRight
                         snapMode: GridView.NoSnap
 
-                        // Compute a reasonable cell width based on font size, keeping
-                        // roughly the same behavior as before.
                         cellWidth: Math.floor(width / Math.max(1, Math.floor(width / Math.max(1, Math.round(Launcher.widgetFontSize * 6)))))
                         cellHeight: Math.ceil(Launcher.widgetFontSize * 1.6) + Launcher.innerMargin * 2
 
@@ -156,6 +154,7 @@ IComponent {
 
                             width: grid.cellWidth
                             height: chipContent.implicitHeight + Launcher.innerMargin * 2
+                            scale: index === selectedIndex ? 1.03 : 0.97
 
                             IRect {
                                 anchors.fill: parent
@@ -168,6 +167,7 @@ IComponent {
                                     text: modelData
                                     font.pixelSize: Launcher.widgetFontSize
                                     elide: Text.ElideRight
+                                    color: index === selectedIndex ? Colors.foreground1 : Colors.foreground2
                                 }
 
                                 MouseArea {
@@ -180,6 +180,10 @@ IComponent {
                                         root._exec();
                                     }
                                 }
+                            }
+
+                            Behavior on scale {
+                                ISpringAnimation {}
                             }
                         }
 
