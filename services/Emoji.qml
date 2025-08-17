@@ -11,7 +11,6 @@ Searchable {
     property var _emojis: []
     property var _emojiFile: FileView {
         path: "/usr/share/rofi-emoji/all_emojis.txt"
-        blockLoading: true
         onTextChanged: _parseEmojis()
     }
 
