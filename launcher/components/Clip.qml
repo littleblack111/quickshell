@@ -84,7 +84,7 @@ IComponent {
             delegate: Item {
                 required property var modelData
                 required property int index
-                width: childrenRect.width + Launcher.innerMargin * 2
+                width: item.implicitWidth + Launcher.innerMargin * 4
                 height: item.height + Launcher.innerMargin * 4
 
                 Row {
