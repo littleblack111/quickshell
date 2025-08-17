@@ -10,7 +10,7 @@ import qs.config
 IComponent {
     id: root
 
-    property var emojis: Emoji.query(input)
+    property var emojis: active ? Emoji.query(input) : []
     property int selectedIndex: -1
 
     property int cols: Math.max(1, Math.floor(innerLoader.width / Math.max(1, Math.round(Launcher.widgetFontSize * 4))))
