@@ -32,6 +32,9 @@ Singleton {
 
     readonly property list<Component> widgets: [
         Component {
+            Emoji {}
+        },
+        Component {
             Clip {}
         },
         Component {
