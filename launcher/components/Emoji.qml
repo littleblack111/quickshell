@@ -88,9 +88,7 @@ IComponent {
     }
 
     syncSelectionState: function () {
-        if (!loader.view)
-            return;
-        Qt.callLater(() => state.selected = loader.view.currentItem);
+        Qt.callLater(() => state.selected = loader.view.itemAtIndex(selectedIndex));
     }
 
     IInnerComponent {
