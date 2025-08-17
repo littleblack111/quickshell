@@ -19,6 +19,8 @@ Searchable {
     property list<string> _clipImgIds: _clipImg.map(p => p.split("/").pop().split(".").shift())
 
     property var _clipMetadata: ({})
+    property var toDecode: ""
+    property string decodedAwaitingForCopy: ""
 
     list: {
         if (!_clipHist?.length)
@@ -85,16 +87,25 @@ Searchable {
         clipMetaStore.adapter.metadata = _clipMetadata;
     }
 
+    onDecodedAwaitingForCopyChanged: {
+        if (!decodedAwaitingForCopy)
+            return;
+
+        Quickshell.execDetached(["wl-copy", decodedAwaitingForCopy]);
+    }
+
     function transformSearch(search) {
         return search.toLowerCase();
     }
 
     function decodeAndCopy(text) {
-        Quickshell.execDetached(["sh", "-c", `cliphist decode ${text} | wl-copy`]);
+        toDecode = text;
+        decodeProc.running = true;
     }
 
     function copy(text) {
-        Quickshell.execDetached(["wl-copy", text]);
+        decodedAwaitingForCopy = "";
+        decodedAwaitingForCopy = text;
     }
 
     function _update() {
@@ -133,6 +144,18 @@ Searchable {
                 }
             };
         });
+    }
+
+    Process {
+        id: decodeProc
+        running: false
+        command: ["cliphist", "decode", toDecode]
+        onExited: {
+            toDecode = "";
+        }
+        stdout: StdioCollector {
+            onStreamFinished: decodedAwaitingForCopy = this.data
+        }
     }
 
     Process {
