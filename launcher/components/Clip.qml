@@ -62,15 +62,7 @@ IComponent {
     }
 
     syncSelectionState: function () {
-        Qt.callLater(() => {
-            let selectedItem = listView.itemAtIndex(selectedIndex);
-            if (!selectedItem && selectedIndex >= 0 && selectedIndex < listView.count) {
-                // Item not visible, force it to be created
-                listView.positionViewAtIndex(selectedIndex, ListView.Contain);
-                selectedItem = listView.itemAtIndex(selectedIndex);
-            }
-            state.selected = selectedItem;
-        });
+        Qt.callLater(() => state.selected = listView.itemAtIndex(selectedIndex));
     }
 
     IInnerComponent {

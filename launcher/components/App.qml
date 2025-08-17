@@ -110,16 +110,7 @@ IComponent {
     }
 
     syncSelectionState: function () {
-        Qt.callLater(() => {
-            const item = listView.itemAtIndex(selectedIndex);
-            if (item)
-                state.selected = item;
-            else if (listView.count > 0) {
-                // wait until it's created
-                listView.forceLayout(); // forces creation if in view
-                Qt.callLater(syncSelectionState);
-            }
-        });
+        Qt.callLater(() => state.selected = listView.itemAtIndex(selectedIndex));
     }
 
     IInnerComponent {
