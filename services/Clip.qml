@@ -7,6 +7,7 @@ import Quickshell.Wayland
 import qs.components
 import qs.utils
 import qs.services
+import "../utils/string_utils.js" as StringUtils
 
 Searchable {
     id: root
@@ -19,8 +20,6 @@ Searchable {
     property list<string> _clipImgIds: _clipImg.map(p => p.split("/").pop().split(".").shift())
 
     property var _clipMetadata: ({})
-    property var toDecode: ""
-    property string decodedAwaitingForCopy: ""
 
     list: {
         if (!_clipHist?.length)
@@ -88,25 +87,16 @@ Searchable {
         clipMetaStore.adapter.metadata = _clipMetadata;
     }
 
-    onDecodedAwaitingForCopyChanged: {
-        if (!decodedAwaitingForCopy)
-            return;
-
-        Quickshell.execDetached(["wl-copy", decodedAwaitingForCopy]);
-    }
-
     function transformSearch(search) {
         return search.toLowerCase();
     }
 
     function decodeAndCopy(text) {
-        toDecode = text;
-        decodeProc.running = true;
+        Quickshell.execDetached(["sh", "-c", `cliphist decode '${StringUtils.shellSingleQuoteEscape(text)}' | wl-copy`]);
     }
 
     function copy(text) {
-        decodedAwaitingForCopy = "";
-        decodedAwaitingForCopy = text;
+        Quickshell.execDetached(["wl-copy", text]);
     }
 
     function _update() {
@@ -145,18 +135,6 @@ Searchable {
                 }
             };
         });
-    }
-
-    Process {
-        id: decodeProc
-        running: false
-        command: ["cliphist", "decode", toDecode]
-        onExited: {
-            toDecode = "";
-        }
-        stdout: StdioCollector {
-            onStreamFinished: decodedAwaitingForCopy = this.data
-        }
     }
 
     Process {
