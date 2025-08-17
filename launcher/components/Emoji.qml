@@ -10,19 +10,22 @@ import qs.config
 IComponent {
     id: root
 
-    property list<QtObject> emojis: active ? Emoji.query(input) : []
+    property var emojis: active ? Emoji.query(input) : []
     property int selectedIndex: -1
 
+    property int cols: Math.max(1, Math.floor(innerLoader.width / Math.max(1, Math.round(Launcher.widgetFontSize * 4))))
+    property int cellWidth: Math.floor(innerLoader.width / cols)
+    property int cellHeight: Math.ceil(Launcher.widgetFontSize * 2) + Launcher.innerMargin * 2
+
     name: "Emoji"
-    prefix: name.toLowerCase() + ' '
+    prefix: name.toLowerCase() + " "
 
     onInputChanged: {
         Qt.callLater(() => {
             selectedIndex = emojis.length > 0 ? 0 : -1;
             syncSelectionState();
-            if (loader.item && loader.item.flickable) {
+            if (loader.item && loader.item.flickable)
                 loader.item.flickable.contentY = 0;
-            }
         });
     }
 
@@ -39,74 +42,61 @@ IComponent {
     }
 
     process: function () {
-        const isValid = selectedIndex >= 0 && emojis.length > 0;
-        const selected = isValid ? emojis[selectedIndex] : null;
-
+        const ok = selectedIndex >= 0 && emojis.length > 0;
+        const sel = ok ? emojis[selectedIndex] : null;
         return {
-            valid: isValid,
-            priority: isValid,
-            answer: isValid ? selected.emoji : "",
+            valid: ok,
+            priority: ok,
+            answer: ok ? sel.emoji : "",
             predictiveCompletion: ""
         };
     }
 
     home: function () {
-        if (loader.view.count === 0)
+        if (!loader.view.count)
             return true;
-        selectedIndex = -1;
         selectedIndex = 0;
     }
-
     end: function () {
-        if (loader.view.count === 0)
+        if (!loader.view.count)
             return true;
-        selectedIndex = loader.view.count;
         selectedIndex = loader.view.count - 1;
     }
-
     prev: function () {
         if (selectedIndex <= 0)
             return true;
         selectedIndex--;
     }
-
     next: function () {
         if (selectedIndex + 1 >= emojis.length)
             return true;
         selectedIndex++;
     }
-
     up: function () {
-        const cols = Math.max(1, Math.floor(innerLoader.width / Math.max(1, Math.round(Launcher.widgetFontSize * 4))));
         if (selectedIndex - cols < 0)
             return true;
         selectedIndex -= cols;
     }
-
     down: function () {
-        const cols = Math.max(1, Math.floor(innerLoader.width / Math.max(1, Math.round(Launcher.widgetFontSize * 4))));
         if (selectedIndex + cols >= emojis.length)
             return true;
         selectedIndex += cols;
     }
 
     exec: function () {
-        if (selectedIndex >= 0 && emojis.length > 0) {
+        if (selectedIndex >= 0 && emojis.length > 0)
             Emoji.copy(emojis[selectedIndex].emoji);
-        }
     }
 
     syncSelectionState: function () {
         if (!loader.view)
             return;
-
-        Qt.callLater(() => {
-            state.selected = loader.view.currentItem;
-        });
+        Qt.callLater(() => state.selected = loader.view.currentItem);
     }
 
     IInnerComponent {
         id: innerLoader
+
         Loader {
             id: loader
             Layout.fillWidth: true
@@ -124,19 +114,18 @@ IComponent {
                         anchors.fill: parent
                         clip: true
                         boundsBehavior: Flickable.StopAtBounds
-                        cacheBuffer: 0
+                        cacheBuffer: cellHeight * 2
                         model: emojis
                         interactive: true
                         flow: GridView.FlowLeftToRight
                         snapMode: GridView.NoSnap
 
-                        cellWidth: Math.floor(width / Math.max(1, Math.floor(width / Math.max(1, Math.round(Launcher.widgetFontSize * 4)))))
-                        cellHeight: Math.ceil(Launcher.widgetFontSize * 2) + Launcher.innerMargin * 2
+                        cellWidth: root.cellWidth
+                        cellHeight: root.cellHeight
 
                         delegate: Item {
                             required property var modelData
                             required property int index
-
                             width: grid.cellWidth
                             height: chipContent.implicitHeight + Launcher.innerMargin * 2
 
@@ -155,7 +144,6 @@ IComponent {
                                         text: modelData.emoji
                                         font.pixelSize: Launcher.widgetFontSize * 1.2
                                     }
-
                                     IText {
                                         anchors.horizontalCenter: parent.horizontalCenter
                                         text: modelData.name
@@ -169,19 +157,13 @@ IComponent {
                                 MouseArea {
                                     anchors.fill: parent
                                     hoverEnabled: true
-                                    onPositionChanged: {
-                                        root.selectedIndex = index;
-                                    }
-                                    onPressed: {
-                                        root._exec();
-                                    }
+                                    onPositionChanged: root.selectedIndex = index
+                                    onPressed: root._exec()
                                 }
                             }
                         }
 
-                        Component.onCompleted: {
-                            loader.view = grid;
-                        }
+                        Component.onCompleted: loader.view = grid
                     }
                 }
             }

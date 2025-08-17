@@ -8,14 +8,11 @@ import qs.components
 Searchable {
     id: root
 
-    property list<QtObject> _emojis: []
+    property var _emojis: []
     property var _emojiFile: FileView {
         path: "/usr/share/rofi-emoji/all_emojis.txt"
         blockLoading: true
-
-        onTextChanged: {
-            _parseEmojis();
-        }
+        onTextChanged: _parseEmojis()
     }
 
     list: _emojis
@@ -26,41 +23,35 @@ Searchable {
     }
 
     function _parseEmojis() {
-        if (!_emojiFile.text())
+        const text = _emojiFile.text();
+        if (!text) {
+            console.warn("Emoji service: failed to load", _emojiFile.path);
+            _emojis = [];
             return;
-
-        const lines = _emojiFile.text().split('\n').filter(line => line.trim());
-        const emojis = [];
-
-        for (const line of lines) {
-            const parts = line.split('\t');
-            if (parts.length >= 5) {
-                const emoji = parts[0];
-                const category = parts[1];
-                const subcategory = parts[2];
-                const name = parts[3];
-                const keywords = parts[4];
-
-                const emojiObj = Qt.createQmlObject(`
-					import QtQuick
-					QtObject {
-						property string emoji: "${emoji.replace(/"/g, '\\"')}"
-						property string category: "${category.replace(/"/g, '\\"')}"
-						property string subcategory: "${subcategory.replace(/"/g, '\\"')}"
-						property string name: "${name.replace(/"/g, '\\"')}"
-						property string keywords: "${keywords.replace(/"/g, '\\"')}"
-						property string searchText: "${(name + ' ' + keywords).toLowerCase().replace(/"/g, '\\"')}"
-					}
-				`, root);
-
-                emojis.push(emojiObj);
-            }
         }
 
-        _emojis = emojis;
+        const lines = text.split("\n").filter(l => l.trim());
+        const out = [];
+        for (let i = 0; i < lines.length; ++i) {
+            const parts = lines[i].split("\t");
+            if (parts.length < 5)
+                continue;
+            const [emoji, category, subcategory, name, keywords] = parts;
+            out.push({
+                emoji: emoji,
+                category: category,
+                subcategory: subcategory,
+                name: name,
+                keywords: keywords,
+                searchText: (name + " " + keywords).toLowerCase()
+            });
+        }
+        _emojis = out;
     }
 
+    Component.onCompleted: _parseEmojis()
+
     function copy(emoji) {
-        Quickshell.execDetached(["wl-copy", emoji]);
+        Clip.copy(emoji);
     }
 }
