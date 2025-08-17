@@ -7,7 +7,7 @@ import QtQuick
 
 Scope {
     id: root
-    property var standaloneObj: null
+    property var standaloneObj: ({})
     Bar {}
     LazyLoader {
         id: launcherLoader
@@ -31,11 +31,11 @@ Scope {
         }
 
         function standalone(component: string): void {
-            if (root.standaloneObj) {
-                root.standaloneObj.active = !root.standaloneObj.active;
+            if (root.standaloneObj.name === component) {
+                root.standaloneObj.obj.active = !root.standaloneObj.obj.active;
                 return;
             }
-            root.standaloneObj = Qt.createQmlObject(`
+            root.standaloneObj.obj = Qt.createQmlObject(`
 				import Quickshell
 				import QtQuick
 				import "launcher"
@@ -71,6 +71,7 @@ Scope {
 					}
 				}
 			`, root);
+            root.standaloneObj.name = component;
         }
     }
 
