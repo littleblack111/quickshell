@@ -15,6 +15,7 @@ Text {
     textFormat: Text.PlainText
     elide: Text.ElideRight
     color: Colors.foreground1
+    smooth: true
 
     font {
         family: Style.font.family.iosevka
