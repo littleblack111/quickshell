@@ -144,6 +144,7 @@ IComponent {
 
                 RowLayout {
                     id: item
+                    scale: index === selectedIndex ? 1.01 : 0.99
                     anchors.left: parent.left
                     anchors.top: parent.top
                     anchors.margins: Launcher.innerMargin * 2
@@ -157,6 +158,11 @@ IComponent {
                     IText {
                         text: modelData.name
                         renderType: Text.QtRendering
+                        color: index === selectedIndex ? Colors.foreground1 : Colors.foreground2
+                    }
+
+                    Behavior on scale {
+                        ISpringAnimation {}
                     }
                 }
 

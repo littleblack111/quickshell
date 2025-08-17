@@ -105,8 +105,13 @@ IComponent {
                         spacing: Launcher.innerMargin * 2
 
                         IconImage {
+                            scale: index === root.selectedIndex ? 1.01 : 0.9
                             source: modelData?.appIcon
                             implicitSize: parent.height
+
+                            Behavior on scale {
+                                ISpringAnimation {}
+                            }
                         }
 
                         Column {
@@ -114,6 +119,7 @@ IComponent {
                                 sourceComponent: modelData?.type === "image" ? img : text
                                 readonly property Component text: IText {
                                     text: modelData?.data || ""
+                                    color: index === root.selectedIndex ? Colors.foreground1 : Colors.foreground2
                                     font.pixelSize: Style.font.size.largerr
                                 }
                                 readonly property Component img: Image {
@@ -125,18 +131,18 @@ IComponent {
                                 property string sinceWhen: TimeDate.sinceWhen(modelData?.timestamp) || ""
                                 IText {
                                     text: modelData.type
-                                    color: Colors.foreground3
+                                    color: index === root.selectedIndex ? Colors.foreground2 : Colors.foreground3
                                     font.pixelSize: Style.font.size.normal
                                 }
                                 IText {
                                     visible: parent.sinceWhen
                                     text: '·'
-                                    color: Colors.foreground3
+                                    color: index === root.selectedIndex ? Colors.foreground2 : Colors.foreground3
                                     font.pixelSize: Style.font.size.normal
                                 }
                                 IText {
                                     text: parent.sinceWhen || ""
-                                    color: Colors.foreground3
+                                    color: index === root.selectedIndex ? Colors.foreground2 : Colors.foreground3
                                     font.pixelSize: Style.font.size.normal
                                 }
                             }
