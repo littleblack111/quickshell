@@ -90,7 +90,7 @@ IComponent {
                 delegate: Item {
                     required property var modelData
                     required property int index
-                    width: item.implicitWidth + Launcher.innerMargin * 4
+                    width: Math.min(item.implicitWidth + Launcher.innerMargin * 4, listView.width)
                     height: item.height + Launcher.innerMargin * 4
 
                     Row {
@@ -99,6 +99,7 @@ IComponent {
                         anchors.top: parent.top
                         anchors.margins: Launcher.innerMargin * 2
                         spacing: Launcher.innerMargin * 2
+                        clip: true
 
                         IconImage {
                             scale: index === root.selectedIndex ? 1.01 : 0.9
