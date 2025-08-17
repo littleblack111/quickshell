@@ -18,8 +18,8 @@ Searchable {
     property list<string> _clipHist: []
     property list<string> _clipImg: []
     property list<string> _clipImgIds: _clipImg.map(p => p.split("/").pop().split(".").shift())
-
     property var _clipMetadata: ({})
+    property var _clipDecoded: ({})
 
     function getType(text: string): string {
         if (!text)
@@ -42,7 +42,7 @@ Searchable {
             return map;
         }, {});
 
-        return _clipHist.filter(raw => raw).map(raw => {
+        return _clipHist.filter(raw => raw).map((raw, idx) => {
             const tab = raw.indexOf("\t");
             let idNum = -1;
             let payload = raw;
@@ -89,9 +89,6 @@ Searchable {
             }
             root._clipMetadata = meta;
         }
-        // fileView.onAdapterUpdated: {
-        //     root._clipMetadata = adapter.metadata;
-        // }
     }
 
     on_ClipMetadataChanged: {
@@ -112,6 +109,7 @@ Searchable {
 
     function _update() {
         clipProc.running = true;
+        clipDecodeProc.running = true;
         imgProc.running = true;
     }
 
@@ -130,7 +128,7 @@ Searchable {
                     const idStr = firstLine.slice(0, tab);
                     const n = parseInt(idStr, 10);
                     if (!Number.isNaN(n)) {
-                        var newMetadata = {};
+                        let newMetadata = {};
                         for (var k in _clipMetadata) {
                             if (_clipMetadata.hasOwnProperty(k))
                                 newMetadata[k] = _clipMetadata[k];
@@ -168,6 +166,42 @@ Searchable {
                         }
                     }
                 });
+            }
+        }
+    }
+
+    Process {
+        id: clipDecodeProc
+        property var tmp: ({})
+        property int index: 0
+        running: true
+        command: ["sh", "-c", 'cliphist list | while IFS= read -r line; do\n' + '  cliphist decode "$line"; ' + 'printf "THIS IS A SEPERATOR 123 -----";\n' + 'done']
+        onStarted: {
+            clipDecodeProc.tmp = [];
+            clipDecodeProc.index = 0;
+        }
+        onExited: {
+            if (clipDecodeProc.tmp)
+                root._clipDecoded = clipDecodeProc.tmp;
+        }
+        stdout: SplitParser {
+            onRead: data => {
+                data = data += '\n';
+                if (data.includes("THIS IS A SEPERATOR 123 -----")) {
+                    const split = data.split("THIS IS A SEPERATOR 123 -----");
+                    const first = split[0] || "";
+                    const second = split[1] || "";
+                    if (first)
+                        clipDecodeProc.tmp[clipDecodeProc.index] += first;
+                    clipDecodeProc.index++;
+                    if (second)
+                        clipDecodeProc.tmp[clipDecodeProc.index] = second;
+                    return;
+                }
+                if (!clipDecodeProc.tmp[clipDecodeProc.index])
+                    clipDecodeProc.tmp[clipDecodeProc.index] = data;
+                else
+                    clipDecodeProc.tmp[clipDecodeProc.index] += data;
             }
         }
     }
