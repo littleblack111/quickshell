@@ -175,8 +175,9 @@ Searchable {
         id: clipDecodeProc
         property var tmp: ({})
         property int index: 0
+        property string separator: "\0\x01\x02CLIP_SEP_7b9a4c8d\x02\x01\0"
         running: true
-        command: ["sh", "-c", 'cliphist list | while IFS= read -r line; do\n' + '  cliphist decode "$line"; ' + 'printf "THIS IS A SEPERATOR 123 -----";\n' + 'done']
+        command: ["sh", "-c", 'cliphist list | while IFS= read -r line; do\n' + '  cliphist decode "$line"; ' + 'printf "\\0\\x01\\x02CLIP_SEP_7b9a4c8d\\x02\\x01\\0";\n' + 'done']
         onStarted: {
             clipDecodeProc.tmp = [];
             clipDecodeProc.index = 0;
@@ -187,22 +188,17 @@ Searchable {
         }
         stdout: SplitParser {
             onRead: data => {
-                data = data += '\n';
-                if (data.includes("THIS IS A SEPERATOR 123 -----")) {
-                    const split = data.split("THIS IS A SEPERATOR 123 -----");
-                    const first = split[0] || "";
-                    const second = split[1] || "";
-                    if (first)
-                        clipDecodeProc.tmp[clipDecodeProc.index] += first;
-                    clipDecodeProc.index++;
-                    if (second)
-                        clipDecodeProc.tmp[clipDecodeProc.index] = second;
-                    return;
-                }
+                const parts = data.split(clipDecodeProc.separator);
+
                 if (!clipDecodeProc.tmp[clipDecodeProc.index])
-                    clipDecodeProc.tmp[clipDecodeProc.index] = data;
-                else
-                    clipDecodeProc.tmp[clipDecodeProc.index] += data;
+                    clipDecodeProc.tmp[clipDecodeProc.index] = "";
+
+                clipDecodeProc.tmp[clipDecodeProc.index] += parts[0];
+
+                for (let i = 1; i < parts.length; i++) {
+                    clipDecodeProc.index++;
+                    clipDecodeProc.tmp[clipDecodeProc.index] = parts[i];
+                }
             }
         }
     }
