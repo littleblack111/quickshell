@@ -49,7 +49,7 @@ ILauncher {
             implicitWidth: launcher.state?.selected?.width || 0
             implicitHeight: launcher.state?.selected?.height || 0
             radius: Launcher.borderRadius
-            color: Qt.rgba(Colors.foreground2.r, Colors.foreground2.g, Colors.foreground2.b, Launcher.bgTransparency)
+            color: Qt.rgba(Colors.background1.r, Colors.background1.g, Colors.background1.b, Launcher.bgTransparency)
             Behavior on x {
                 ISpringAnimation {}
             }
