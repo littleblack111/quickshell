@@ -10,24 +10,12 @@ import qs.services as Services
 
 import qs.config
 import qs.components
+import "../utils/string_utils.js" as StringUtils
 
 Item {
     id: root
     readonly property MprisPlayer activePlayer: Services.Mpris.activePlayer
-    readonly property string cleanedTitle: cleanMusicTitle(activePlayer?.trackTitle)
-
-    function cleanMusicTitle(title) {
-        if (!title)
-            return "";
-        title = title.replace(/\s*\([^)]*\)/g, " ");
-        title = title.replace(/\s*\[[^\]]*\]/g, " ");
-        title = title.replace(/\s*\{[^\}]*\}/g, " ");
-        title = title.replace(/\s*【[^】]*】/g, " ");
-        title = title.replace(/\s*《[^》]*》/g, " ");
-        title = title.replace(/\s*「[^」]*」/g, " ");
-        title = title.replace(/\s*『[^』]*』/g, " ");
-        return title.trim();
-    }
+    readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle)
 
     implicitWidth: activePlayer ? rect.width - General.rectMargin / 1.2 : 0
     height: Bar.height + General.rectMargin / 1.5
