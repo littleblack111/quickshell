@@ -7,6 +7,7 @@ import QtQuick
 
 Scope {
     id: root
+    property var standaloneObj: null
     Bar {}
     LazyLoader {
         id: launcherLoader
@@ -24,18 +25,17 @@ Scope {
     }
     IpcHandler {
         target: "launcher"
-        property var standaloneObj: null
 
         function toggle() {
             launcherLoader.active = !launcherLoader.active;
         }
 
         function standalone(component: string): void {
-            if (standaloneObj) {
-                standaloneObj.active = !standaloneObj.active;
+            if (root.standaloneObj) {
+                root.standaloneObj.active = !root.standaloneObj.active;
                 return;
             }
-            standaloneObj = Qt.createQmlObject(`
+            root.standaloneObj = Qt.createQmlObject(`
 				import Quickshell
 				import QtQuick
 				import "launcher"
