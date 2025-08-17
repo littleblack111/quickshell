@@ -10,7 +10,7 @@ import qs.config
 IComponent {
     id: root
 
-    property var clipHist: Clip.query(inputCleaned)
+    property var clipHist: active ? Clip.query(inputCleaned) : []
     property int selectedIndex: -1
     property bool mouseTriggered: false
 
