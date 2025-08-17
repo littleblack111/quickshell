@@ -21,6 +21,17 @@ Searchable {
 
     property var _clipMetadata: ({})
 
+    function getType(text: string): string {
+        if (!text)
+            return;
+        if (text.startsWith("http://") || text.startsWith("https://"))
+            return "web";
+        if (text.startsWith("file://"))
+            return "file";
+
+        return "text";
+    }
+
     list: {
         if (!_clipHist?.length)
             return [];
@@ -50,7 +61,7 @@ Searchable {
 
             return {
                 index: idNum,
-                isImage: isImg,
+                type: isImg ? "image" : root.getType(payload),
                 data: isImg ? imgPath : payload,
                 raw: raw,
                 timestamp: metadata.timestamp || "",

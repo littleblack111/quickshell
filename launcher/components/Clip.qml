@@ -101,7 +101,7 @@ IComponent {
 
                     Column {
                         Loader {
-                            sourceComponent: modelData?.isImage ? img : text
+                            sourceComponent: modelData?.type === "image" ? img : text
                             readonly property Component text: IText {
                                 text: modelData?.data || ""
                                 font.pixelSize: Style.font.size.largerr
@@ -113,7 +113,7 @@ IComponent {
                         Row {
                             spacing: Launcher.innerMargin
                             IText {
-                                text: modelData.isImage ? "Image" : "Text"
+                                text: modelData.type
                                 color: Colors.foreground3
                                 font.pixelSize: Style.font.size.normal
                             }
