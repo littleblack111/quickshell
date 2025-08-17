@@ -100,9 +100,15 @@ IComponent {
                     }
 
                     Column {
-                        IText {
-                            text: modelData?.data || ""
-                            font.pixelSize: Style.font.size.largerr
+                        Loader {
+                            sourceComponent: modelData?.isImage ? img : text
+                            readonly property Component text: IText {
+                                text: modelData?.data || ""
+                                font.pixelSize: Style.font.size.largerr
+                            }
+                            readonly property Component img: Image {
+                                source: modelData?.data || ""
+                            }
                         }
                         Row {
                             spacing: Launcher.innerMargin

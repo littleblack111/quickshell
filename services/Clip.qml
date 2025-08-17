@@ -45,10 +45,9 @@ Searchable {
                 }
             }
 
-            const idStr = idNum >= 0 ? "" + idNum : "";
-            const imgPath = idStr ? imgMap[idStr] || "" : "";
+            const imgPath = idNum >= 0 ? imgMap[idNum] || "" : "";
             const isImg = !!imgPath;
-            const metadata = _clipMetadata[idStr] || {};
+            const metadata = _clipMetadata[idNum] || {};
 
             return {
                 index: idNum,
@@ -58,7 +57,9 @@ Searchable {
                 timestamp: metadata.timestamp || "",
                 appId: metadata.appId || "",
                 appTitle: metadata.appTitle || "",
-                appIcon: Quickshell.iconPath(AppSearch.guessIcon(metadata.appId), "image-missing")
+                appIcon: Quickshell.iconPath(AppSearch.guessIcon(metadata.appId), "image-missing"),
+                image: imgPath,
+                decoded: root._clipDecoded[idx] || ""
             };
         });
     }
