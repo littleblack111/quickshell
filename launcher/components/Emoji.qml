@@ -20,7 +20,7 @@ IComponent {
     name: "Emoji"
     prefix: name.toLowerCase() + " "
 
-    onInputChanged: {
+    onEmojisChanged: {
         Qt.callLater(() => {
             selectedIndex = emojis.length > 0 ? 0 : -1;
             syncSelectionState();
