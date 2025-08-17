@@ -73,70 +73,111 @@ IComponent {
         width: parent.width
         height: Math.min(listView.contentHeight + titleBar.height, Launcher.widgetHeight * 1.5)
 
-        ListView {
-            id: listView
+        RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            clip: true
-            model: clipHist
-            spacing: 0
+            ListView {
+                id: listView
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                clip: true
+                model: clipHist
+                spacing: 0
 
-            delegate: Item {
-                required property var modelData
-                required property int index
-                width: item.implicitWidth + Launcher.innerMargin * 4
-                height: item.height + Launcher.innerMargin * 4
+                delegate: Item {
+                    required property var modelData
+                    required property int index
+                    width: item.implicitWidth + Launcher.innerMargin * 4
+                    height: item.height + Launcher.innerMargin * 4
 
-                Row {
-                    id: item
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    anchors.margins: Launcher.innerMargin * 2
-                    spacing: Launcher.innerMargin * 2
+                    Row {
+                        id: item
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.margins: Launcher.innerMargin * 2
+                        spacing: Launcher.innerMargin * 2
 
-                    IconImage {
-                        source: modelData?.appIcon
-                        implicitSize: parent.height
-                    }
+                        IconImage {
+                            source: modelData?.appIcon
+                            implicitSize: parent.height
+                        }
 
-                    Column {
-                        Loader {
-                            sourceComponent: modelData?.type === "image" ? img : text
-                            readonly property Component text: IText {
-                                text: modelData?.data || ""
-                                font.pixelSize: Style.font.size.largerr
+                        Column {
+                            Loader {
+                                sourceComponent: modelData?.type === "image" ? img : text
+                                readonly property Component text: IText {
+                                    text: modelData?.data || ""
+                                    font.pixelSize: Style.font.size.largerr
+                                }
+                                readonly property Component img: Image {
+                                    source: modelData?.data || ""
+                                }
                             }
-                            readonly property Component img: Image {
-                                source: modelData?.data || ""
+                            Row {
+                                spacing: Launcher.innerMargin
+                                property string sinceWhen: TimeDate.sinceWhen(modelData?.timestamp) || ""
+                                IText {
+                                    text: modelData.type
+                                    color: Colors.foreground3
+                                    font.pixelSize: Style.font.size.normal
+                                }
+                                IText {
+                                    visible: parent.sinceWhen
+                                    text: '·'
+                                    color: Colors.foreground3
+                                    font.pixelSize: Style.font.size.normal
+                                }
+                                IText {
+                                    text: parent.sinceWhen || ""
+                                    color: Colors.foreground3
+                                    font.pixelSize: Style.font.size.normal
+                                }
                             }
                         }
-                        Row {
-                            spacing: Launcher.innerMargin
-                            IText {
-                                text: modelData.type
-                                color: Colors.foreground3
-                                font.pixelSize: Style.font.size.normal
-                            }
-                            IText {
-                                text: TimeDate.sinceWhen(modelData?.timestamp) || ""
-                                color: Colors.foreground3
-                                font.pixelSize: Style.font.size.normal
-                            }
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onPositionChanged: {
+                            root.selectedIndex = index;
+                        }
+                        onExited: {
+                            root.selectedIndex = 0;
+                        }
+                        onPressed: {
+                            root.exec();
                         }
                     }
                 }
+            }
+            Flickable {
+                id: preview
+                clip: true
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onPositionChanged: {
-                        root.selectedIndex = index;
+                contentWidth: loader.item.width
+                contentHeight: loader.item.height
+                flickableDirection: Flickable.VerticalFlick
+                boundsBehavior: Flickable.StopAtBounds
+
+                Loader {
+                    id: loader
+                    sourceComponent: clipHist[selectedIndex]?.type === "image" ? img : text
+                    property Component text: TextEdit {
+                        id: textEdit
+                        width: preview.width
+                        color: Colors.foreground1
+                        selectionColor: Colors.background3
+                        text: clipHist[selectedIndex]?.decoded
                     }
-                    onExited: {
-                        root.selectedIndex = 0;
-                    }
-                    onPressed: {
-                        root.exec();
+                    property Component img: Image {
+                        id: image
+                        width: preview.width
+                        height: preview.height
+                        source: clipHist[selectedIndex]?.image || ""
+                        fillMode: Image.PreserveAspectFit
                     }
                 }
             }
