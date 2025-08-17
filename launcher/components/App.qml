@@ -12,6 +12,7 @@ IComponent {
 
     property list<DesktopEntry> entries: active ? AppSearch.query(inputCleaned) : []
     property int selectedIndex: -1
+    property bool mouseTriggered: false
 
     name: "Applications"
 
@@ -44,23 +45,27 @@ IComponent {
     up: function () {
         if (selectedIndex <= 0)
             return true;
+        mouseTriggered = false;
         selectedIndex--;
     }
     down: function () {
         if (selectedIndex + 1 > listView.count - 1)
             return true;
+        mouseTriggered = false;
         selectedIndex++;
     }
 
     home: function () {
         if (listView.count === 0)
             return true;
+        mouseTriggered = false;
         selectedIndex = -1;
         selectedIndex = 0;
     }
     end: function () {
         if (listView.count === 0)
             return true;
+        mouseTriggered = false;
         selectedIndex = listView.count;
         selectedIndex = listView.count - 1;
     }
@@ -68,6 +73,7 @@ IComponent {
     pgup: function () {
         if (listView.count === 0)
             return true;
+        mouseTriggered = false;
         const pageSize = Math.floor(listView.height / (General.appIconSize + Launcher.innerMargin * 2));
         if (selectedIndex - pageSize < 0) {
             selectedIndex = 0;
@@ -79,6 +85,7 @@ IComponent {
     pgdn: function () {
         if (listView.count === 0)
             return true;
+        mouseTriggered = false;
         const pageSize = Math.floor(listView.height / (General.appIconSize + Launcher.innerMargin * 2));
         if (selectedIndex + pageSize >= listView.count) {
             selectedIndex = listView.count - 1;
@@ -95,7 +102,7 @@ IComponent {
 
     onSelectedIndexChanged: {
         syncSelectionState();
-        if (selectedIndex < 0 || selectedIndex >= listView.count)
+        if (selectedIndex < 0 || selectedIndex >= listView.count || mouseTriggered)
             return;
         Qt.callLater(() => {
             listView.positionViewAtIndex(selectedIndex, ListView.Contain);
@@ -157,9 +164,11 @@ IComponent {
                     anchors.fill: parent
                     hoverEnabled: true
                     onPositionChanged: {
+                        root.mouseTriggered = true;
                         root.selectedIndex = index;
                     }
                     onExited: {
+                        root.mouseTriggered = true;
                         root.selectedIndex = 0;
                     }
                     onPressed: {

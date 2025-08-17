@@ -12,6 +12,7 @@ IComponent {
 
     property var clipHist: Clip.query(inputCleaned)
     property int selectedIndex: -1
+    property bool mouseTriggered: false
 
     name: "Clipboard"
 
@@ -34,23 +35,28 @@ IComponent {
     up: function () {
         if (selectedIndex <= 0)
             return true;
+        mouseTriggered = false;
         selectedIndex--;
     }
     down: function () {
         if (selectedIndex + 1 > listView.count - 1)
             return true;
+        mouseTriggered = false;
         selectedIndex++;
     }
 
     onClipHistChanged: {
+        mouseTriggered = false;
         selectedIndex = 0;
         listView.positionViewAtBeginning();
         syncSelectionState();
     }
 
     onSelectedIndexChanged: {
-        if (selectedIndex >= 0 && selectedIndex < listView.count) {
-            listView.positionViewAtIndex(selectedIndex, ListView.Contain);
+        if (!mouseTriggered && selectedIndex >= 0 && selectedIndex < listView.count) {
+            Qt.callLater(() => {
+                listView.positionViewAtIndex(selectedIndex, ListView.Contain);
+            });
         }
         syncSelectionState();
     }
@@ -76,6 +82,7 @@ IComponent {
         RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
+
             ListView {
                 id: listView
                 Layout.fillWidth: true
@@ -140,9 +147,11 @@ IComponent {
                         anchors.fill: parent
                         hoverEnabled: true
                         onPositionChanged: {
+                            root.mouseTriggered = true;
                             root.selectedIndex = index;
                         }
                         onExited: {
+                            root.mouseTriggered = true;
                             root.selectedIndex = 0;
                         }
                         onPressed: {
@@ -151,6 +160,7 @@ IComponent {
                     }
                 }
             }
+
             Flickable {
                 id: preview
                 clip: true
