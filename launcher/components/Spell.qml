@@ -27,6 +27,10 @@ IComponent {
     }
 
     onAspellChanged: {
+        if (selectedIndex !== -1) {
+            syncSelectionState();
+            return;
+        }
         selectedIndex = aspell.length > 0 ? 0 : -1;
         // selectedIndexChanged dont get called somehow
         syncSelectionState();

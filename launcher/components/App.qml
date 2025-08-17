@@ -95,6 +95,10 @@ IComponent {
     }
 
     onEntriesChanged: {
+        if (selectedIndex !== -1) {
+            syncSelectionState();
+            return;
+        }
         selectedIndex = 0;
         listView.contentY = 0;
         syncSelectionState();

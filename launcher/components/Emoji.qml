@@ -22,6 +22,10 @@ IComponent {
 
     onEmojisChanged: {
         Qt.callLater(() => {
+            if (selectedIndex !== -1) {
+                syncSelectionState();
+                return;
+            }
             selectedIndex = emojis.length > 0 ? 0 : -1;
             syncSelectionState();
             if (loader.item && loader.item.flickable)

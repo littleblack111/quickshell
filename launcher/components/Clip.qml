@@ -46,6 +46,10 @@ IComponent {
     }
 
     onClipHistChanged: {
+        if (selectedIndex !== -1) {
+            syncSelectionState();
+            return;
+        }
         mouseTriggered = false;
         selectedIndex = 0;
         listView.positionViewAtBeginning();
