@@ -24,7 +24,7 @@ Singleton {
     readonly property double widgetBgTransparency: 0.3
     readonly property double widgetTitleBgTransparency: 0.2 // as it's on top of it
 
-    readonly property bool showWidgetTitle: true
+    readonly property bool showWidgetTitle: false
 
     readonly property int topMargin: 400
 
