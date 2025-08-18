@@ -63,8 +63,8 @@ IComponent {
         return {
             valid: isValid,
             priority: isValid,
-            answer: isValid ? answer : "",
-            predictiveCompletion: isValid ? answer.slice(input.length) : ""
+            answer: answer || "",
+            predictiveCompletion: answer?.slice(input.length) || ""
         };
     }
 
