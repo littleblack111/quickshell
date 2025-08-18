@@ -157,7 +157,7 @@ IComponent {
                             root.mouseTriggered = true;
                         }
                         onPressed: {
-                            root.exec();
+                            root._exec();
                         }
                     }
                 }
