@@ -180,6 +180,7 @@ IComponent {
                     sourceComponent: clipHist[selectedIndex]?.type === "image" ? img : text
                     property Component text: TextEdit {
                         id: textEdit
+                        readOnly: true
                         width: preview.width
                         color: Colors.foreground1
                         selectionColor: Colors.background3
