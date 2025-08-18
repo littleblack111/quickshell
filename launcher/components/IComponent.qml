@@ -15,8 +15,8 @@ IRect {
     readonly property string inputCleaned: input.toLowerCase().trim()
     property string prefix
     property bool active: !standalone ? input && _input.startsWith(prefix) : true
-    property bool valid: processed?.valid || false
-    property bool priority: valid && processed?.priority || false // please set priority to false if it's invalid
+    property bool valid: !standalone ? processed?.valid || false : true
+    property bool priority: !standalone ? valid && processed?.priority || false : true // please set priority to false if it's invalid
     property string answer: processed?.answer || ""
     property Component preview: Component {
         IText {

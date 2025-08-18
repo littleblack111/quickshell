@@ -34,7 +34,7 @@ IComponent {
         return {
             valid: isValid,
             priority: isValid,
-            answer: selected ? selected.icon : ""
+            answer: selected?.icon || ""
         };
     }
 
