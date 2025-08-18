@@ -266,6 +266,7 @@ ILauncher {
                         }
                         Connections {
                             target: item
+                            ignoreUnknownSignals: true
                             function onClose() {
                                 parentLoader.active = false;
                             }
