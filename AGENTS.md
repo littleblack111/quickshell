@@ -18,7 +18,13 @@ for example:
 ```
 qs msg reload true
 ```
+or for standalone components:
+```
+qs msg launcher standalone Clip
+```
 where reload is the target and true is the argument, the argument is seperated by space
+
+most IPCHandlers are located in shell.qml, check that
 
 Obviously this is IPC, meaning qs should be running already, so consider something like this:
 ```
