@@ -170,7 +170,6 @@ IComponent {
                     }
                     onExited: {
                         root.mouseTriggered = true;
-                        root.selectedIndex = 0;
                     }
                     onPressed: {
                         root.exec();
