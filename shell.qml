@@ -58,6 +58,7 @@ Scope {
 								onLoaded: {
 									item.standalone = true
 									item.state = selectionState;
+									item.close.connect(() => root.active = false);
 								}
 							}
 						}
