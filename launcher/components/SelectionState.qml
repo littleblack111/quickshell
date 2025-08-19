@@ -3,12 +3,24 @@ import Quickshell
 import QtQuick
 
 Singleton {
+    id: root
+
+    PersistentProperties {
+        id: persist
+        reloadableId: "launcherSelectionState"
+
+        property string input: ""
+        property int cursorPosition: 0
+        property int selectedPriority: 0
+        property int previousSelectedPriority: 0
+    }
+
     property Item selected: null
-    property string input: ""
-    property int cursorPosition: 0
+    property alias input: persist.input
+    property alias cursorPosition: persist.cursorPosition
     property var priorities: []
-    property int selectedPriority: 0
-    property int previousSelectedPriority: 0
+    property alias selectedPriority: persist.selectedPriority
+    property alias previousSelectedPriority: persist.previousSelectedPriority
     property var widgets: []
 
     onSelectedPriorityChanged: {
@@ -22,7 +34,6 @@ Singleton {
 
         previousSelectedPriority = selectedPriority;
     }
-
     // order them based on widgets(which came from order from config)
     onPrioritiesChanged: {
         for (let i = priorities.length - 1; i >= 0; i--)

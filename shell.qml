@@ -7,12 +7,24 @@ import QtQuick
 
 Scope {
     id: root
+
     property var standaloneObj: ({})
+
     Bar {}
+
+    PersistentProperties {
+        id: loaderProp
+        reloadableId: "launcherLoaderProp"
+
+        property bool active: false
+    }
     LazyLoader {
         id: launcherLoader
+
+        active: loaderProp.active
+
         component: Launcher {
-            parentLoader: launcherLoader
+            parentLoader: loaderProp
         }
     }
 
@@ -27,7 +39,7 @@ Scope {
         target: "launcher"
 
         function toggle() {
-            launcherLoader.active = !launcherLoader.active;
+            loaderProp.active = !loaderProp.active;
         }
 
         function standalone(component: string): void {
