@@ -27,16 +27,15 @@ IComponent {
     }
 
     onAspellChanged: {
-        if (selectedIndex !== -1) {
-            syncSelectionState();
-            return;
-        }
-        selectedIndex = aspell.length > 0 ? 0 : -1;
-        // selectedIndexChanged dont get called somehow
-        syncSelectionState();
-        if (loader.item && loader.item.flickable) {
-            loader.item.flickable.contentY = 0;
-        }
+        Qt.callLater(() => {
+            if (selectedIndex !== -1) {
+                syncSelectionState();
+                return;
+            }
+            selectedIndex = aspell.length > 0 ? 0 : -1;
+            if (loader.item && loader.item.flickable)
+                loader.item.flickable.contentY = 0;
+        });
     }
 
     onSelectedIndexChanged: {

@@ -27,7 +27,6 @@ IComponent {
                 return;
             }
             selectedIndex = emojis.length > 0 ? 0 : -1;
-            syncSelectionState();
             if (loader.item && loader.item.flickable)
                 loader.item.flickable.contentY = 0;
         });
