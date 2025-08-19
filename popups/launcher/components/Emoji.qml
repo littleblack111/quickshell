@@ -13,6 +13,10 @@ IComponent {
     property var emojis: active ? Emoji.query(input) : []
     property int selectedIndex: -1
 
+    property int cols: Math.max(1, Math.floor(innerLoader.width / Math.max(1, Math.round(Launcher.widgetFontSize * 4))))
+    property int cellWidth: Math.floor(innerLoader.width / cols)
+    property int cellHeight: Math.ceil(Launcher.widgetFontSize * 2) + Launcher.innerMargin * 2
+
     name: "Emoji"
     prefix: name.toLowerCase() + " "
 
@@ -72,13 +76,11 @@ IComponent {
         selectedIndex++;
     }
     up: function () {
-        const cols = loader.view ? Math.max(1, Math.floor(loader.view.width / loader.view.cellWidth)) : 1;
         if (selectedIndex - cols < 0)
             return true;
         selectedIndex -= cols;
     }
     down: function () {
-        const cols = loader.view ? Math.max(1, Math.floor(loader.view.width / loader.view.cellWidth)) : 1;
         if (selectedIndex + cols >= emojis.length)
             return true;
         selectedIndex += cols;
@@ -119,14 +121,14 @@ IComponent {
                         flow: GridView.FlowLeftToRight
                         snapMode: GridView.NoSnap
 
-                        cellWidth: Math.min(width / Math.max(1, Math.floor(width / (Launcher.widgetFontSize * 5))), width / 3)
-                        cellHeight: Launcher.widgetFontSize * 2.2 + Launcher.innerMargin * 2
+                        cellWidth: root.cellWidth
+                        cellHeight: root.cellHeight
 
                         delegate: Item {
                             required property var modelData
                             required property int index
                             width: grid.cellWidth
-                            height: grid.cellHeight
+                            height: chipContent.implicitHeight + Launcher.innerMargin * 2
                             scale: index === selectedIndex ? 1.03 : 0.97
 
                             IRect {

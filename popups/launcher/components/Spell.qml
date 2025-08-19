@@ -94,14 +94,14 @@ IComponent {
     }
 
     up: function () {
-        const cols = loader.view ? Math.max(1, Math.floor(loader.view.width / loader.view.cellWidth)) : 1;
+        const cols = Math.max(1, Math.floor(innerLoader.width / Math.max(1, Math.round(Launcher.widgetFontSize * 6))));
         if (selectedIndex - cols < 0)
             return true;
         selectedIndex -= cols;
     }
 
     down: function () {
-        const cols = loader.view ? Math.max(1, Math.floor(loader.view.width / loader.view.cellWidth)) : 1;
+        const cols = Math.max(1, Math.floor(innerLoader.width / Math.max(1, Math.round(Launcher.widgetFontSize * 6))));
         if (selectedIndex + cols >= aspell.length)
             return true;
         selectedIndex += cols;
@@ -144,15 +144,15 @@ IComponent {
                         flow: GridView.FlowLeftToRight
                         snapMode: GridView.NoSnap
 
-                        cellWidth: Math.min(width / Math.max(1, Math.floor(width / (Launcher.widgetFontSize * 4))), width / 2)
-                        cellHeight: Launcher.widgetFontSize * 1.4 + Launcher.innerMargin * 2
+                        cellWidth: Math.floor(width / Math.max(1, Math.floor(width / Math.max(1, Math.round(Launcher.widgetFontSize * 6)))))
+                        cellHeight: Math.ceil(Launcher.widgetFontSize * 1.6) + Launcher.innerMargin * 2
 
                         delegate: Item {
                             required property var modelData
                             required property int index
 
                             width: grid.cellWidth
-                            height: grid.cellHeight
+                            height: chipContent.implicitHeight + Launcher.innerMargin * 2
                             scale: index === selectedIndex ? 1.03 : 0.97
 
                             IRect {
