@@ -26,18 +26,18 @@ IComponent {
                 syncSelectionState();
                 return;
             }
-            selectedIndex = emojis.length > 0 ? 0 : -1;
+
+            selectedIndex = 0;
             if (loader.item && loader.item.flickable)
                 loader.item.flickable.contentY = 0;
         });
     }
 
     onSelectedIndexChanged: {
-        if (!loader.view || !loader.item || !loader.item.flickable)
-            return;
-        if (selectedIndex < 0 || selectedIndex >= loader.view.count)
-            return;
         Qt.callLater(() => {
+            if (!loader.view || selectedIndex < 0 || selectedIndex >= loader.view.count)
+                return;
+
             syncSelectionState();
             loader.view.currentIndex = selectedIndex;
             loader.view.positionViewAtIndex(selectedIndex, GridView.Contain);
@@ -91,7 +91,12 @@ IComponent {
     }
 
     syncSelectionState: function () {
-        Qt.callLater(() => state.selected = loader.view.itemAtIndex(selectedIndex));
+        Qt.callLater(() => {
+            if (!loader.view || selectedIndex < 0 || selectedIndex >= loader.view.count)
+                return;
+
+            state.selected = loader.view.itemAtIndex(selectedIndex);
+        });
     }
 
     IInnerComponent {
