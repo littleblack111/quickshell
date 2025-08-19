@@ -2,7 +2,7 @@ pragma Singleton
 
 import Quickshell
 import QtQuick
-import qs.launcher.components
+import qs.popups.launcher.components
 
 Singleton {
     id: root

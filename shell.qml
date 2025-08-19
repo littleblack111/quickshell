@@ -1,7 +1,7 @@
 import Quickshell
 import Quickshell.Io
 import "bar"
-import "launcher"
+import "popups/launcher"
 
 import QtQuick
 
@@ -50,8 +50,8 @@ Scope {
             root.standaloneObj.obj = Qt.createQmlObject(`
 				import Quickshell
 				import QtQuick
-				import "launcher"
-				import "launcher/components"
+				import "popups/launcher"
+				import "popups/launcher/components"
 
 				LazyLoader {
 					property QtObject selectionState: QtObject {
@@ -66,7 +66,7 @@ Scope {
 					readonly property list<Component> widgets: [
 						Component {
 							Loader {
-								sourceComponent: Qt.createComponent("launcher/components/" + "${component}.qml")
+								sourceComponent: Qt.createComponent("popups/launcher/components/" + "${component}.qml")
 								onLoaded: {
 									item.standalone = true
 									item.state = selectionState;
