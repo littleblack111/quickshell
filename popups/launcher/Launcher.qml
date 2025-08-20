@@ -329,13 +329,13 @@ ILauncher {
         }
 
         Shortcut {
-            sequence: "PageDown"
+            sequence: "PgDown"
             context: Qt.ApplicationShortcut
             onActivated: changePos(-20)
         }
 
         Shortcut {
-            sequence: "PageUp"
+            sequence: "PgUp"
             context: Qt.ApplicationShortcut
             onActivated: changePos(20)
         }
