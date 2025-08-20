@@ -92,7 +92,7 @@ IComponent {
 
     syncSelectionState: function () {
         Qt.callLater(() => {
-            if (!loader.view || selectedIndex < 0 || selectedIndex >= loader.view.count)
+            if (!loader.view || selectedIndex < 0 || selectedIndex >= loader.view.count || !root.visible)
                 return;
 
             state.selected = loader.view.itemAtIndex(selectedIndex);

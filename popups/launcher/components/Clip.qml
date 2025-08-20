@@ -63,7 +63,11 @@ IComponent {
     }
 
     syncSelectionState: function () {
-        Qt.callLater(() => state.selected = listView.itemAtIndex(selectedIndex));
+        Qt.callLater(() => {
+            if (!root.visible || selectedIndex < 0 || selectedIndex >= listView.count)
+                return;
+            state.selected = listView.itemAtIndex(selectedIndex);
+        });
     }
 
     IInnerComponent {

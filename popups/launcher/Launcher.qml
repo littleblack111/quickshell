@@ -15,6 +15,15 @@ ILauncher {
 
     name: "quickshell::launcher::launcher"
 
+    Connections {
+        target: parentLoader
+        function onActiveChanged() {
+            if (!parentLoader.active && launcher.state) {
+                launcher.state.selected = null;
+            }
+        }
+    }
+
     anchors.top: true
     margins.top: Launcher.topMargin
     aboveWindows: true
