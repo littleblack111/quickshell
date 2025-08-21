@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import "components"
 import qs.components
 import qs.config
+import qs.services
 
 // TODO: currently, we're relying on the compositor to provide the animation which ig is fine, but we should use our own in the future, however it might look weird combined with the compositors's
 ILauncher {
@@ -212,7 +213,12 @@ ILauncher {
                         //     parentLoader.active = activeFocus;
                         // }
                         onAccepted: {
-                            launcher.state?.priorities[launcher.state.selectedPriority]?._exec(); // TODO: kde like waiting animation for app to launch
+                            const selectedComponent = launcher.state?.priorities[launcher.state.selectedPriority];
+                            const selectedData = selectedComponent?.getSelectedData ? selectedComponent.getSelectedData() : null;
+                            
+                            History.trackLauncherAction(textInput.text, selectedComponent?.name || "", selectedData);
+                            
+                            selectedComponent?._exec();
                             parentLoader.active = false;
                             textInput.text = "";
                         }

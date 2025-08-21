@@ -11,6 +11,8 @@ IComponent {
     id: root
 
     property var clipHist: active ? Clip.query(inputCleaned) : []
+    property var historyData: active ? History.getRecentHistory("Clipboard", 10) : []
+    property var combinedList: active ? combineClipboardAndHistory() : []
     property int selectedIndex: -1
 
     name: "Clipboard"
@@ -19,8 +21,44 @@ IComponent {
 
     implicitHeight: valid ? layout.height : 0
 
+    function combineClipboardAndHistory() {
+        const clips = clipHist || [];
+        const history = historyData || [];
+        
+        const historyMap = new Map();
+        history.forEach(item => {
+            if (item.data && item.data.raw) {
+                historyMap.set(item.data.raw, item.count || 1);
+            }
+        });
+
+        const enhanced = clips.map(clip => {
+            const count = historyMap.get(clip.raw) || 0;
+            const result = {};
+            for (const key in clip) {
+                if (clip.hasOwnProperty(key)) {
+                    result[key] = clip[key];
+                }
+            }
+            result.historyCount = count;
+            result.isFromHistory = count > 0;
+            return result;
+        });
+
+        return enhanced.sort((a, b) => {
+            if (b.historyCount !== a.historyCount) {
+                return b.historyCount - a.historyCount;
+            }
+            return 0;
+        });
+    }
+
+    getSelectedData: function() {
+        return selectedIndex >= 0 && combinedList[selectedIndex] ? combinedList[selectedIndex] : null;
+    }
+
     process: function () {
-        const isValid = clipHist.length > 0;
+        const isValid = combinedList.length > 0;
         return {
             valid: isValid,
             priority: isValid
@@ -28,7 +66,10 @@ IComponent {
     }
 
     exec: function () {
-        Clip.decodeAndCopy(clipHist[selectedIndex].raw);
+        const item = combinedList[selectedIndex];
+        if (item) {
+            Clip.decodeAndCopy(item.raw);
+        }
     }
 
     up: function () {
@@ -53,7 +94,7 @@ IComponent {
         selectedIndex = listView.count - 1;
     }
 
-    onClipHistChanged: {
+    onCombinedListChanged: {
         if (selectedIndex !== -1) {
             syncSelectionState();
             return;
@@ -91,13 +132,13 @@ IComponent {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            ListView {
-                id: listView
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                clip: true
-                model: clipHist
-                spacing: 0
+                ListView {
+                    id: listView
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    clip: true
+                    model: combinedList
+                    spacing: 0
 
                 delegate: Item {
                     required property var modelData
@@ -123,6 +164,14 @@ IComponent {
                             }
                         }
 
+                        IRect {
+                            visible: modelData?.isFromHistory || false
+                            color: Colors.accent
+                            width: 3
+                            height: parent.height
+                            radius: 1
+                        }
+
                         Column {
                             Loader {
                                 sourceComponent: modelData?.type === "image" ? img : text
@@ -141,6 +190,12 @@ IComponent {
                                 IText {
                                     text: modelData.type
                                     color: index === root.selectedIndex ? Colors.foreground2 : Colors.foreground3
+                                    font.pixelSize: Launcher.widgetFontSize / 1.35
+                                }
+                                IText {
+                                    visible: modelData?.historyCount > 0
+                                    text: `×${modelData.historyCount}`
+                                    color: Colors.accent
                                     font.pixelSize: Launcher.widgetFontSize / 1.35
                                 }
                                 IText {
@@ -184,20 +239,20 @@ IComponent {
 
                 Loader {
                     id: loader
-                    sourceComponent: clipHist[selectedIndex]?.type === "image" ? img : text
+                    sourceComponent: combinedList[selectedIndex]?.type === "image" ? img : text
                     property Component text: TextEdit {
                         id: textEdit
                         readOnly: true
                         width: preview.width
                         color: Colors.foreground1
                         selectionColor: Colors.background3
-                        text: clipHist[selectedIndex]?.decoded || ""
+                        text: combinedList[selectedIndex]?.decoded || ""
                     }
                     property Component img: Image {
                         id: image
                         width: preview.width
                         height: preview.height
-                        source: clipHist[selectedIndex]?.image || ""
+                        source: combinedList[selectedIndex]?.image || ""
                         fillMode: Image.PreserveAspectFit
                     }
                 }

@@ -11,11 +11,49 @@ IComponent {
     id: root
 
     property list<DesktopEntry> entries: active ? AppSearch.query(inputCleaned) : []
+    property var historyData: active ? History.getRecentHistory("Applications", 10) : []
+    property var enhancedEntries: active ? enhanceWithHistory() : []
     property int selectedIndex: -1
 
     name: "Applications"
 
     implicitHeight: valid ? layout.height : 0
+
+    function enhanceWithHistory() {
+        const apps = entries || [];
+        const history = historyData || [];
+        
+        const historyMap = new Map();
+        history.forEach(item => {
+            if (item.data && item.data.name) {
+                historyMap.set(item.data.name, item.count || 1);
+            }
+        });
+
+        const enhanced = apps.map(app => {
+            const count = historyMap.get(app.name) || 0;
+            const result = {};
+            for (const key in app) {
+                if (app.hasOwnProperty(key)) {
+                    result[key] = app[key];
+                }
+            }
+            result.historyCount = count;
+            result.isFromHistory = count > 0;
+            return result;
+        });
+
+        return enhanced.sort((a, b) => {
+            if (b.historyCount !== a.historyCount) {
+                return b.historyCount - a.historyCount;
+            }
+            return 0;
+        });
+    }
+
+    getSelectedData: function() {
+        return selectedIndex >= 0 && enhancedEntries[selectedIndex] ? enhancedEntries[selectedIndex] : null;
+    }
 
     preview: Component {
         IconImage {
@@ -25,11 +63,11 @@ IComponent {
         }
     }
 
-    property string predictiveCompletion: valid ? entries[selectedIndex]?.name.slice(input.length) || "" : ""
+    property string predictiveCompletion: valid ? enhancedEntries[selectedIndex]?.name.slice(input.length) || "" : ""
 
     process: function () {
-        const isValid = entries.length > 0;
-        const selected = isValid ? entries[selectedIndex] : "";
+        const isValid = enhancedEntries.length > 0;
+        const selected = isValid ? enhancedEntries[selectedIndex] : "";
         return {
             valid: isValid,
             priority: isValid,
@@ -38,7 +76,10 @@ IComponent {
     }
 
     exec: function () {
-        SelectionState.selected.modelData.execute();
+        const app = enhancedEntries[selectedIndex];
+        if (app && app.execute) {
+            app.execute();
+        }
     }
 
     up: function () {
@@ -87,7 +128,7 @@ IComponent {
         }
     }
 
-    onEntriesChanged: {
+    onEnhancedEntriesChanged: {
         if (selectedIndex !== -1) {
             syncSelectionState();
             return;
@@ -125,11 +166,11 @@ IComponent {
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-            model: entries
+            model: enhancedEntries
             spacing: 0
 
             delegate: Item {
-                required property DesktopEntry modelData
+                required property var modelData
                 required property int index
                 width: item.implicitWidth + Launcher.innerMargin * 4
                 height: item.height + Launcher.innerMargin * 4
@@ -142,15 +183,31 @@ IComponent {
                     anchors.margins: Launcher.innerMargin * 2
                     spacing: Launcher.innerMargin * 2
 
+                    IRect {
+                        visible: modelData?.isFromHistory || false
+                        color: Colors.accent
+                        width: 3
+                        height: parent.height
+                        radius: 1
+                    }
+
                     IconImage {
                         source: Quickshell.iconPath(modelData.icon, "image-missing")
                         implicitWidth: General.appIconSize
                         implicitHeight: General.appIconSize
                     }
-                    IText {
-                        text: modelData.name
-                        renderType: Text.QtRendering
-                        color: index === selectedIndex ? Colors.foreground1 : Colors.foreground2
+                    Column {
+                        IText {
+                            text: modelData.name
+                            renderType: Text.QtRendering
+                            color: index === selectedIndex ? Colors.foreground1 : Colors.foreground2
+                        }
+                        IText {
+                            visible: modelData?.historyCount > 0
+                            text: `Used ${modelData.historyCount} times`
+                            color: Colors.accent
+                            font.pixelSize: Launcher.widgetFontSize / 1.5
+                        }
                     }
 
                     Behavior on scale {

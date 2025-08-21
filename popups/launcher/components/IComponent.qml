@@ -3,6 +3,7 @@ import QtQuick
 
 import qs.components
 import qs.config
+import qs.services
 
 IRect {
     id: root
@@ -48,10 +49,13 @@ IRect {
     property var end: () => {}
     property var pgup: () => {}
     property var pgdn: () => {}
+    property var getSelectedData: null
 
     signal close
 
     function _exec() {
+        const selectedData = getSelectedData ? getSelectedData() : null;
+        History.trackComponentAction(name, input, selectedData);
         exec();
         close();
     }
