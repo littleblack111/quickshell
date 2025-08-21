@@ -119,6 +119,16 @@ ILauncher {
                     TextInput {
                         id: textInput
                         property bool pendingUpdate: false
+                        Keys.onPressed: event => {
+                            if (event.key === Qt.Key_End || event.key === Qt.Key_Home) {
+                                if (event.key === Qt.Key_End) {
+                                    endShortcut.activated();
+                                } else if (event.key === Qt.Key_Home) {
+                                    homeShortcut.activated();
+                                }
+                                event.accepted = true;
+                            }
+                        }
 
                         Layout.fillHeight: true
                         Layout.fillWidth: true
@@ -339,6 +349,20 @@ ILauncher {
             context: Qt.ApplicationShortcut
             onActivated: changePos(20)
         }
+
+        Shortcut {
+            id: homeShortcut
+            sequence: "Home"
+            context: Qt.ApplicationShortcut
+            onActivated: changePos(200)
+        }
+
+        Shortcut {
+            id: endShortcut
+            sequence: StandardKey.MoveToEndOfDocument
+            context: Qt.ApplicationShortcut
+            onActivated: changePos(-200)
+        }
     }
     // 1 = left
     // -1 = right
@@ -374,6 +398,14 @@ ILauncher {
             break;
         case -20:
             if (item.pgdn())
+                set = 1;
+            break;
+        case 200:
+            if (item.home())
+                set = -1;
+            break;
+        case -200:
+            if (item.end())
                 set = 1;
             break;
         }
