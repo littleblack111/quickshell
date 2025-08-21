@@ -41,6 +41,17 @@ IComponent {
             return true;
         selectedIndex++;
     }
+    home: function () {
+        if (selectedIndex <= 0)
+            return true;
+        selectedIndex = -1;
+        selectedIndex = 0;
+    }
+    end: function () {
+        if (selectedIndex + 1 > listView.count - 1)
+            return true;
+        selectedIndex = listView.count - 1;
+    }
 
     onClipHistChanged: {
         if (selectedIndex !== -1) {

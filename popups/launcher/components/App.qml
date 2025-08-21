@@ -25,7 +25,7 @@ IComponent {
         }
     }
 
-    property string predictiveCompletion: valid ? entries[selectedIndex].name.slice(input.length) : ""
+    property string predictiveCompletion: valid ? entries[selectedIndex]?.name.slice(input.length) || "" : ""
 
     process: function () {
         const isValid = entries.length > 0;
@@ -53,13 +53,13 @@ IComponent {
     }
 
     home: function () {
-        if (listView.count === 0)
+        if (selectedIndex <= 0)
             return true;
         selectedIndex = -1;
         selectedIndex = 0;
     }
     end: function () {
-        if (listView.count === 0)
+        if (selectedIndex + 1 > listView.count - 1)
             return true;
         selectedIndex = listView.count;
         selectedIndex = listView.count - 1;
