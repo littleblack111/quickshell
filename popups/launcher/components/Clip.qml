@@ -133,6 +133,8 @@ IComponent {
                                 }
                                 readonly property Component img: Image {
                                     source: modelData?.data || ""
+                                    height: Launcher.widgetFontSize * 1.3
+                                    fillMode: Image.PreserveAspectFit
                                 }
                             }
                             Row {
