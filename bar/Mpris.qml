@@ -112,12 +112,26 @@ Item {
                     anchors.fill: parent
                     radius: 6
                     color: "transparent"
-                    Image {
+                    child: Image {
+                        id: albumArt
                         // IconImage makes it less crisp and blurry
                         anchors.fill: parent
                         source: activePlayer?.trackArtUrl || Quickshell.iconPath(AppSearch.guessIcon(activePlayer?.desktopEntry), "image-missing")
                         antialiasing: true
                         asynchronous: true
+                        ColorOverlay {
+                            property color rawColor: activePlayer?.playbackState === MprisPlaybackState.Playing ? Colors.background1 : Colors.background2
+                            anchors.fill: albumArt
+                            source: albumArt
+                            color: Qt.rgba(rawColor.r, rawColor.g, rawColor.b, General.accentTransparency)
+
+                            Behavior on color {
+                                ColorAnimation {
+                                    duration: General.animationDuration / 4
+                                    easing.type: Easing.InOutQuad
+                                }
+                            }
+                        }
                     }
                 }
 
