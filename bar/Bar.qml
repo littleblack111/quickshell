@@ -50,7 +50,7 @@ Scope {
                     radius: Bar.moduleRadius
 
                     Behavior on color {
-                        NumberAnimation {
+                        ColorAnimation {
                             duration: General.animationDuration
                             easing.type: Easing.InOutQuad
                         }

@@ -43,7 +43,7 @@ Item {
         opacity: root.activeOccupied ? Bar.wsActiveOpacity : Bar.wsEmptyOpacity / 3
 
         Behavior on color {
-            NumberAnimation {
+            ColorAnimation {
                 duration: Bar.wsAnimationDuration
                 easing.type: Easing.InOutQuad
             }
