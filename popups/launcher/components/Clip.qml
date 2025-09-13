@@ -190,6 +190,7 @@ IComponent {
                     property Component text: TextEdit {
                         id: textEdit
                         readOnly: true
+                        wrapMode: TextEdit.Wrap
                         width: preview.width
                         color: Colors.foreground1
                         selectionColor: Colors.background3
