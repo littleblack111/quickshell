@@ -20,6 +20,7 @@ Searchable {
     property list<string> _clipImgIds: _clipImg.map(p => p.split("/").pop().split(".").shift())
     property var _clipMetadata: ({})
     property var _clipDecoded: ({})
+    property int _pendingReorderId: -1
 
     function getType(text: string): string {
         if (!text)
@@ -100,10 +101,18 @@ Searchable {
     }
 
     function decodeAndCopy(text) {
+        const tab = text.indexOf("\t");
+        if (tab > 0) {
+            const idStr = text.slice(0, tab);
+            const n = parseInt(idStr, 10);
+            if (!Number.isNaN(n))
+                _pendingReorderId = n;
+        }
         Quickshell.execDetached(["sh", "-c", `cliphist decode '${StringUtils.shellSingleQuoteEscape(text)}' | wl-copy`]);
     }
 
     function copy(text) {
+        _pendingReorderId = -1;
         Quickshell.execDetached(["wl-copy", text]);
     }
 
@@ -128,17 +137,31 @@ Searchable {
                     const idStr = firstLine.slice(0, tab);
                     const n = parseInt(idStr, 10);
                     if (!Number.isNaN(n)) {
+                        if (_clipMetadata[idStr]) {
+                            _pendingReorderId = -1;
+                            return;
+                        }
+
                         let newMetadata = {};
                         for (var k in _clipMetadata) {
                             if (_clipMetadata.hasOwnProperty(k))
                                 newMetadata[k] = _clipMetadata[k];
                         }
 
-                        newMetadata[idStr] = {
-                            timestamp: now,
-                            appId: activeToplevel ? activeToplevel.appId : "",
-                            appTitle: activeToplevel ? activeToplevel.title : ""
-                        };
+                        if (_pendingReorderId >= 0) {
+                            if (_clipMetadata[_pendingReorderId]) {
+                                newMetadata[idStr] = _clipMetadata[_pendingReorderId];
+                            }
+                            _pendingReorderId = -1;
+                        } else {
+                            if (!newMetadata[idStr]) {
+                                newMetadata[idStr] = {
+                                    timestamp: now,
+                                    appId: activeToplevel ? activeToplevel.appId : "",
+                                    appTitle: activeToplevel ? activeToplevel.title : ""
+                                };
+                            }
+                        }
                         _clipMetadata = newMetadata;
                     }
                 }
