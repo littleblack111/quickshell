@@ -76,7 +76,7 @@ Singleton {
 
             gpuUsageProc.running = true;
             gpuTempProc.running = true;
-            interval = General.resourceUpdateInterval * 1000;
+            interval = General.resourceUpdateInterval * cpuUsage > 0.7 || memoryUsedPercentage > 0.7 || cpuTemp > 0.7 ? 100 : 1000;
         }
     }
 
