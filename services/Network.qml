@@ -14,12 +14,21 @@ Singleton {
     property bool ethernet: false
     property string networkName: ""
     property int networkStrength
+    property int count
     property string state: ethernet ? Icons.resource.network.wifi : (networkName.length >= 0 && networkName !== "lo") ? (networkStrength >= 90 ? Icons.resource.network.wifi.max : networkStrength >= 80 ? Icons.resource.network.wifi.high : networkStrength >= 60 ? Icons.resource.network.wifi.mid : networkStrength >= 40 ? Icons.resource.network.wifi.low : networkStrength >= 20 ? Icons.resource.network.wifi.min : Icons.resource.network.disconnected) : Icons.resource.network.disconnected
+    property alias updateNetworkNameProc: updateNetworkName
 
     function update() {
-        updateConnectionType.startCheck();
-        updateNetworkName.running = true;
         updateNetworkStrength.running = true;
+        if (count >= 50) {
+            updateNetworkName.running = true;
+            count = 0;
+        }
+        count++;
+    }
+
+    Component.onCompleted: {
+        updateConnectionType.startCheck();
     }
 
     Timer {
@@ -35,7 +44,7 @@ Singleton {
     Process {
         id: updateConnectionType
         property string buffer
-        command: ["nmcli", "-t", "-f", "NAME,TYPE,DEVICE", "c", "show", "--active"]
+        command: ["nmcli", "-t", "-f", "TYPE", "c", "show", "--active"]
         running: true
         function startCheck() {
             buffer = "";
