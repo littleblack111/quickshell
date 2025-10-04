@@ -7,7 +7,7 @@ Singleton {
 
     readonly property int resourceUpdateInterval: 1
 
-    readonly property real iconSize: Style.font.size.larger ?? 16
+    readonly property real iconSize: Style.font.size.larger
 
     readonly property string cpuThermalPath: "/sys/class/thermal/thermal_zone0/temp"
 

@@ -38,15 +38,26 @@ Item {
             Layout.fillWidth: true
         }
 
-        Icon {
-            text: !root.isAlt ? root.icon : root.altIcon
-            color: root.value < root.thresholdL1 ? Colors.foreground2 : root.value >= root.thresholdL3 ? root.thresholdColorL3 : root.value >= root.thresholdL2 ? root.thresholdColorL2 : root.thresholdColorL1
-        }
-        IText {
-            animate: true
-            renderType: Text.CurveRendering // it's not static and is rapidly updated
-            text: !root.isAlt ? root.text : root.altText
-            color: root.value < root.thresholdL1 ? Colors.foreground1 : root.value >= root.thresholdL3 ? root.thresholdColorL3 : root.value >= root.thresholdL2 ? root.thresholdColorL2 : root.thresholdColorL1
+        ColumnLayout {
+            spacing: 0
+            Item {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+            }
+            IText {
+                animate: true
+                renderType: Text.CurveRendering // it's not static and is rapidly updated
+                text: !root.isAlt ? root.text : root.altText
+                fontSize: Style.font.size.largerr
+                color: root.value < root.thresholdL1 ? Colors.foreground1 : root.value >= root.thresholdL3 ? root.thresholdColorL3 : root.value >= root.thresholdL2 ? root.thresholdColorL2 : root.thresholdColorL1
+            }
+
+            Icon {
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+                iconSize: Style.font.size.small
+                text: !root.isAlt ? root.icon : root.altIcon
+                color: root.value < root.thresholdL1 ? Colors.foreground2 : root.value >= root.thresholdL3 ? root.thresholdColorL3 : root.value >= root.thresholdL2 ? root.thresholdColorL2 : root.thresholdColorL1
+            }
         }
 
         Item {

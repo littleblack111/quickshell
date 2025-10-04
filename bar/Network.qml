@@ -55,30 +55,54 @@ Item {
                 renderType: Text.CurveRendering // it's not static and is rapidly updated
             }
 
-            RowLayout {
-                spacing: Bar.resourceIconTextSpacing / 2
-                Icon {
-                    text: Icons.resource.network.download
-                    color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : Colors.foreground2
+            ColumnLayout {
+                // spacing: Bar.resourceIconTextSpacing / 2
+                spacing: 0
+                Item {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
                 }
                 IText {
                     animate: true
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                     text: root.down + root.downUnit
                     color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : Colors.foreground2
                     renderType: Text.CurveRendering // it's not static and is rapidly updated
                 }
-            }
-            RowLayout {
-                spacing: Bar.resourceIconTextSpacing / 2
                 Icon {
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+                    text: Icons.resource.network.download
+                    iconSize: Style.font.size.normal
+                    color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : Colors.foreground2
+                }
+                Item {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                }
+            }
+            ColumnLayout {
+                // spacing: Bar.resourceIconTextSpacing / 2
+                spacing: 0
+                Item {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                }
+                Icon {
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                     text: Icons.resource.network.upload
+                    iconSize: Style.font.size.normal
                     color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : Colors.foreground2
                 }
                 IText {
                     animate: true
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                     text: root.up + root.upUnit
                     color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : Colors.foreground2
                     renderType: Text.CurveRendering // it's not static and is rapidly updated
+                }
+                Item {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
                 }
             }
 

@@ -10,6 +10,7 @@ Text {
     property bool animate: false
     property real animateFrom: 0
     property real animateTo: 1
+    property real fontSize: Style.font.size.larger
 
     renderType: Text.NativeRendering // or Text.CurveRendering(much more expansive) or Text.QtRendering for faster
     textFormat: Text.PlainText
@@ -20,7 +21,7 @@ Text {
     font {
         family: Style.font.family.iosevka
         // pointSize: root.pixelSize
-        pixelSize: Style.font.size.larger
+        pixelSize: fontSize
     }
 
     Behavior on color {
