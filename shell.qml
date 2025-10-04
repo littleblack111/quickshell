@@ -2,6 +2,7 @@ import Quickshell
 import Quickshell.Io
 import "bar"
 import "popups/launcher"
+import "popups/CC"
 
 import QtQuick
 
@@ -25,6 +26,13 @@ Scope {
 
         component: Launcher {
             parentLoader: loaderProp
+        }
+    }
+    LazyLoader {
+        active: Global.ccProp.active
+
+        component: CC {
+            parentLoader: Global.ccProp
         }
     }
 

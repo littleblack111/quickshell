@@ -4,6 +4,8 @@ import QtQuick.Layouts
 import qs.components
 import qs.config
 
+import ".."
+
 Scope {
     id: root
 
@@ -154,6 +156,15 @@ Scope {
                                                             easing.type: Easing.InOutQuad
                                                         }
                                                     }
+                                                    MouseArea {
+                                                        anchors.fill: parent
+                                                        onPressed: {
+                                                            Global.ccProp.active = !Global.ccProp.active;
+                                                            let pos = parent.mapToGlobal(0, 0);
+                                                            Global.ccProp.x = pos.x;
+                                                            Global.ccProp.y = pos.y;
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -168,8 +179,9 @@ Scope {
                             }
                             MouseArea {
                                 anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
                                 hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                acceptedButtons: Qt.NoButton // propagate to timedate
                                 onEntered: {
                                     timeDateCC.showcc = true;
                                 }

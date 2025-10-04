@@ -10,8 +10,8 @@ Item {
 
     implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
+
     property bool isAlt: false
-    property bool isCollapsed: false
 
     RowLayout {
         id: layout
@@ -110,7 +110,6 @@ Item {
     }
     MouseArea {
         anchors.fill: parent
-        cursorShape: Qt.PointingHandCursor
         onPressed: {
             root.isAlt = !root.isAlt;
         }
