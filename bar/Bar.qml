@@ -114,7 +114,70 @@ Scope {
                         // Tray {
                         //     id: tray
                         // }
-                        TimeDate {}
+                        Item {
+                            Layout.preferredWidth: timeDateCCWrapper.implicitWidth
+                            Layout.preferredHeight: timeDateCCWrapper.implicitHeight
+                            IRect {
+                                id: timeDateCCWrapper
+                                color: Colors.accent
+                                radius: Style.rounding.large
+
+                                anchors.fill: parent
+
+                                implicitHeight: Bar.height - General.rectMargin
+                                implicitWidth: timeDateCC.width + General.rectMargin * 2
+                                RowLayout {
+                                    id: timeDateCC
+                                    property bool showcc: false
+                                    // width: childrenRect.width
+                                    // height: childrenRect.height
+                                    anchors.centerIn: parent
+
+                                    TimeDate {}
+                                    Item {
+                                        implicitWidth: timeDateCC.showcc ? ccLoader.width : 0
+                                        implicitHeight: timeDateCC.showcc ? ccLoader.height : 0
+                                        Loader {
+                                            id: ccLoader
+                                            active: timeDateCC.showcc
+                                            sourceComponent: Component {
+                                                Icon {
+                                                    text: ""
+                                                    SequentialAnimation {
+                                                        running: true
+                                                        NumberAnimation {
+                                                            target: parent
+                                                            property: "opacity"
+                                                            from: 0
+                                                            to: 1
+                                                            duration: General.animationDuration / 2
+                                                            easing.type: Easing.InOutQuad
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        Behavior on implicitWidth {
+                                            NumberAnimation {
+                                                duration: General.animationDuration / 4
+                                                easing.type: Easing.InOutQuad
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                hoverEnabled: true
+                                onEntered: {
+                                    timeDateCC.showcc = true;
+                                }
+                                onExited: {
+                                    timeDateCC.showcc = false;
+                                }
+                            }
+                        }
                         Network {}
                         // Temp {
                         //     id: temp
