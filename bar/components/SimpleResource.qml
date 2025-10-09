@@ -67,7 +67,7 @@ Item {
                         color: Qt.rgba(root.color.r, root.color.g, root.color.b, General.accentTransparency * 1.5)
                         radius: Style.rounding.smaller
 
-                        Behavior on width {
+                        Behavior on height {
                             NumberAnimation {
                                 duration: General.animationDuration / 2
                             }
