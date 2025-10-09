@@ -27,6 +27,8 @@ Item {
 
     property bool isAlt: false
 
+    property color color: value < thresholdL1 ? Colors.accentAlt : value >= thresholdL3 ? thresholdColorL3 : value >= thresholdL2 ? thresholdColorL2 : thresholdColorL1
+
     implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
 
@@ -62,7 +64,7 @@ Item {
                         anchors.bottom: parent.bottom
                         width: parent.width
                         height: parent.height * pBar.visualPosition
-                        color: Qt.rgba(Colors.accentAlt.r, Colors.accentAlt.g, Colors.accentAlt.b, General.accentTransparency * 1.5)
+                        color: Qt.rgba(root.color.r, root.color.g, root.color.b, General.accentTransparency * 1.5)
                         radius: Style.rounding.smaller
 
                         Behavior on width {
