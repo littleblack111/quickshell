@@ -3,6 +3,7 @@ import Quickshell
 import QtQuick.Layouts
 import qs.config
 import qs.components
+import QtQuick.Controls
 
 Item {
     id: root
@@ -32,28 +33,51 @@ Item {
     RowLayout {
         id: layout
 
-        spacing: Bar.resourceIconTextSpacing
+        spacing: 0
 
         Item {
             Layout.fillWidth: true
         }
 
-        ColumnLayout {
-            spacing: 0
-            Item {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-            }
-            IText {
-                animate: true
-                renderType: Text.CurveRendering // it's not static and is rapidly updated
-                text: !root.isAlt ? root.text : root.altText
-                fontSize: Style.font.size.largerr
-                color: root.value < root.thresholdL1 ? Colors.foreground1 : root.value >= root.thresholdL3 ? root.thresholdColorL3 : root.value >= root.thresholdL2 ? root.thresholdColorL2 : root.thresholdColorL1
-            }
+        IRect {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            implicitWidth: m_icon.width + General.rectMargin * 2
+            implicitHeight: Bar.height - General.rectMargin
+            color: "transparent"
+            Slider {
+                id: pBar
+                anchors.fill: parent
+                handle: Item
+                from: 0
+                to: 100
+                value: !root.isAlt ? root.value : root.altValue
+                background: IRect {
+                    anchors.fill: parent
+                    color: "transparent"
+                    // radius: Style.rounding.smaller
+                }
+                contentItem: Item {
+                    IRect {
+                        anchors.bottom: parent.bottom
+                        width: parent.width
+                        height: parent.height * pBar.visualPosition
+                        color: Qt.rgba(Colors.accentAlt.r, Colors.accentAlt.g, Colors.accentAlt.b, General.accentTransparency * 1.5)
+                        radius: Style.rounding.smaller
 
+                        Behavior on width {
+                            NumberAnimation {
+                                duration: General.animationDuration / 2
+                            }
+                        }
+                    }
+                }
+            }
             Icon {
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+                id: m_icon
+                anchors {
+                    centerIn: parent
+                }
                 iconSize: Style.font.size.small
                 text: !root.isAlt ? root.icon : root.altIcon
                 color: root.value < root.thresholdL1 ? Colors.foreground2 : root.value >= root.thresholdL3 ? root.thresholdColorL3 : root.value >= root.thresholdL2 ? root.thresholdColorL2 : root.thresholdColorL1
