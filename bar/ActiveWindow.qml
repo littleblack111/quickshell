@@ -18,7 +18,7 @@ IRect {
     property var activated: toplevel?.activated || false
 
     implicitWidth: activated ? rowLayout.implicitWidth + General.rectMargin * 4 : 0
-    implicitHeight: rowLayout.implicitHeight + General.rectMargin * 2
+    implicitHeight: rowLayout.implicitHeight + General.rectMargin * 2 + Bar.topMargin * 2
     anchors.centerIn: parent
 
     color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Bar.bgTransparency)
@@ -26,7 +26,8 @@ IRect {
     // hypr toplevel.activated is always true and doesn't change either so..
     opacity: activated ? 1 : 0
 
-    radius: Style.rounding.smaller
+    bottomLeftRadius: Bar.moduleRadius
+    bottomRightRadius: Bar.moduleRadius
 
     function strip(s) {
         var out = s;

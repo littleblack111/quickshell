@@ -32,9 +32,6 @@ Scope {
                     right: parent.mid
                     fill: parent
                     top: parent.top
-                    topMargin: Bar.topMargin
-                    leftMargin: Bar.leftMargin
-                    rightMargin: Bar.rightMargin
                 }
 
                 color: "transparent"
@@ -44,10 +41,10 @@ Scope {
                     anchors {
                         left: parent.left
                     }
-                    width: leftInnerRow.width + leftInnerRow.anchors.leftMargin - leftSpacer.width
+                    width: leftInnerRow.width + leftInnerRow.anchors.leftMargin - leftSpacer.width + Bar.leftMargin
                     height: leftInnerRow.height
                     color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Bar.bgTransparency)
-                    radius: Bar.moduleRadius
+                    bottomRightRadius: Bar.moduleRadius
 
                     Behavior on color {
                         ColorAnimation {
@@ -61,7 +58,7 @@ Scope {
                         spacing: Bar.leftModuleSpacing
                         anchors {
                             left: parent.left
-                            leftMargin: Bar.moduleLeftMargin
+                            leftMargin: Bar.moduleLeftMargin + Bar.leftMargin
                         }
 
                         Workspace {
@@ -96,7 +93,7 @@ Scope {
                     width: rightInnerRow.width + rightInnerRow.anchors.rightMargin - rightSpacer.width
                     height: rightInnerRow.height
                     color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Bar.bgTransparency)
-                    radius: Bar.moduleRadius
+                    bottomLeftRadius: Bar.moduleRadius
 
                     RowLayout {
                         id: rightInnerRow

@@ -8,8 +8,8 @@ Singleton {
     readonly property int height: 40
     readonly property int borderRadius: Style.rounding.small
     readonly property int topMargin: Style.spacing.small
-    readonly property int leftMargin: Style.spacing.larger
-    readonly property int rightMargin: Style.spacing.larger
+    readonly property int leftMargin: Style.spacing.small
+    readonly property int rightMargin: Style.spacing.small
 
     readonly property int moduleLeftMargin: Style.spacing.larger
     readonly property int moduleRightMargin: Style.spacing.small
