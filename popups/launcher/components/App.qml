@@ -38,7 +38,7 @@ IComponent {
     }
 
     exec: function () {
-        SelectionState.selected.modelData.execute();
+        SelectionState.selected?.modelData?.execute();
     }
 
     up: function () {
@@ -131,6 +131,7 @@ IComponent {
             delegate: Item {
                 required property DesktopEntry modelData
                 required property int index
+                visible: modelData !== null
                 width: item.implicitWidth + Launcher.innerMargin * 4
                 height: item.height + Launcher.innerMargin * 4
 
@@ -143,12 +144,12 @@ IComponent {
                     spacing: Launcher.innerMargin * 2
 
                     IconImage {
-                        source: Quickshell.iconPath(modelData.icon, "image-missing")
+                        source: modelData ? Quickshell.iconPath(modelData.icon, "image-missing") : ""
                         implicitWidth: General.appIconSize
                         implicitHeight: General.appIconSize
                     }
                     IText {
-                        text: modelData.name
+                        text: modelData ? modelData.name : ""
                         renderType: Text.QtRendering
                         color: index === selectedIndex ? Colors.foreground1 : Colors.foreground2
                     }
