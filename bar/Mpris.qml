@@ -24,7 +24,7 @@ Item {
     IRect {
         id: rect
         anchors.verticalCenter: parent.verticalCenter
-        implicitWidth: layout.width + General.rectMargin * 4
+        implicitWidth: (layout.width + General.rectMargin * 4) * (mouseArea.containsMouse ? Bar.hoverScale : 1.0)
         height: parent.height - General.rectMargin
         radius: Style.rounding.smaller
         color: "transparent"
@@ -65,9 +65,11 @@ Item {
             // }
 
             MouseArea {
+                id: mouseArea
                 anchors.fill: parent
                 acceptedButtons: Qt.MiddleButton | Qt.RightButton | Qt.LeftButton
                 cursorShape: Qt.PointingHandCursor
+                hoverEnabled: true
                 onClicked: mouse => {
                     if (mouse.button === Qt.MiddleButton)
                         root.activePlayer?.togglePlaying();
@@ -82,8 +84,18 @@ Item {
 
         RowLayout {
             id: layout
-            anchors.centerIn: parent
+
+            x: (parent.width - width) / 2
+            y: (parent.height - height) / 2
             spacing: Bar.resourceIconTextSpacing / 1.5
+
+            Behavior on x {
+                ISpringAnimation {
+                    spring: General.springAnimationSpring * 2
+                    damping: General.springAnimationDamping * 1.3
+                }
+            }
+
             Item {
                 Layout.preferredWidth: childrenRect.width
                 Layout.preferredHeight: childrenRect.height
@@ -169,7 +181,15 @@ Item {
             duration: General.animationDuration / 4
         }
     }
+
     Behavior on width {
+        ISpringAnimation {
+            spring: General.springAnimationSpring * 2
+            damping: General.springAnimationDamping * 1.3
+        }
+    }
+
+    Behavior on implicitWidth {
         ISpringAnimation {
             spring: General.springAnimationSpring * 2
             damping: General.springAnimationDamping * 1.3
