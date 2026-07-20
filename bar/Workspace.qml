@@ -136,7 +136,7 @@ Item {
 
                     onPressed: {
                         if (!parent.active)
-                            Hyprland.dispatch(`workspace ${index + 1}`);
+                            Hyprland.dispatch(`hl.dsp.focus({ workspace = '${index + 1}' })`);
                     }
                     function moveActive() {
                         activeRect.x = parent.x;
@@ -167,14 +167,14 @@ Item {
                         // no idea wats wrong w/ prev so we just unify it to use +/- 1
                         if (event.angleDelta.y < 0) {
                             if (activeIndex + 1 < Bar.wss)
-                                Hyprland.dispatch(`workspace +1`);
+                                Hyprland.dispatch(`hl.dsp.focus({ workspace = '+1' })`);
                             else
-                                Hyprland.dispatch(`workspace 1`);
+                                Hyprland.dispatch(`hl.dsp.focus({ workspace = '1' })`);
                         } else if (event.angleDelta.y > 0) {
                             if (activeIndex + 1 > 1) {
-                                Hyprland.dispatch(`workspace -1`);
+                                Hyprland.dispatch(`hl.dsp.focus({ workspace = '-1' })`);
                             } else if (Bar.wss > 1) {
-                                Hyprland.dispatch(`workspace ${Bar.wss}`);
+                                Hyprland.dispatch(`hl.dsp.focus({ workspace = '${Bar.wss}' })`);
                             }
                         }
                     }
