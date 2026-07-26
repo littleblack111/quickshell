@@ -78,9 +78,7 @@ There are no automated tests or linting tools configured for this project.
 
 ### Formatting
 
-1. **Indentation**: Use 4 spaces (no tabs).
-
-2. **Properties and signals**: Place at the top of QML objects, before any other content:
+1. **Properties and signals**: Place at the top of QML objects, before any other content:
    ```qml
    IRect {
        id: root
@@ -94,7 +92,7 @@ There are no automated tests or linting tools configured for this project.
    }
    ```
 
-3. **Property declarations**: Always specify types:
+2. **Property declarations**: Always specify types:
    ```qml
    property int count: 0
    property string name: ""
@@ -248,39 +246,6 @@ There are no automated tests or linting tools configured for this project.
     */
    function format(str, ...args) { ... }
    ```
-
-## Project Structure
-
-```
-.
-├── shell.qml              # Main entry point, IpcHandler definitions
-├── bar/                   # Status bar components
-│   ├── Bar.qml           # Main bar layout
-│   └── *.qml             # Bar modules (Workspace, Mpris, TimeDate, etc.)
-├── components/           # Reusable base components
-│   ├── IText.qml
-│   ├── IRect.qml
-│   ├── IWindow.qml
-│   └── ...
-├── config/               # Configuration singletons
-│   ├── Colors.qml        # Color palette
-│   ├── Style.qml         # Typography and animation styles
-│   ├── Bar.qml           # Bar configuration
-│   └── General.qml       # General settings
-├── popups/               # Popup windows
-│   ├── IPopup.qml
-│   └── launcher/         # Launcher popup
-│       ├── Launcher.qml
-│       └── components/   # Launcher widget components
-├── services/             # Service singletons
-│   ├── Mpris.qml         # Media player service
-│   ├── Network.qml       # Network service
-│   └── ...
-└── utils/                # JavaScript utilities
-    ├── string_utils.js
-    ├── fzf.js
-    └── ...
-```
 
 ## Common Tasks
 
