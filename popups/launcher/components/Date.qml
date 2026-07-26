@@ -9,6 +9,7 @@ import qs.config
 import core
 
 IComponent {
+    property int cursorPosition: SelectionState.cursorPosition
 	property string answer: active && valid ? SmartCalc.result : ""
 
     name: "Date"

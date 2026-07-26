@@ -1,6 +1,6 @@
-use cxx_qt::{QObject, Threading};
-use cxx_qt_lib::{QDateTime, QString, QVariant};
-use std::{pin::Pin, sync::mpsc, time::Duration};
+use cxx_qt::Threading;
+use cxx_qt_lib::{QString, QVariant};
+use std::pin::Pin;
 
 use crate::RUNTIME;
 
@@ -23,6 +23,10 @@ mod qobject {
         #[qproperty(
             ResultType,
             result_type
+        )]
+        #[qproperty(
+            QVariant,
+            cached_query
         )]
         type SmartCalc = super::SmartCalcRs;
 
@@ -70,10 +74,17 @@ impl From<&smart_calculator::types::ResultType> for qobject::ResultType {
 pub struct SmartCalcRs {
     result: QVariant,
     result_type: qobject::ResultType,
+
+    cached_query: QVariant,
 }
 
 impl qobject::SmartCalc {
-    fn query(self: Pin<&mut Self>, input: QString) {
+    fn query(mut self: Pin<&mut Self>, input: QString) {
+        if self.cached_query == (&input).into() {
+            return;
+        }
+        self.as_mut()
+            .set_cached_query((&input.clone()).into());
         let qt_thread = self.qt_thread();
         RUNTIME.spawn(
             async move {
@@ -118,5 +129,7 @@ impl qobject::SmartCalc {
             .set_result(QVariant::default());
         self.as_mut()
             .set_result_type(qobject::ResultType::Unset);
+        self.as_mut()
+            .set_cached_query(QVariant::default());
     }
 }
