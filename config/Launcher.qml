@@ -45,6 +45,10 @@ Singleton {
         },
         Component {
             Calc {}
-        }
+        },
+        Component {
+            Date {}
+        },
+
     ]
 }

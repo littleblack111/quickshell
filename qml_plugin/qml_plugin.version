@@ -1,0 +1,9 @@
+{
+    global:
+        qt_plugin_instance;
+        qt_plugin_query_metadata_v2;
+        qml_register_types_*;
+        qml_*;
+        cxx_qt_init_*;
+    local: *;
+};

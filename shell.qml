@@ -5,6 +5,10 @@ import "popups/launcher"
 
 import QtQuick
 
+import core
+
+import qs.services
+
 Scope {
     id: root
 
@@ -96,5 +100,9 @@ Scope {
         // function onReloadFailed() {
         //     Quickshell.inhibitReloadPopup();
         // }
+    }
+
+    Component.onCompleted: {
+    	SmartCalc.query("1+2")
     }
 }

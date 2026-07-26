@@ -1,0 +1,19 @@
+name := "core"
+
+default: debug run
+
+debug:
+	cargo build
+	mkdir -p target/debug/{{ name }}
+	ln -sf ../libqml_plugin.so target/debug/{{ name }}/lib{{ name }}.so
+	ln -sf ../../cxxqt/qml_modules/{{ name }}/qmldir target/debug/{{ name }}
+
+release:
+	cargo build --release
+	mkdir -p target/release/{{ name }}
+	ln -sf ../libqml_plugin.so target/release/{{ name }}/lib{{ name }}.so
+	ln -sf ../../cxxqt/qml_modules/{{ name }}/qmldir target/release/{{ name }}
+
+run profile="debug":
+	@just {{profile}}
+	QML_IMPORT_PATH=target/{{ profile }} qs -p ..
