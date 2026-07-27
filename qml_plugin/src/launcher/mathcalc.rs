@@ -55,11 +55,12 @@ impl qobject::MathCalc {
         // TODO: consider moving to spawn_blocking
         RUNTIME.spawn(
             async move {
+                let input = input.to_string();
                 let result = parser::eval(
                     &mut *ctx
                         .lock()
                         .await,
-                    &input.to_string(),
+                    &input,
                     // TODO: move to const/config
                     53,
                 );
@@ -72,22 +73,17 @@ impl qobject::MathCalc {
                                         r.map_or_default(
                                             |r| {
                                                 let result: QString = r
-                                                    .to_string_big()
+                                                    .to_string()
                                                     .into();
-                                                QVariant::from(&result)
+                                                if result != input.into() {
+                                                    QVariant::from(&result)
+                                                } else {
+                                                    QVariant::default()
+                                                }
                                             },
                                         )
                                     },
-                                ), /* match result {
-                                    *     Ok(value) => {
-                                    *         let result: QString = value
-                                    *             .to_string()
-                                    *             .into();
-                                    *         QVariant::from(&result)
-                                    *     }
-                                    *     // TODO: add some logging
-                                    *     Err(_) => QVariant::default(),
-                                    * }, */
+                                ),
                             )
                     },
                 )
