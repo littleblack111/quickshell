@@ -5,11 +5,15 @@ import ".."
 IPopup {
     id: root
 
+    function closeLauncher() {
+        parentLoader.active = false;
+    }
+
     HyprlandFocusGrab {
         active: true
         windows: [root]
         onCleared: {
-            parentLoader.active = false; // or active = true again
+            root.closeLauncher();
         }
     }
 }
