@@ -6,6 +6,8 @@ use tokio::sync::Mutex;
 
 use crate::RUNTIME;
 
+const DEFAULT_ANGLE_UNIT: &str = "deg";
+
 #[cxx_qt::bridge]
 mod qobject {
     extern "C++" {
@@ -94,14 +96,13 @@ impl qobject::MathCalc {
     fn reset(mut self: Pin<&mut Self>) {
         self.as_mut()
             .set_result(QVariant::default());
-        self.as_mut()
-            .rust_mut()
-            .ctx = Arc::new(Mutex::new(parser::Context::default()));
+        self.reset_ctx();
     }
 
     fn reset_ctx(mut self: Pin<&mut Self>) {
         self.as_mut()
             .rust_mut()
-            .ctx = Arc::new(Mutex::new(parser::Context::default()));
+            .ctx =
+            Arc::new(Mutex::new(parser::Context::default().set_angle_unit(DEFAULT_ANGLE_UNIT)));
     }
 }
