@@ -56,6 +56,7 @@ IRect {
         close();
     }
 
+    visible: active
     opacity: valid ? 1 : 0
     y: valid ? 0 : -Launcher.widgetHeight
 

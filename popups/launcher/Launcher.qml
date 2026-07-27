@@ -276,6 +276,7 @@ ILauncher {
                     model: launcher.widgetItems
                     delegate: Loader {
                         active: true
+                        visible: item?.valid ?? false
                         sourceComponent: modelData
                         asynchronous: true
                         onLoaded: {
