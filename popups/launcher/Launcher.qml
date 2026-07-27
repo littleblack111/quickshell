@@ -6,7 +6,6 @@ import "components"
 import qs.components
 import qs.config
 
-// TODO: currently, we're relying on the compositor to provide the animation which ig is fine, but we should use our own in the future, however it might look weird combined with the compositors's
 ILauncher {
     id: launcher
 
@@ -14,6 +13,57 @@ ILauncher {
     property var state: SelectionState
 
     name: "quickshell::launcher::launcher"
+
+    function closeLauncher() {
+        if (!exitAnim.running) {
+            exitAnim.start();
+        }
+    }
+
+    Component.onCompleted: {
+        container.opacity = 0;
+        container.scale = 0.95;
+        enterAnim.start();
+    }
+
+    ParallelAnimation {
+        id: enterAnim
+        NumberAnimation {
+            target: container
+            property: "opacity"
+            to: 1
+            duration: General.animationDuration
+            easing.type: Easing.OutCubic
+        }
+        NumberAnimation {
+            target: container
+            property: "scale"
+            to: 1
+            duration: General.animationDuration
+            easing.type: Easing.OutBack
+        }
+    }
+
+    ParallelAnimation {
+        id: exitAnim
+        NumberAnimation {
+            target: container
+            property: "opacity"
+            to: 0
+            duration: General.animationDuration
+            easing.type: Easing.InCubic
+        }
+        NumberAnimation {
+            target: container
+            property: "scale"
+            to: 0.95
+            duration: General.animationDuration
+            easing.type: Easing.InCubic
+        }
+        onFinished: {
+            parentLoader.active = false;
+        }
+    }
 
     Connections {
         target: parentLoader
@@ -196,14 +246,9 @@ ILauncher {
                             }
                         }
                         onTextChanged: {
-                            if (launcher.state.input !== textInput.text)
-                                pendingUpdate = true;
-                            Qt.callLater(() => {
-                                if (pendingUpdate) {
-                                    pendingUpdate = false;
-                                    launcher.state.input = textInput.text; // TODO: find ways to optimize this, like how i was using an alias
-                                }
-                            });
+                            if (launcher.state && launcher.state.input !== textInput.text) {
+                                launcher.state.input = textInput.text;
+                            }
                         }
                         onCursorPositionChanged: {
                             launcher.state.cursorPosition = textInput.cursorPosition;
@@ -211,10 +256,32 @@ ILauncher {
                         // onActiveFocusChanged: {
                         //     parentLoader.active = activeFocus;
                         // }
+                        SequentialAnimation {
+                            id: launchAnim
+                            NumberAnimation {
+                                target: activeRect
+                                property: "scale"
+                                to: 0.8
+                                duration: General.animationDuration / 2
+                                easing.type: Easing.OutQuad
+                            }
+                            NumberAnimation {
+                                target: activeRect
+                                property: "scale"
+                                to: 1.1
+                                duration: General.animationDuration / 2
+                                easing.type: Easing.OutBack
+                            }
+                            onFinished: {
+                                activeRect.scale = 1;
+                                textInput.text = "";
+                                launcher.closeLauncher();
+                            }
+                        }
+
                         onAccepted: {
-                            launcher.state?.priorities[launcher.state.selectedPriority]?._exec(); // TODO: kde like waiting animation for app to launch
-                            parentLoader.active = false;
-                            textInput.text = "";
+                            launcher.state?.priorities[launcher.state.selectedPriority]?._exec();
+                            launchAnim.start();
                         }
                         Component.onCompleted: {
                             selectAll();
@@ -263,13 +330,29 @@ ILauncher {
                 }
             }
 
+            IRect {
+                id: separator
+                anchors {
+                    top: searchBar.bottom
+                    left: parent.left
+                    right: parent.right
+                    topMargin: Launcher.innerMargin * 0.75
+                    leftMargin: Launcher.innerMargin * 2
+                    rightMargin: Launcher.innerMargin * 2
+                }
+                height: 1
+                color: Colors.foreground1
+                opacity: 0.1
+                visible: widgets.height > (Launcher.widgets.length * 5 - 5)
+            }
+
             ColumnLayout {
                 id: widgets
                 anchors {
                     top: searchBar.bottom
                     left: parent.left
                     right: parent.right
-                    topMargin: Launcher.innerMargin * 1.5 // gap in between, maybe seperator FIXME
+                    topMargin: Launcher.innerMargin * 1.5 
                 }
 
                 Repeater {
@@ -280,14 +363,15 @@ ILauncher {
                         asynchronous: true
                         onLoaded: {
                             launcher.state.widgets[index] = item;
-                            // FIXME: prev predictiveCompletion still exists here
-                            // workaround atm: just clear it or preserve the text manually
+                            if (launcher.state.priorities[0] && launcher.state.priorities[0].predictiveCompletion !== undefined) {
+                                launcher.state.priorities[0].predictiveCompletion = "";
+                            }
                         }
                         Connections {
                             target: item
                             ignoreUnknownSignals: true
                             function onClose() {
-                                parentLoader.active = false;
+                                launcher.closeLauncher();
                             }
                         }
                     }
@@ -299,7 +383,7 @@ ILauncher {
         Shortcut {
             sequence: "Escape"
             context: Qt.ApplicationShortcut
-            onActivated: parentLoader.active = false
+            onActivated: launcher.closeLauncher()
         }
 
         Shortcut {
