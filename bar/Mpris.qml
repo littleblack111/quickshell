@@ -29,7 +29,6 @@ Item {
         radius: Style.rounding.smaller
         color: "transparent"
 
-        // FIXME: at the start, the progress bar's radius will make it go out of bounds. use OpacityMask or something
         Slider {
             id: pBar
             anchors.fill: parent
@@ -44,17 +43,31 @@ Item {
                 radius: Style.rounding.smaller
             }
             contentItem: Item {
+                id: contentItemRoot
+
                 IRect {
-                    width: pBar.visualPosition * parent.width
-                    height: parent.height
-                    color: Qt.rgba(Colors.accentAlt.r, Colors.accentAlt.g, Colors.accentAlt.b, General.accentTransparency * 1.5)
+                    id: progressMask
+                    width: contentItemRoot.width
+                    height: contentItemRoot.height
                     radius: Style.rounding.smaller
+                    visible: false
+                }
+
+                IRect {
+                    width: pBar.visualPosition * contentItemRoot.width
+                    height: contentItemRoot.height
+                    color: Qt.rgba(Colors.accentAlt.r, Colors.accentAlt.g, Colors.accentAlt.b, General.accentTransparency * 1.5)
 
                     Behavior on width {
                         NumberAnimation {
                             duration: General.animationDuration / 2
                         }
                     }
+                }
+
+                layer.enabled: true
+                layer.effect: OpacityMask {
+                    maskSource: progressMask
                 }
             }
 
