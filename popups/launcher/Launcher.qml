@@ -276,7 +276,7 @@ ILauncher {
                     model: launcher.widgetItems
                     delegate: Loader {
                         active: true
-                        visible: item?.valid ?? false
+                        visible: item?.valid ?? true // not item?.standalone cuz when its standalone it doesnt appear in launcher.widgetItems
                         sourceComponent: modelData
                         asynchronous: true
                         onLoaded: {

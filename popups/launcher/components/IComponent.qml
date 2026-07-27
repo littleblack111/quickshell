@@ -56,6 +56,7 @@ IRect {
         close();
     }
 
+    // this doesn't change launcher size but only hides the actual content but the outside still think the content is there
     visible: active
     opacity: valid ? 1 : 0
     y: valid ? 0 : -Launcher.widgetHeight
