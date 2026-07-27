@@ -49,6 +49,8 @@ Singleton {
         Component {
             Date {}
         },
-
+        Component {
+            Unit {}
+        },
     ]
 }
