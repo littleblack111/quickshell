@@ -6,6 +6,8 @@ use tokio::sync::Mutex;
 
 use crate::RUNTIME;
 
+const PRECISION: u32 = 53;
+
 #[cxx_qt::bridge]
 mod qobject {
     extern "C++" {
@@ -52,47 +54,27 @@ impl qobject::MathCalc {
                 .rust_mut()
                 .ctx,
         );
-        // TODO: consider moving to spawn_blocking
-        RUNTIME.spawn(
-            async move {
-                let result = parser::eval(
-                    &mut *ctx
-                        .lock()
-                        .await,
-                    &input.to_string(),
-                    // TODO: move to const/config
-                    53,
-                );
-                qt_thread.queue(
-                    |mut qo| {
-                        qo.as_mut()
-                            .set_result(
-                                result.map_or_default(
-                                    |r| {
-                                        r.map_or_default(
-                                            |r| {
-                                                let result: QString = r
-                                                    .to_string_big()
-                                                    .into();
-                                                QVariant::from(&result)
-                                            },
-                                        )
-                                    },
-                                ), /* match result {
-                                    *     Ok(value) => {
-                                    *         let result: QString = value
-                                    *             .to_string()
-                                    *             .into();
-                                    *         QVariant::from(&result)
-                                    *     }
-                                    *     // TODO: add some logging
-                                    *     Err(_) => QVariant::default(),
-                                    * }, */
-                            )
-                    },
-                )
-            },
-        );
+        RUNTIME.spawn_blocking(move || {
+            let result = parser::eval(
+                &mut *ctx.blocking_lock(),
+                &input.to_string(),
+                PRECISION,
+            );
+            qt_thread.queue(|mut qo| {
+                let variant = match result {
+                    Ok(Some(value)) => {
+                        let res: QString = value.to_string_big().into();
+                        QVariant::from(&res)
+                    }
+                    Ok(None) => QVariant::default(),
+                    Err(err) => {
+                        eprintln!("MathCalc evaluation error: {:?}", err);
+                        QVariant::default()
+                    }
+                };
+                qo.as_mut().set_result(variant);
+            });
+        });
     }
 
     fn reset(mut self: Pin<&mut Self>) {
