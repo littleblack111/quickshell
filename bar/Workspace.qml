@@ -217,7 +217,22 @@ Item {
         // sync w the inner MouseArea
         // https://github.com/quickshell-mirror/quickshell/issues/118 // but onEnter won't update the mouseX
         onPositionChanged: {
-            const abovedItemIndex = Math.round((mouseX - layout.x) / (Bar.wsIconSize + Bar.wsSpacing)) - 1; // TODO: workspaceActiveIconSize might be before
+            const dist = mouseX - layout.x;
+            const activeX = root.activeIndex * (Bar.wsIconSize + Bar.wsSpacing);
+            let abovedItemIndex = 0;
+
+            if (dist < 0) {
+                abovedItemIndex = 0;
+            } else if (root.activeIndex < 0 || dist < activeX) {
+                abovedItemIndex = Math.floor(dist / (Bar.wsIconSize + Bar.wsSpacing));
+            } else if (dist < activeX + Bar.wsActiveIconSize + Bar.wsSpacing) {
+                abovedItemIndex = root.activeIndex;
+            } else {
+                abovedItemIndex = Math.floor((dist - (Bar.wsActiveIconSize - Bar.wsIconSize)) / (Bar.wsIconSize + Bar.wsSpacing));
+            }
+            
+            abovedItemIndex = Math.max(0, Math.min(Bar.wss - 1, abovedItemIndex));
+
             activeRect.x = mouseX - activeRect.width / 2;
             root.activeOccupied = getWorkspaceStats(abovedItemIndex).isOccupied || false;
             activeRect.implicitWidth = root.activeIndex === abovedItemIndex ? Bar.wsActiveIconSize : Bar.wsIconSize;
