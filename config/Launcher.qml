@@ -54,6 +54,9 @@ Singleton {
             Unit {}
         },
         Component {
+			Currency {}
+        },
+        Component {
             App {}
         },
     ]

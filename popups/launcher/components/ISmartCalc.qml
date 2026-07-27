@@ -53,7 +53,7 @@ IComponent {
                     clip: true
                     renderType: Text.CurveRendering
                     visible: valid
-                    text: input.replace(/ /g, "").replace(/\+/g, " + ").replace(/-/g, " - ").replace(/\*/g, " × ").replace(/\//g, " ÷ ").replace(/%/g, " % ").replace(/\(/g, " ( ").replace(/\)/g, " ) ")
+                    text: input
                     font {
                         pixelSize: Launcher.widgetFontSize
                         bold: true
