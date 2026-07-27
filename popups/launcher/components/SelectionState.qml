@@ -2,8 +2,6 @@ pragma Singleton
 import Quickshell
 import QtQuick
 
-// FIXME: fix some selection not show/updated when deselected i.e. "pi" from app back to calc wont visually show deselection of last app
-// FIXME: icon/answer not updated when changed to non first priority
 Singleton {
     id: root
 

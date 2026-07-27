@@ -133,7 +133,7 @@ IComponent {
                             required property int index
                             width: grid.cellWidth
                             height: chipContent.implicitHeight + Launcher.innerMargin * 2
-                            scale: index === selectedIndex ? 1.03 : 0.97
+                            scale: index === selectedIndex && isSelectedPriority ? 1.03 : 0.97
 
                             IRect {
                                 anchors.fill: parent
@@ -154,7 +154,7 @@ IComponent {
                                         anchors.horizontalCenter: parent.horizontalCenter
                                         text: modelData.name
                                         font.pixelSize: Launcher.widgetFontSize * 0.7
-                                        color: index === selectedIndex ? Colors.foreground1 : Colors.foreground2
+                                        color: index === selectedIndex && isSelectedPriority ? Colors.foreground1 : Colors.foreground2
                                         elide: Text.ElideRight
                                         width: parent.parent.width - Launcher.innerMargin * 2
                                     }

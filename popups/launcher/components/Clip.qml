@@ -114,7 +114,7 @@ IComponent {
                         clip: true
 
                         IconImage {
-                            scale: index === root.selectedIndex ? 1.01 : 0.9
+                            scale: index === root.selectedIndex && root.isSelectedPriority ? 1.01 : 0.9
                             source: modelData?.appIcon
                             implicitSize: parent.height
 
@@ -128,7 +128,7 @@ IComponent {
                                 sourceComponent: modelData?.type === "image" ? img : text
                                 readonly property Component text: IText {
                                     text: modelData?.data || ""
-                                    color: index === root.selectedIndex ? Colors.foreground1 : Colors.foreground2
+                                    color: index === root.selectedIndex && root.isSelectedPriority ? Colors.foreground1 : Colors.foreground2
                                     font.pixelSize: Launcher.widgetFontSize
                                 }
                                 readonly property Component img: Image {
@@ -142,18 +142,18 @@ IComponent {
                                 property string sinceWhen: TimeDate.sinceWhen(modelData?.timestamp) || ""
                                 IText {
                                     text: modelData.type
-                                    color: index === root.selectedIndex ? Colors.foreground2 : Colors.foreground3
+                                    color: index === root.selectedIndex && root.isSelectedPriority ? Colors.foreground2 : Colors.foreground3
                                     font.pixelSize: Launcher.widgetFontSize / 1.35
                                 }
                                 IText {
                                     visible: parent.sinceWhen
                                     text: '·'
-                                    color: index === root.selectedIndex ? Colors.foreground2 : Colors.foreground3
+                                    color: index === root.selectedIndex && root.isSelectedPriority ? Colors.foreground2 : Colors.foreground3
                                     font.pixelSize: Launcher.widgetFontSize / 1.35
                                 }
                                 IText {
                                     text: parent.sinceWhen || ""
-                                    color: index === root.selectedIndex ? Colors.foreground2 : Colors.foreground3
+                                    color: index === root.selectedIndex && root.isSelectedPriority ? Colors.foreground2 : Colors.foreground3
                                     font.pixelSize: Launcher.widgetFontSize / 1.35
                                 }
                             }
