@@ -14,7 +14,6 @@ IComponent {
 	required property string predictiveText
 
     property int cursorPosition: SelectionState.cursorPosition
-	property string answer: active && valid ? SmartCalc.result : ""
 
     preview: Component {
         Icon {
@@ -24,13 +23,14 @@ IComponent {
 
     process: function () {
     	SmartCalc.query(input);
-	    const isValid = active && SmartCalc.result && SmartCalc.result.length > 0 && category;
-        const answer = isValid ? SmartCalc.result : "";
+     	const answer = SmartCalc.result;
+		// TODO: use answer property rn its circular dependent since it has to be valid which is the line below
+		const valid = SmartCalc.result && SmartCalc.result.length > 0 && category;
         return {
-            valid: isValid,
-            priority: isValid,
-            answer: answer,
-            predictiveCompletion: isValid ? ` ${predictiveText} ` + answer : ''
+            valid,
+            priority: valid,
+            answer,
+            predictiveCompletion: ` ${predictiveText} ` + answer
         };
     }
     exec: function () {

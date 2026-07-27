@@ -31,6 +31,10 @@ Singleton {
     readonly property int predictiveCompletionRadius: 6
 
     readonly property list<Component> widgets: [
+    	// recommanded order:
+		// 1. components with .startswith
+		// 2. utils
+		// 3. app launcher
         Component {
             Emoji {}
         },
@@ -41,16 +45,16 @@ Singleton {
             Spell {}
         },
         Component {
-            App {}
-        },
-        Component {
             Calc {}
         },
         Component {
-            Date {}
+            DateTime {}
         },
         Component {
             Unit {}
+        },
+        Component {
+            App {}
         },
     ]
 }

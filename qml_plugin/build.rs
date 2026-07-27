@@ -13,6 +13,11 @@ fn main() {
 
     CxxQtBuilder::new_qml_module(QmlModule::new(NAME).plugin_type(PluginType::Dynamic))
         .qt_module("Qml")
-        .files(["src/launcher/smartcalc.rs"])
+        .files(
+            [
+                "src/launcher/smartcalc.rs",
+                "src/launcher/mathcalc.rs",
+            ],
+        )
         .build();
 }

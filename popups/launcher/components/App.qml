@@ -10,7 +10,7 @@ import qs.config
 IComponent {
     id: root
 
-    property list<DesktopEntry> entries: active ? AppSearch.query(inputCleaned) : []
+    property list<DesktopEntry> entries: AppSearch.query(inputCleaned)
     property int selectedIndex: -1
 
     name: "Applications"
@@ -25,14 +25,15 @@ IComponent {
         }
     }
 
-    property string predictiveCompletion: valid ? entries[selectedIndex]?.name.slice(input.length) || "" : ""
+    property string predictiveCompletion: entries[selectedIndex]?.name.slice(input.length) || ""
 
     process: function () {
-        const isValid = entries.length > 0;
-        const selected = isValid ? entries[selectedIndex] : "";
+        const valid = entries.length > 0;
+        // TODO: consider removing the valid check
+        const selected = valid ? entries[selectedIndex] : "";
         return {
-            valid: isValid,
-            priority: isValid,
+            valid,
+            priority: valid,
             answer: selected?.icon || ""
         };
     }

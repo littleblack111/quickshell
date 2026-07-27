@@ -6,6 +6,8 @@ import qs.components
 import qs.services
 import qs.config
 
+import core
+
 IComponent {
     property int cursorPosition: SelectionState.cursorPosition
 
@@ -17,17 +19,19 @@ IComponent {
     }
 
     process: function () {
-        const isValid = /^(?=.*\d)(?=.*[+\-*\/\^])[0-9+\-*\/\^().\s]+$/.test(input);
-        const answer = isValid ? String(eval(input.replace(/\^/g, '**').replace(/([\d)])\(/g, '$1*(').replace(/\)([\d])/g, ')*$1'))) : null;
+	    MathCalc.query(input);
+	    const valid = MathCalc.result && MathCalc.result.length > 0;
+        const answer = MathCalc.result;
         return {
-            valid: isValid,
-            priority: isValid,
-            answer: answer,
-            predictiveCompletion: isValid ? ' = ' + answer : ''
+            valid,
+            priority: valid,
+            answer,
+            predictiveCompletion: valid ? ' = ' + answer : ''
         };
     }
     exec: function () {
         Clip.copy(answer);
+        MathCalc.reset_ctx();
     }
 
     IInnerComponent {
