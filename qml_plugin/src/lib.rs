@@ -10,3 +10,4 @@ static RUNTIME: LazyLock<tokio::runtime::Runtime> = LazyLock::new(
 );
 
 mod launcher;
+mod web;
