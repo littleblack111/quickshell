@@ -17,6 +17,7 @@ fn main() {
             [
                 "src/launcher/smartcalc.rs",
                 "src/launcher/mathcalc.rs",
+                "src/launcher/duckduckgo.rs",
             ],
         )
         .build();
