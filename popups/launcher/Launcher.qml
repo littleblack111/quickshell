@@ -221,7 +221,7 @@ ILauncher {
                         }
                     }
                     IRect {
-                        opacity: launcher.state?.priorities[0]?.predictiveCompletion ? 1 : 0
+                        opacity: launcher.state?.priorities[launcher.state.selectedPriority]?.predictiveCompletion ? 1 : 0
                         Layout.fillHeight: true
                         Layout.preferredWidth: text.width
                         radius: Launcher.predictiveCompletionRadius
@@ -238,7 +238,7 @@ ILauncher {
                                 family: Style.font.family.sans
                                 wordSpacing: 5
                             }
-                            text: launcher.state?.priorities[0]?.predictiveCompletion || ""
+                            text: launcher.state?.priorities[launcher.state.selectedPriority]?.predictiveCompletion || ""
                         }
                         Behavior on Layout.preferredWidth {
                             ISpringAnimation {}
@@ -257,8 +257,8 @@ ILauncher {
                         Layout.fillWidth: true
                     }
                     Loader {
-                        active: launcher.state?.priorities[0]?.priority || false // .priority should always be true if it's in priorities
-                        sourceComponent: launcher.state?.priorities[0]?.preview
+                        active: launcher.state?.priorities[launcher.state.selectedPriority]?.priority || false // .priority should always be true if it's in priorities
+                        sourceComponent: launcher.state?.priorities[launcher.state.selectedPriority]?.preview
                     }
                 }
             }

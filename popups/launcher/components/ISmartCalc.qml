@@ -23,14 +23,13 @@ IComponent {
 
     process: function () {
     	SmartCalc.query(input);
-     	const answer = SmartCalc.result;
-		// TODO: use answer property rn its circular dependent since it has to be valid which is the line below
-		const valid = SmartCalc.result && SmartCalc.result.length > 0 && category;
+     	const res = SmartCalc.result;
+		const valid = res && res.length > 0 && category;
         return {
             valid,
             priority: valid,
-            answer,
-            predictiveCompletion: ` ${predictiveText} ` + answer
+            answer: res,
+            predictiveCompletion: ` ${predictiveText} ` + res
         };
     }
     exec: function () {

@@ -68,7 +68,8 @@ IRect {
     // implicitHeight: Launcher.widgetHeight
 
     radius: Launcher.widgetRadius
-    color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetBgTransparency) // TODO when prioritized, highlight
+    property bool isSelectedPriority: state.priorities[state.selectedPriority] === root
+    color: isSelectedPriority ? Qt.rgba(Colors.background2.r, Colors.background2.g, Colors.background2.b, Launcher.widgetBgTransparency) : Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetBgTransparency)
 
     onPriorityChanged: {
         // sync with state.priorities

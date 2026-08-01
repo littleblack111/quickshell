@@ -29,8 +29,7 @@ IComponent {
 
     process: function () {
         const valid = entries.length > 0;
-        // TODO: consider removing the valid check
-        const selected = valid ? entries[selectedIndex] : "";
+        const selected = entries[selectedIndex];
         return {
             valid,
             priority: valid,
@@ -138,7 +137,7 @@ IComponent {
 
                 RowLayout {
                     id: item
-                    scale: index === selectedIndex ? 1.01 : 0.99
+                    scale: index === selectedIndex && isSelectedPriority ? 1.01 : 0.99
                     anchors.left: parent.left
                     anchors.top: parent.top
                     anchors.margins: Launcher.innerMargin * 2
@@ -152,7 +151,7 @@ IComponent {
                     IText {
                         text: modelData ? modelData.name : ""
                         renderType: Text.QtRendering
-                        color: index === selectedIndex ? Colors.foreground1 : Colors.foreground2
+                        color: index === selectedIndex && isSelectedPriority ? Colors.foreground1 : Colors.foreground2
                     }
 
                     Behavior on scale {
