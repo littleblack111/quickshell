@@ -1,5 +1,6 @@
 use std::ops::{Deref, DerefMut};
 
+use crate::launcher::duckduckgo::QmlDuckDuckGo;
 use duckduckgo::{
     browser::Browser,
     params::{SafeSearch, SearchParams, Toggle},
@@ -9,10 +10,33 @@ use serde::Deserialize;
 
 const DUCKDUCKGO: &str = "https://duckduckgo.com";
 
+#[derive(Default, PartialEq)]
 pub struct DuckDuckGoContent {
     title: String,
     description_html: String,
     preview_image: Option<Url>,
+}
+
+impl From<DuckDuckGoContent> for QmlDuckDuckGo {
+    fn from(value: DuckDuckGoContent) -> Self {
+        Self {
+            title: value
+                .title
+                .into(),
+            description_html: value
+                .description_html
+                .into(),
+            preview_image: value
+                .preview_image
+                .map(
+                    |u| {
+                        u.to_string()
+                            .into()
+                    },
+                )
+                .unwrap_or_default(),
+        }
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -121,7 +145,7 @@ pub async fn query(input: &str) -> anyhow::Result<DuckDuckGoContent> {
             // TODO: try also Results[*].Icon.URL and RelatedTopics[*].Icon.URL
             preview_image: resp
                 .image
-                .and_then(|i| Url::parse(&(DUCKDUCKGO.to_owned() + &i)).ok()),
+                .and_then(|i| Url::parse(&format!("{DUCKDUCKGO}{i}",)).ok()),
         },
     )
 }
