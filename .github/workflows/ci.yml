@@ -1,0 +1,201 @@
+# .github/workflows/build.yml
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: qml_plugin
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup | Qt
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qt6-base-dev qt6-declarative-dev
+
+      - name: Setup | Rust
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Check
+        run: cargo check
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup | Qt
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qt6-base-dev qt6-declarative-dev
+      - name: Setup | Rust
+        uses: dtolnay/rust-toolchain@nightly
+      - uses: giraffate/clippy-action@v1
+        with:
+          reporter: "github-pr-check"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          clippy_flags: --all --lib --bins --examples
+          workdir: qml_plugin
+
+  fmt:
+    name: Rustfmt
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: qml_plugin
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup | Rust
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Format
+        run: cargo fmt --all -- --check
+
+  semver:
+    name: Semver Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: qml_plugin
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup | Qt
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qt6-base-dev qt6-declarative-dev
+
+      - name: Setup | Rust
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Install cargo-semver-checks from git
+        run: cargo install --git https://github.com/obi1kenobi/cargo-semver-checks cargo-semver-checks
+
+      - name: Check semver
+        run: cargo semver-checks --baseline-rev origin/main
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: qml_plugin
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v4
+      - name: Setup | Qt
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qt6-base-dev qt6-declarative-dev
+      - name: Setup | Rust
+        uses: dtolnay/rust-toolchain@nightly
+      - name: Setup | Toolchain
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-nextest
+      - name: Test
+        run: cargo nextest run --no-tests=pass
+
+  mutants:
+    name: Mutation Testing
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: qml_plugin
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v4
+      - name: Setup | Qt
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qt6-base-dev qt6-declarative-dev
+      - name: Setup | Rust
+        uses: dtolnay/rust-toolchain@nightly
+      - name: Setup | Toolchain
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-mutants
+      - name: Mutation Testing
+        run: cargo mutants -vV --in-place
+      - name: Upload Mutation Testing Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mutants-out
+          path: qml_plugin/mutants.out
+
+  audit:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: qml_plugin
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v4
+      - name: Setup | Rust
+        uses: dtolnay/rust-toolchain@nightly
+      - name: Setup | Toolchain | Install cargo-audit
+        run: cargo install cargo-audit
+      - name: Audit
+        run: cargo audit
+
+  dep:
+    name: Unused Dependencies
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: qml_plugin
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v4
+      - name: Setup | Rust
+        uses: dtolnay/rust-toolchain@nightly
+      - name: Check Unused Dependencies
+        uses: bnjbvr/cargo-machete@main
+
+  ui:
+    name: UI (QML/JS/Shell) Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup | Qt & ShellCheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qt6-declarative-dev-tools shellcheck
+
+      - name: Setup | Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Prettier
+        run: npm install -g prettier
+
+      - name: Format JS
+        run: |
+          cat <<EOF > .prettierignore
+          utils/fuzzysort.js
+          utils/fzf.js
+          utils/levendist.js
+          EOF
+          prettier --check "utils/**/*.js"
+
+      - name: Check QML/JS Format
+        run: find . \( -name "*.qml" -o -name "*.js" \) -exec qmlformat -n {} +
+
+      - name: Lint Shell
+        run: shellcheck utils/*.sh
