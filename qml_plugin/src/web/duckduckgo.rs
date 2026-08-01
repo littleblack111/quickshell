@@ -117,7 +117,7 @@ pub async fn query(input: &str) -> anyhow::Result<DuckDuckGoContent> {
                                     .clone()
                             } else {
                                 match i.value {
-                                    InfoboxValue::Entity(ref entity_value) => unreachable!(),
+                                    InfoboxValue::Entity(_) => unreachable!(),
                                     InfoboxValue::String(ref s) => s.to_string(),
                                 }
                             }

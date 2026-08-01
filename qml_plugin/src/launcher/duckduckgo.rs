@@ -1,11 +1,8 @@
 use cxx_qt::Threading;
 use cxx_qt_lib::QString;
-use std::{pin::Pin, ptr};
+use std::pin::Pin;
 
-use crate::{
-    RUNTIME,
-    web::duckduckgo::{self, DuckDuckGoContent},
-};
+use crate::{RUNTIME, web::duckduckgo};
 
 #[cxx_qt::bridge]
 mod qobject {

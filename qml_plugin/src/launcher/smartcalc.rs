@@ -104,6 +104,8 @@ impl qobject::SmartCalc {
                             );
                         qo.as_mut()
                             .set_result(
+                                // TODO: do the calc outside of ts main qt ui render thread.(all
+                                // *.rs)
                                 match result {
                                     Ok(value) => {
                                         if value.formatted == value.input {
