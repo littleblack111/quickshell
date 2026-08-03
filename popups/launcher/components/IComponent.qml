@@ -20,7 +20,9 @@ IRect {
     property string answer: processed?.answer || ""
     property Component preview: Component {
         IText {
-            animate: true
+        // TODO: use proper active: false via Loader
+	       	visible: answer.length <= Launcher.maxPreviewLen
+	        animate: true
             text: answer
         }
     }

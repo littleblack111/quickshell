@@ -30,6 +30,8 @@ Singleton {
 
     readonly property int predictiveCompletionRadius: 6
 
+    readonly property int maxPreviewLen: 20
+
     readonly property list<Component> widgets: [
     	// recommanded order:
 		// 1. components with .startswith
@@ -59,5 +61,8 @@ Singleton {
         Component {
             App {}
         },
+        Component {
+        	DuckDuckGo {}
+        }
     ]
 }
