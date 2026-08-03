@@ -18,6 +18,10 @@ IComponent {
         }
     }
 
+    onInputChanged: {
+	    MathCalc.reset_result();
+    }
+
     process: function () {
 	    MathCalc.query(input);
 	    const valid = MathCalc.result && MathCalc.result.length > 0;

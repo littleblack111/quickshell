@@ -21,8 +21,12 @@ IComponent {
         }
     }
 
+    onInputChanged: {
+	   	SmartCalc.reset_result();
+	}
+
     process: function () {
-    	SmartCalc.query(input);
+	   	SmartCalc.query(input);
      	const answer = SmartCalc.result;
 		// TODO: use answer property rn its circular dependent since it has to be valid which is the line below
 		const valid = SmartCalc.result && SmartCalc.result.length > 0 && category;

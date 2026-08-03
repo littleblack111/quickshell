@@ -35,6 +35,9 @@ mod qobject {
 
         #[qinvokable]
         fn reset(self: Pin<&mut SmartCalc>);
+
+        #[qinvokable]
+        fn reset_result(self: Pin<&mut SmartCalc>);
     }
 
     impl cxx_qt::Threading for SmartCalc {}
@@ -128,10 +131,14 @@ impl qobject::SmartCalc {
 
     fn reset(mut self: Pin<&mut Self>) {
         self.as_mut()
+            .set_cached_query(QVariant::default());
+        self.reset_result();
+    }
+
+    fn reset_result(mut self: Pin<&mut Self>) {
+        self.as_mut()
             .set_result(QVariant::default());
         self.as_mut()
             .set_result_type(qobject::ResultType::Unset);
-        self.as_mut()
-            .set_cached_query(QVariant::default());
     }
 }

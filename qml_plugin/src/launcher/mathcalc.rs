@@ -34,6 +34,9 @@ mod qobject {
 
         #[qinvokable]
         fn reset_ctx(self: Pin<&mut MathCalc>);
+
+        #[qinvokable]
+        fn reset_result(self: Pin<&mut MathCalc>);
     }
 
     impl cxx_qt::Threading for MathCalc {}
@@ -95,7 +98,7 @@ impl qobject::MathCalc {
 
     fn reset(mut self: Pin<&mut Self>) {
         self.as_mut()
-            .set_result(QVariant::default());
+            .reset_result();
         self.reset_ctx();
     }
 
@@ -104,5 +107,10 @@ impl qobject::MathCalc {
             .rust_mut()
             .ctx =
             Arc::new(Mutex::new(parser::Context::default().set_angle_unit(DEFAULT_ANGLE_UNIT)));
+    }
+
+    fn reset_result(mut self: Pin<&mut Self>) {
+        self.as_mut()
+            .set_result(QVariant::default())
     }
 }
