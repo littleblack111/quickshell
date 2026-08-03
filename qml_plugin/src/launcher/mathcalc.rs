@@ -1,10 +1,11 @@
 use cxx_qt::{CxxQtType, Threading};
 use cxx_qt_lib::{QString, QVariant};
-use kalk::parser;
+use kalk::{calculation_result::CalculationResult, parser};
 use std::{pin::Pin, sync::Arc};
 use tokio::sync::Mutex;
+use unwrap_print::PrintableResult;
 
-use crate::RUNTIME;
+use crate::ExclusiveExecutor;
 
 const DEFAULT_ANGLE_UNIT: &str = "deg";
 
@@ -42,58 +43,75 @@ mod qobject {
     impl cxx_qt::Threading for MathCalc {}
 }
 
-#[derive(Default)]
 pub struct MathCalcRs {
     result: QVariant,
-
     ctx: Arc<Mutex<parser::Context>>,
+
+    executor: ExclusiveExecutor,
+}
+
+impl Default for MathCalcRs {
+    fn default() -> Self {
+        Self {
+            result: QVariant::default(),
+            ctx: Arc::new(Mutex::new(qobject::MathCalc::new_ctx())),
+            executor: ExclusiveExecutor::default(),
+        }
+    }
 }
 
 impl qobject::MathCalc {
-    fn query(self: Pin<&mut Self>, input: QString) {
+    fn query(mut self: Pin<&mut Self>, input: QString) {
         let qt_thread = self.qt_thread();
         let ctx = Arc::clone(
             &self
+                .as_mut()
                 .rust_mut()
                 .ctx,
         );
         // TODO: consider moving to spawn_blocking
-        RUNTIME.spawn(
-            async move {
-                let input = input.to_string();
-                let result = parser::eval(
-                    &mut *ctx
-                        .lock()
-                        .await,
-                    &input,
-                    // TODO: move to const/config
-                    53,
-                );
-                qt_thread.queue(
-                    |mut qo| {
-                        qo.as_mut()
-                            .set_result(
-                                result.map_or_default(
-                                    |r| {
-                                        r.map_or_default(
-                                            |r| {
-                                                let result: QString = r
-                                                    .to_string()
-                                                    .into();
-                                                if result != input.into() {
-                                                    QVariant::from(&result)
-                                                } else {
-                                                    QVariant::default()
-                                                }
-                                            },
-                                        )
-                                    },
-                                ),
+        self.rust_mut()
+            .executor
+            .spawn(
+                async move {
+                    let input = input.to_string();
+                    let result = parser::eval(
+                        &mut *ctx
+                            .lock()
+                            .await,
+                        &input,
+                        // TODO: move to const/config
+                        53,
+                    )
+                    .map_or_default(
+                        |r| {
+                            r.map_or_default(
+                                |r| {
+                                    let r: QString = r
+                                        // to display scientific notation properly
+                                        // other ones show both version without e or shows *10^_
+                                        // and have a = prefix
+                                        .to_string_big()
+                                        .into();
+                                    if r != input.into() {
+                                        QVariant::from(&r)
+                                    } else {
+                                        QVariant::default()
+                                    }
+                                },
                             )
-                    },
-                )
-            },
-        );
+                        },
+                    );
+                    qt_thread
+                        .queue(
+                            |mut qo| {
+                                qo.as_mut()
+                                    .set_result(result)
+                            },
+                        )
+                        .unwrap_print();
+                },
+            );
     }
 
     fn reset(mut self: Pin<&mut Self>) {
@@ -102,11 +120,14 @@ impl qobject::MathCalc {
         self.reset_ctx();
     }
 
+    fn new_ctx() -> parser::Context {
+        parser::Context::default().set_angle_unit(DEFAULT_ANGLE_UNIT)
+    }
+
     fn reset_ctx(mut self: Pin<&mut Self>) {
         self.as_mut()
             .rust_mut()
-            .ctx =
-            Arc::new(Mutex::new(parser::Context::default().set_angle_unit(DEFAULT_ANGLE_UNIT)));
+            .ctx = Arc::new(Mutex::new(Self::new_ctx()))
     }
 
     fn reset_result(mut self: Pin<&mut Self>) {

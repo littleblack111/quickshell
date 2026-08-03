@@ -1810,6 +1810,8 @@ dependencies = [
  "serde_json",
  "smart-calculator",
  "tokio",
+ "unwrap-print",
+ "unwrap-retry",
 ]
 
 [[package]]
@@ -2745,6 +2747,21 @@ name = "untrusted"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8ecb6da28b8a351d773b68d5825ac39017e680750f980f3a1a85cd8dd28a47c1"
+
+[[package]]
+name = "unwrap-print"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a5d0aeaa22516bc62ce84e47f3b72de84acc2120ce6cb38dbfc19825470b207e"
+
+[[package]]
+name = "unwrap-retry"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9300c005780a019c417e87e4adae3fdb1653be75b384f1fec16f7452fa724372"
+dependencies = [
+ "tokio",
+]
 
 [[package]]
 name = "url"

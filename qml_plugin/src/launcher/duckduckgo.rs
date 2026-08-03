@@ -1,8 +1,9 @@
-use cxx_qt::Threading;
+use cxx_qt::{CxxQtType, Threading};
 use cxx_qt_lib::QString;
 use std::pin::Pin;
+use unwrap_print::PrintableResult;
 
-use crate::{RUNTIME, web::duckduckgo};
+use crate::{ExclusiveExecutor, web::duckduckgo};
 
 #[cxx_qt::bridge]
 mod qobject {
@@ -16,7 +17,7 @@ mod qobject {
         #[qml_element]
         #[qml_singleton]
         #[qproperty(
-            bool, valid
+            bool, ok
         )]
         #[qproperty(
             QString, title
@@ -50,43 +51,53 @@ pub struct QmlDuckDuckGo {
 
 #[derive(Default)]
 pub struct DuckDuckGoRs {
-    valid: bool,
+    ok: bool,
     title: QString,
     description_html: QString,
     preview_image: QString,
+
+    executor: ExclusiveExecutor,
 }
 
 impl qobject::DuckDuckGo {
-    fn query(self: Pin<&mut Self>, input: QString) {
+    fn query(mut self: Pin<&mut Self>, input: QString) {
         let qt_thread = self.qt_thread();
-        RUNTIME.spawn(
-            async move {
-                let input = input.to_string();
-                let result: Result<QmlDuckDuckGo, _> = duckduckgo::query(&input)
-                    .await
-                    .map(|r| r.into());
-                qt_thread.queue(
-                    |mut qo| match result {
-                        Ok(r) => {
-                            qo.as_mut()
-                                .set_valid(true);
-                            qo.as_mut()
-                                .set_title(r.title);
-                            qo.as_mut()
-                                .set_description_html(r.description_html);
-                            qo.as_mut()
-                                .set_preview_image(r.preview_image);
-                        }
-                        Err(_) => qo.set_valid(false),
-                    },
-                )
-            },
-        );
+        // self.as_mut()
+        //     .reset();
+        self.rust_mut()
+            .executor
+            .spawn(
+                async move {
+                    let input = input.to_string();
+                    let result: Result<QmlDuckDuckGo, _> = duckduckgo::query(&input)
+                        .await
+                        .map(|r| r.into());
+                    // consider just unwrapping since this is in a separate thread and is already
+                    // end of life anw
+                    _ = qt_thread
+                        .queue(
+                            |mut qo| match result {
+                                Ok(r) => {
+                                    qo.as_mut()
+                                        .set_ok(true);
+                                    qo.as_mut()
+                                        .set_title(r.title);
+                                    qo.as_mut()
+                                        .set_description_html(r.description_html);
+                                    qo.as_mut()
+                                        .set_preview_image(r.preview_image);
+                                }
+                                Err(_) => qo.set_ok(false),
+                            },
+                        )
+                        .unwrap_print();
+                },
+            );
     }
 
     fn reset(mut self: Pin<&mut Self>) {
         self.as_mut()
-            .set_valid(false);
+            .set_ok(false);
         self.as_mut()
             .set_title("".into());
         self.as_mut()

@@ -1,8 +1,9 @@
-use cxx_qt::Threading;
+use cxx_qt::{CxxQtType, Threading};
 use cxx_qt_lib::{QString, QVariant};
 use std::pin::Pin;
+use unwrap_print::PrintableResult;
 
-use crate::RUNTIME;
+use crate::{ExclusiveExecutor, RUNTIME};
 
 #[cxx_qt::bridge]
 mod qobject {
@@ -79,6 +80,8 @@ pub struct SmartCalcRs {
     result_type: qobject::ResultType,
 
     cached_query: QVariant,
+
+    executor: ExclusiveExecutor,
 }
 
 impl qobject::SmartCalc {
@@ -89,44 +92,49 @@ impl qobject::SmartCalc {
         self.as_mut()
             .set_cached_query((&input.clone()).into());
         let qt_thread = self.qt_thread();
-        RUNTIME.spawn(
-            async move {
-                let result = smart_calculator::calculate(
-                    &input.to_string(),
-                    None,
-                )
-                .await;
-                qt_thread.queue(
-                    |mut qo| {
-                        qo.as_mut()
-                            .set_result_type(
-                                match &result {
-                                    Ok(value) => (&value.res_type).into(),
-                                    Err(_) => qobject::ResultType::Unset,
-                                },
-                            );
-                        qo.as_mut()
-                            .set_result(
-                                // TODO: do the calc outside of ts main qt ui render thread.(all
-                                // *.rs)
-                                match result {
-                                    Ok(value) => {
-                                        if value.formatted == value.input {
-                                            QVariant::default()
-                                        } else {
-                                            let result: QString = value
-                                                .formatted
-                                                .into();
-                                            QVariant::from(&result)
-                                        }
-                                    }
-                                    Err(_) => QVariant::default(),
-                                },
-                            )
-                    },
-                )
-            },
-        );
+        self.as_mut()
+            .rust_mut()
+            .executor
+            .spawn(
+                async move {
+                    let result = smart_calculator::calculate(
+                        &input.to_string(),
+                        None,
+                    )
+                    .await;
+                    qt_thread
+                        .queue(
+                            |mut qo| {
+                                qo.as_mut()
+                                    .set_result_type(
+                                        match &result {
+                                            Ok(value) => (&value.res_type).into(),
+                                            Err(_) => qobject::ResultType::Unset,
+                                        },
+                                    );
+                                qo.as_mut()
+                                    .set_result(
+                                        // TODO: do the calc outside of ts main qt ui render
+                                        // thread.(all *.rs)
+                                        match result {
+                                            Ok(value) => {
+                                                if value.formatted == value.input {
+                                                    QVariant::default()
+                                                } else {
+                                                    let result: QString = value
+                                                        .formatted
+                                                        .into();
+                                                    QVariant::from(&result)
+                                                }
+                                            }
+                                            Err(_) => QVariant::default(),
+                                        },
+                                    )
+                            },
+                        )
+                        .unwrap_print();
+                },
+            );
     }
 
     fn reset(mut self: Pin<&mut Self>) {
