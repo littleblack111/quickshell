@@ -65,24 +65,36 @@ impl qobject::DuckDuckGo {
             .executor
             .spawn(
                 async move {
-                    let input = input.to_string();
-                    let result: Result<QmlDuckDuckGo, _> = duckduckgo::query(&input)
+                    let qinput = input.to_string();
+                    let result: Result<QmlDuckDuckGo, _> = duckduckgo::query(&qinput)
                         .await
                         .map(|r| r.into());
                     // consider just unwrapping since this is in a separate thread and is already
                     // end of life anw
                     _ = qt_thread
                         .queue(
-                            |mut qo| match result {
+                            move |mut qo| match result {
                                 Ok(r) => {
-                                    qo.as_mut()
-                                        .set_ok(true);
-                                    qo.as_mut()
-                                        .set_title(r.title);
-                                    qo.as_mut()
-                                        .set_description_html(r.description_html);
-                                    qo.as_mut()
-                                        .set_image(r.image);
+                                    if (r.title == input
+                                        || r.title
+                                            .is_empty())
+                                        && r.description_html
+                                            .is_empty()
+                                        && r.image
+                                            .is_empty()
+                                    {
+                                        qo.as_mut()
+                                            .set_ok(false);
+                                    } else {
+                                        qo.as_mut()
+                                            .set_ok(true);
+                                        qo.as_mut()
+                                            .set_title(r.title);
+                                        qo.as_mut()
+                                            .set_description_html(r.description_html);
+                                        qo.as_mut()
+                                            .set_image(r.image);
+                                    }
                                 }
                                 Err(_) => qo.set_ok(false),
                             },
