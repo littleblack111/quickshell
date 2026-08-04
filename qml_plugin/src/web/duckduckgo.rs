@@ -145,7 +145,15 @@ pub async fn query(input: &str) -> anyhow::Result<DuckDuckGoContent> {
             // TODO: try also Results[*].Icon.URL and RelatedTopics[*].Icon.URL
             image: resp
                 .image
-                .and_then(|i| Url::parse(&format!("{DUCKDUCKGO}{i}",)).ok()),
+                .and_then(
+                    |i| {
+                        if !i.is_empty() {
+                            Url::parse(&format!("{DUCKDUCKGO}{i}",)).ok()
+                        } else {
+                            None
+                        }
+                    },
+                ),
         },
     )
 }
