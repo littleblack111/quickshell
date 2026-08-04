@@ -27,8 +27,7 @@ mod qobject {
             description_html
         )]
         #[qproperty(
-            QString,
-            preview_image
+            QString, image
         )]
         type DuckDuckGo = super::DuckDuckGoRs;
 
@@ -46,7 +45,7 @@ mod qobject {
 pub struct QmlDuckDuckGo {
     pub title: QString,
     pub description_html: QString,
-    pub preview_image: QString,
+    pub image: QString,
 }
 
 #[derive(Default)]
@@ -54,7 +53,7 @@ pub struct DuckDuckGoRs {
     ok: bool,
     title: QString,
     description_html: QString,
-    preview_image: QString,
+    image: QString,
 
     executor: ExclusiveExecutor,
 }
@@ -83,7 +82,7 @@ impl qobject::DuckDuckGo {
                                     qo.as_mut()
                                         .set_description_html(r.description_html);
                                     qo.as_mut()
-                                        .set_preview_image(r.preview_image);
+                                        .set_image(r.image);
                                 }
                                 Err(_) => qo.set_ok(false),
                             },
@@ -101,6 +100,6 @@ impl qobject::DuckDuckGo {
         self.as_mut()
             .set_description_html("".into());
         self.as_mut()
-            .set_preview_image("".into());
+            .set_image("".into());
     }
 }

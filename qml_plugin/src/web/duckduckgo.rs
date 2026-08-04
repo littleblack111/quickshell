@@ -14,7 +14,7 @@ const DUCKDUCKGO: &str = "https://duckduckgo.com";
 pub struct DuckDuckGoContent {
     title: String,
     description_html: String,
-    preview_image: Option<Url>,
+    image: Option<Url>,
 }
 
 impl From<DuckDuckGoContent> for QmlDuckDuckGo {
@@ -26,8 +26,8 @@ impl From<DuckDuckGoContent> for QmlDuckDuckGo {
             description_html: value
                 .description_html
                 .into(),
-            preview_image: value
-                .preview_image
+            image: value
+                .image
                 .map(
                     |u| {
                         u.to_string()
@@ -143,7 +143,7 @@ pub async fn query(input: &str) -> anyhow::Result<DuckDuckGoContent> {
                         .unwrap_or(alt_desc),
                 ),
             // TODO: try also Results[*].Icon.URL and RelatedTopics[*].Icon.URL
-            preview_image: resp
+            image: resp
                 .image
                 .and_then(|i| Url::parse(&format!("{DUCKDUCKGO}{i}",)).ok()),
         },
