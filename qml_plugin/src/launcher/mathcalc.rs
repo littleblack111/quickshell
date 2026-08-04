@@ -1,6 +1,6 @@
 use cxx_qt::{CxxQtType, Threading};
 use cxx_qt_lib::{QString, QVariant};
-use kalk::{calculation_result::CalculationResult, parser};
+use kalk::parser;
 use std::{pin::Pin, sync::Arc};
 use tokio::sync::Mutex;
 use unwrap_print::PrintableResult;
@@ -102,7 +102,7 @@ impl qobject::MathCalc {
                             )
                         },
                     );
-                    qt_thread
+                    _ = qt_thread
                         .queue(
                             |mut qo| {
                                 qo.as_mut()

@@ -60,10 +60,8 @@ pub struct DuckDuckGoRs {
 }
 
 impl qobject::DuckDuckGo {
-    fn query(mut self: Pin<&mut Self>, input: QString) {
+    fn query(self: Pin<&mut Self>, input: QString) {
         let qt_thread = self.qt_thread();
-        // self.as_mut()
-        //     .reset();
         self.rust_mut()
             .executor
             .spawn(

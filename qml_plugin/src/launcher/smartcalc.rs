@@ -3,7 +3,7 @@ use cxx_qt_lib::{QString, QVariant};
 use std::pin::Pin;
 use unwrap_print::PrintableResult;
 
-use crate::{ExclusiveExecutor, RUNTIME};
+use crate::ExclusiveExecutor;
 
 #[cxx_qt::bridge]
 mod qobject {
@@ -102,7 +102,7 @@ impl qobject::SmartCalc {
                         None,
                     )
                     .await;
-                    qt_thread
+                    _ = qt_thread
                         .queue(
                             |mut qo| {
                                 qo.as_mut()
