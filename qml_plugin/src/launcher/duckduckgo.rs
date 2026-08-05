@@ -75,7 +75,10 @@ impl qobject::DuckDuckGo {
                         .queue(
                             move |mut qo| match result {
                                 Ok(r) => {
-                                    if (r.title == input
+                                    if (r
+                                        .title
+                                        .to_lower()
+                                        == input.to_lower()
                                         || r.title
                                             .is_empty())
                                         && r.description_html
