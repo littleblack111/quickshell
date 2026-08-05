@@ -32,6 +32,8 @@ Singleton {
 
     readonly property int maxPreviewLen: 20
 
+    readonly property int duckduckgoSpacing: 25
+
     readonly property list<Component> widgets: [
     	// recommanded order:
 		// 1. components with .startswith
