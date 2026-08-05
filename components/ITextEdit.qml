@@ -1,0 +1,50 @@
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import qs.config
+
+TextEdit {
+    id: root
+
+    property bool animate: false
+    property real animateFrom: 0
+    property real animateTo: 1
+    property real fontSize: Style.font.size.larger
+
+    renderType: Text.NativeRendering // or Text.CurveRendering(much more expansive) or Text.QtRendering for faster
+    textFormat: Text.PlainText
+    color: Colors.foreground1
+    smooth: true
+
+    font {
+        family: Style.font.family.iosevka
+        // pointSize: root.pixelSize
+        pixelSize: fontSize
+    }
+
+    Behavior on color {
+        ColorAnimation {
+            duration: Style.anim.durations.normal
+            easing.type: Easing.BezierSpline
+            easing.bezierCurve: Style.anim.curves.standard
+        }
+    }
+
+    NumberAnimation {
+        id: scaleAnim
+        target: root
+        property: "scale"
+        duration: General.animationDuration / 4
+        easing.type: Easing.BezierSpline
+    }
+
+    onTextChanged: {
+        if (animate) {
+            root.scale = animateFrom;
+            scaleAnim.to = animateTo;
+            scaleAnim.easing.bezierCurve = Style.anim.curves.standardAccel;
+            scaleAnim.start();
+        }
+    }
+}

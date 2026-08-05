@@ -187,7 +187,8 @@ IComponent {
                 Loader {
                     id: loader
                     sourceComponent: clipHist[selectedIndex]?.type === "image" ? img : text
-                    property Component text: TextEdit {
+                    property Component text: ITextEdit {
+                        animate: true
                         id: textEdit
                         readOnly: true
                         wrapMode: TextEdit.Wrap

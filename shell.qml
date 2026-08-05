@@ -22,6 +22,7 @@ Scope {
 
         property bool active: false
     }
+    // TODO: cache/don't destory when closed(active=false)
     LazyLoader {
         id: launcherLoader
 
