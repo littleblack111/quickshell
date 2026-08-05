@@ -132,19 +132,24 @@ pub async fn query(input: &str) -> anyhow::Result<DuckDuckGoContent> {
         DuckDuckGoContent {
             title: resp
                 .heading
+                .filter(|h| !h.is_empty())
                 .unwrap_or(
                     resp.definition
+                        .filter(|d| !d.is_empty())
                         .unwrap_or(alt_desc.clone()),
                 ),
             description_html: resp
                 .answer
+                .filter(|a| !a.is_empty())
                 .unwrap_or(
                     resp.r#abstract
+                        .filter(|a| !a.is_empty())
                         .unwrap_or(alt_desc),
                 ),
             // TODO: try also Results[*].Icon.URL and RelatedTopics[*].Icon.URL
             image: resp
                 .image
+                .filter(|i| !i.is_empty())
                 .and_then(
                     |i| {
                         if !i.is_empty() {
