@@ -45,6 +45,7 @@ IRect {
             })
     property var prev: () => {}
     property var next: () => {}
+    // true if not closed
     property var exec: () => {}
     property var home: () => {}
     property var end: () => {}
@@ -54,8 +55,8 @@ IRect {
     signal close
 
     function _exec() {
-        exec();
-        close();
+        if (!exec())
+	        close();
     }
 
     // this doesn't change launcher size but only hides the actual content but the outside still think the content is there

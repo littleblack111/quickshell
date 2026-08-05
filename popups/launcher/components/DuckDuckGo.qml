@@ -43,11 +43,12 @@ IComponent {
         };
     }
     exec: function () {
-    // FIXME: doesn't work as enter closes the launcher
-    if (!expand)
-		expand = true;
-    else
-       	Clip.copy(`{DuckDuckGo.title}\n{DuckDuckGo.description_html}`);
+		// FIXME: doesn't work as enter closes the launcher
+		if (!expand) {
+			expand = true;
+			return true;
+		} else
+		   	Clip.copy(`{DuckDuckGo.title}\n{DuckDuckGo.description_html}`);
     }
 
     IInnerComponent {
