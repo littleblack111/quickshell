@@ -1,6 +1,7 @@
 pragma Singleton
 // pragma ComponentBehavior: Bound
 
+// TODO: move to rust or native Network modules
 import Quickshell
 import Quickshell.Io
 import QtQuick
