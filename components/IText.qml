@@ -18,6 +18,8 @@ Text {
     color: Colors.foreground1
     smooth: true
 
+    wrapMode: TextEdit.Wrap
+
     font {
         family: Style.font.family.iosevka
         // pointSize: root.pixelSize
