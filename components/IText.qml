@@ -26,6 +26,19 @@ Text {
         pixelSize: fontSize
     }
 
+    onTextChanged: {
+        if (animate) {
+            root.scale = animateFrom;
+            scaleAnim.to = animateTo;
+            scaleAnim.easing.bezierCurve = Style.anim.curves.standardAccel;
+            scaleAnim.start();
+        }
+    }
+
+    onLinkActivated: (link) => {
+        Qt.openUrlExternally(link)
+    }
+
     Behavior on color {
         ColorAnimation {
             duration: Style.anim.durations.normal
@@ -42,12 +55,4 @@ Text {
         easing.type: Easing.BezierSpline
     }
 
-    onTextChanged: {
-        if (animate) {
-            root.scale = animateFrom;
-            scaleAnim.to = animateTo;
-            scaleAnim.easing.bezierCurve = Style.anim.curves.standardAccel;
-            scaleAnim.start();
-        }
-    }
 }
