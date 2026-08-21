@@ -39,6 +39,10 @@ ILauncher {
             // so it doesnt get the right vars, but it doesn't update after since it already triggered it
             selectionSync.running = true;
         }
+        // for some reason selection changing doesnt call onMappedSelectionChanged, so we manually trigger it
+        onSelectionChanged: {
+            selectionSync.running = true;
+        }
         Timer {
             id: selectionSync
             running: false
