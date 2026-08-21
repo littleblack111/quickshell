@@ -91,7 +91,8 @@ impl qobject::MathCalc {
                                         // to display scientific notation properly
                                         // other ones show both version without e or shows *10^_
                                         // and have a = prefix
-                                        .to_string_big()
+                                        // to_string_big will result in 1/2=5.0000000000000000e − 1
+                                        .to_string()
                                         .into();
                                     if r != input.into() {
                                         QVariant::from(&r)

@@ -39,7 +39,7 @@ IComponent {
             valid,
             priority: valid,
             answer,
-            predictiveCompletion: valid ? ' is ' + answer : ''
+            predictiveCompletion: valid && inputCleaned.toLowerCase() != answer.toLowerCase().trim() ? ' is ' + answer : ''
         };
     }
     exec: function () {
