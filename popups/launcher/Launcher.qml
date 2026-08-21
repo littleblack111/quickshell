@@ -425,8 +425,6 @@ ILauncher {
                 launcher.state.selectedPriority--;
             break;
         }
-
-        selectionSync.running = true;
     }
 
     implicitWidth: container.width
