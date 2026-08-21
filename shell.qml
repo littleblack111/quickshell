@@ -9,6 +9,8 @@ import core
 
 import qs.services
 
+// TODO: remove all MouseArea and use modern alternative
+
 Scope {
     id: root
 
@@ -101,9 +103,5 @@ Scope {
         // function onReloadFailed() {
         //     Quickshell.inhibitReloadPopup();
         // }
-    }
-
-    Component.onCompleted: {
-    	SmartCalc.query("1+2")
     }
 }
