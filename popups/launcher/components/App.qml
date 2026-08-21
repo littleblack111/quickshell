@@ -171,6 +171,9 @@ IComponent {
                     }
                 }
             }
+            onContentYChanged: {
+                SelectionState.syncSelectionState();
+            }
         }
     }
 }

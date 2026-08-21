@@ -24,6 +24,7 @@ Singleton {
     property alias selectedPriority: persist.selectedPriority
     property alias previousSelectedPriority: persist.previousSelectedPriority
     property var widgets: []
+    signal syncSelectionState
 
     onSelectedPriorityChanged: {
         if (selectedPriority > previousSelectedPriority) {

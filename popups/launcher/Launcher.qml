@@ -45,6 +45,7 @@ ILauncher {
         }
         Timer {
             id: selectionSync
+            // TODO: evaluate weather i just leave it running repeat, might be costy though
             running: false
             repeat: false
             // sync w/ IComponent y animation duration
@@ -429,4 +430,12 @@ ILauncher {
 
     implicitWidth: container.width
     implicitHeight: container.height
+
+    Connections {
+        target: launcher?.state
+
+        function onSyncSelectionState() {
+            selectionSync.running = true;
+        }
+    }
 }
