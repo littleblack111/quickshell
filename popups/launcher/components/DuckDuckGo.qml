@@ -43,18 +43,18 @@ IComponent {
         };
     }
     exec: function () {
-		// FIXME: doesn't work as enter closes the launcher
-		if (!expand) {
-			expand = true;
-			return true;
-		} else
-		   	Clip.copy(`{DuckDuckGo.title}\n{DuckDuckGo.description_html}`);
+        // FIXME: doesn't work as enter closes the launcher
+        // if (!expand) {
+        //     expand = true;
+        //     return false;
+        // } else
+        Clip.copy(`${DuckDuckGo.title}\n${DuckDuckGo.description_html}`);
     }
 
     IInnerComponent {
         anchors.margins: Launcher.duckduckgoSpacing
         RowLayout {
-		    id: layout
+            id: layout
             spacing: Launcher.duckduckgoSpacing
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -69,9 +69,8 @@ IComponent {
                 visible: image.status === Image.Ready
 
                 Image {
-                    property real maxWidth: status === Image.Ready ? implicitWidth : 0
-
                     id: image
+                    property real maxWidth: status === Image.Ready ? implicitWidth : 0
                     anchors.fill: parent
 
                     fillMode: Image.PreserveAspectCrop
@@ -132,8 +131,8 @@ IComponent {
                     }
 
                     TapHandler {
-                    	gesturePolicy: TapHandler.DragThreshold
-                     	onTapped: expand = !expand
+                        gesturePolicy: TapHandler.DragThreshold
+                        onTapped: expand = !expand
                     }
                 }
             }
