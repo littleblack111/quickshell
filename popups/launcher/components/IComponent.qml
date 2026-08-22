@@ -95,6 +95,13 @@ IRect {
         }
     }
 
+    HoverHandler {
+        onHoveredChanged: {
+            if (hovered)
+                root.state.selectedPriority = root.getSelfPriority();
+        }
+    }
+
     Component.onCompleted: {
         Qt.callLater(() => {
             syncSelectionState();
