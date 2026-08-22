@@ -433,6 +433,8 @@ ILauncher {
 
     Connections {
         target: launcher?.state
+        // launcher.state may be null
+        ignoreUnknownSignals: true
 
         function onSyncSelectionState() {
             selectionSync.running = true;
