@@ -27,16 +27,19 @@ Singleton {
     signal syncSelectionState
 
     onSelectedPriorityChanged: {
-        if (selectedPriority > previousSelectedPriority) {
-            priorities[selectedPriority].home();
-            priorities[selectedPriority].syncSelectionState();
-        } else {
-            priorities[selectedPriority].end();
-            priorities[selectedPriority].syncSelectionState();
+        // so it won't mess w/ if we changed it via mouse
+        if (Math.abs(selectedPriority - previousSelectedPriority) == 1) {
+            if (selectedPriority > previousSelectedPriority) {
+                priorities[selectedPriority].home();
+            } else {
+                priorities[selectedPriority].end();
+            }
         }
+        priorities[selectedPriority].syncSelectionState();
 
         previousSelectedPriority = selectedPriority;
     }
+
     // order them based on widgets(which came from order from config)
     onPrioritiesChanged: {
         for (let i = priorities.length - 1; i >= 0; i--)
@@ -45,7 +48,13 @@ Singleton {
 
         priorities.sort((a, b) => (widgets.indexOf(a) - widgets.indexOf(b)) || 0);
 
-        priorities.forEach((item, index) => {});
+        if (!priorities[selectedPriority]) {
+            if (priorities[previousSelectedPriority]) {
+                selectedPriority = previousSelectedPriority;
+            } else {
+                selectedPriority = 0;
+            }
+        }
 
         priorities[selectedPriority]?.syncSelectionState();
     }
