@@ -20,9 +20,9 @@ IRect {
     property string answer: processed?.answer || ""
     property Component preview: Component {
         IText {
-        // TODO: use proper active: false via Loader
-	       	visible: answer.length <= Launcher.maxPreviewLen
-	        animate: true
+            // TODO: use proper active: false via Loader
+            visible: answer.length <= Launcher.maxPreviewLen
+            animate: true
             text: answer
         }
     }
@@ -34,14 +34,15 @@ IRect {
                 answer: answer,
                 preview: preview,
                 predictiveCompletion: predictiveCompletion
-            })// use the current IRect if valid is set
+            })
+    // use the current IRect if valid is set
     property var syncSelectionState: () => {}
     // actions
     property var up: () => ({
-                top: false
+                top: true
             })
     property var down: () => ({
-                bottom: false
+                bottom: true
             })
     property var prev: () => {}
     property var next: () => {}
@@ -56,7 +57,7 @@ IRect {
 
     function _exec() {
         if (!exec())
-	        close();
+            close();
     }
 
     // this doesn't change launcher size but only hides the actual content but the outside still think the content is there
@@ -77,7 +78,7 @@ IRect {
         // sync with state.priorities
         Qt.callLater(() => {
             if (!standalone)
-                state.priorities = [...[...state.priorities, root].reduce((s, x) => (s[(s.has(x) && 'delete') || 'add'](x), s), new Set())];
+                state.priorities = state.priorities.includes(root) ? state.priorities.filter(x => x !== root) : [...new Set(state.priorities), root];
             else
                 state.priorities = [root];
         });

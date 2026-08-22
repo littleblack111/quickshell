@@ -35,10 +35,10 @@ Singleton {
     readonly property int duckduckgoSpacing: 25
 
     readonly property list<Component> widgets: [
-    	// recommanded order:
-		// 1. components with .startswith
-		// 2. utils
-		// 3. app launcher
+        // recommanded order:
+        // 1. components with .startswith
+        // 2. utils
+        // 3. app launcher
         Component {
             Emoji {}
         },
@@ -58,13 +58,13 @@ Singleton {
             Unit {}
         },
         Component {
-			Currency {}
+            Currency {}
         },
         Component {
             App {}
         },
         Component {
-        	DuckDuckGo {}
+            DuckDuckGo {}
         }
     ]
 }
