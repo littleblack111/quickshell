@@ -77,6 +77,8 @@ IComponent {
         Qt.callLater(() => {
             if (!root.visible || selectedIndex < 0 || selectedIndex >= listView.count)
                 return;
+
+            state.selectedPriority = root.getSelfPriority();
             state.selected = listView.itemAtIndex(selectedIndex);
         });
     }
@@ -188,8 +190,8 @@ IComponent {
                     id: loader
                     sourceComponent: clipHist[selectedIndex]?.type === "image" ? img : text
                     property Component text: ITextEdit {
-                        animate: true
                         id: textEdit
+                        animate: true
                         readOnly: true
                         wrapMode: TextEdit.Wrap
                         width: preview.width
@@ -209,7 +211,5 @@ IComponent {
         }
     }
 
-    Component.onCompleted: {
-
-    }
+    Component.onCompleted: {}
 }

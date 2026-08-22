@@ -111,6 +111,7 @@ IComponent {
             if (selectedIndex < 0 || selectedIndex >= listView.count || !root.visible)
                 return;
 
+            state.selectedPriority = root.getSelfPriority();
             state.selected = listView.itemAtIndex(selectedIndex);
         });
     }
