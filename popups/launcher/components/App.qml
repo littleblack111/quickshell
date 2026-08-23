@@ -56,25 +56,24 @@ IComponent {
     home: function () {
         if (selectedIndex <= 0)
             return true;
-        selectedIndex = -1;
         selectedIndex = 0;
     }
     end: function () {
         if (selectedIndex + 1 > listView.count - 1)
             return true;
-        selectedIndex = listView.count;
         selectedIndex = listView.count - 1;
     }
 
     pgup: function () {
         if (listView.count === 0)
             return true;
+
         const pageSize = Math.floor(listView.height / (General.appIconSize + Launcher.innerMargin * 2));
-        if (selectedIndex - pageSize < 0) {
+
+        if (selectedIndex - pageSize < 0)
             selectedIndex = 0;
-        } else {
+        else
             selectedIndex -= pageSize;
-        }
     }
 
     pgdn: function () {
@@ -100,14 +99,21 @@ IComponent {
     }
 
     onSelectedIndexChanged: {
-        syncSelectionState();
         Qt.callLater(() => {
+            // so at least it exist
+            listView.positionViewAtIndex(selectedIndex, ListView.Visible);
+            syncSelectionState();
             listView.positionViewAtIndex(selectedIndex, ListView.Contain);
         });
     }
 
     syncSelectionState: function () {
         Qt.callLater(() => {
+            if (!isSelectedPriority() && state.selected === listView.itemAtIndex(selectedIndex)) {
+                state.selected = null;
+                return;
+            }
+
             if (selectedIndex < 0 || selectedIndex >= listView.count || !root.visible)
                 return;
 
@@ -139,7 +145,7 @@ IComponent {
 
                 RowLayout {
                     id: item
-                    scale: index === selectedIndex ? 1.01 : 0.99
+                    scale: isSelectedPriority() && index === selectedIndex ? 1.01 : 0.99
                     anchors.left: parent.left
                     anchors.top: parent.top
                     anchors.margins: Launcher.innerMargin * 2
@@ -153,7 +159,14 @@ IComponent {
                     IText {
                         text: modelData ? modelData.name : ""
                         renderType: Text.QtRendering
-                        color: index === selectedIndex ? Colors.foreground1 : Colors.foreground2
+                        font.bold: isSelectedPriority() && index === selectedIndex
+                        color: isSelectedPriority() && index === selectedIndex ? Colors.foreground1 : Colors.foreground2
+                        Behavior on color {
+                            ColorAnimation {
+                                duration: General.animationDuration
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
                     }
 
                     Behavior on scale {

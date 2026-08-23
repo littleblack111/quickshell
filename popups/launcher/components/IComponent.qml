@@ -44,14 +44,26 @@ IRect {
     property var down: () => ({
                 bottom: true
             })
-    property var prev: () => {}
-    property var next: () => {}
+    property var prev: () => ({
+                left: true
+            })
+    property var next: () => ({
+                right: true
+            })
     // true if not closed
     property var exec: () => {}
-    property var home: () => {}
-    property var end: () => {}
-    property var pgup: () => {}
-    property var pgdn: () => {}
+    property var home: () => ({
+                top: true
+            })
+    property var end: () => ({
+                bottom: true
+            })
+    property var pgup: () => ({
+                top: true
+            })
+    property var pgdn: () => ({
+                bottom: true
+            })
 
     signal close
 
@@ -62,6 +74,10 @@ IRect {
 
     function getSelfPriority() {
         return state.priorities.indexOf(root);
+    }
+
+    function isSelectedPriority() {
+        return state.selectedPriority === getSelfPriority();
     }
 
     function trySetSelfPriority() {
@@ -106,6 +122,8 @@ IRect {
         onHoveredChanged: {
             if (hovered)
                 root.trySetSelfPriority();
+            else
+                root.syncSelectionState();
         }
     }
 

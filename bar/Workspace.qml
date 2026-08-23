@@ -1,8 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
 import Quickshell.Hyprland
-import Quickshell.Wayland
 import Qt5Compat.GraphicalEffects
 import qs.config
 import qs.components
@@ -57,7 +55,7 @@ Item {
     }
     IRect {
         id: activeRect
-        x: layout.x + activeIndex * Bar.wsIconSize + activeIndex * Bar.wsSpacing
+        x: layout.x + root.activeIndex * Bar.wsIconSize + root.activeIndex * Bar.wsSpacing
         anchors.verticalCenter: layout.verticalCenter
         implicitWidth: Bar.wsActiveIconSize
         implicitHeight: Bar.wsIconSize - Bar.wsHorizontalSpacing
@@ -219,7 +217,7 @@ Item {
         onPositionChanged: {
             const abovedItemIndex = Math.round((mouseX - layout.x) / (Bar.wsIconSize + Bar.wsSpacing)) - 1; // TODO: workspaceActiveIconSize might be before
             activeRect.x = mouseX - activeRect.width / 2;
-            root.activeOccupied = getWorkspaceStats(abovedItemIndex).isOccupied || false;
+            root.activeOccupied = root.getWorkspaceStats(abovedItemIndex).isOccupied || false;
             activeRect.implicitWidth = root.activeIndex === abovedItemIndex ? Bar.wsActiveIconSize : Bar.wsIconSize;
         }
         onExited: {
@@ -227,18 +225,18 @@ Item {
                 // just in case
                 activeRect.x = layout.x + root.activeIndex * Bar.wsIconSize + root.activeIndex * Bar.wsSpacing;
                 activeRect.implicitWidth = Bar.wsActiveIconSize;
-                root.activeOccupied = getWorkspaceStats(root.activeIndex).isOccupied || false;
+                root.activeOccupied = root.getWorkspaceStats(root.activeIndex).isOccupied || false;
             }
         }
         onWheel: event => {
             // no idea wats wrong w/ prev so we just unify it to use +/- 1
             if (event.angleDelta.y < 0) {
-                if (activeIndex + 1 < Bar.wss)
+                if (root.activeIndex + 1 < Bar.wss)
                     Hyprland.dispatch(`hl.dsp.focus({ workspace = '+1' })`);
                 else
                     Hyprland.dispatch(`hl.dsp.focus({ workspace = '1' })`);
             } else if (event.angleDelta.y > 0) {
-                if (activeIndex + 1 > 1) {
+                if (root.activeIndex + 1 > 1) {
                     Hyprland.dispatch(`hl.dsp.focus({ workspace = '1' })`);
                 } else if (Bar.wss > 1) {
                     Hyprland.dispatch(`hl.dsp.focus({ workspace = '${Bar.wss}' })`);

@@ -35,12 +35,17 @@ IComponent {
 
     onSelectedIndexChanged: {
         Qt.callLater(() => {
-            if (!loader.view || selectedIndex < 0 || selectedIndex >= loader.view.count)
+            if (!loader?.view || selectedIndex < 0 || selectedIndex >= loader.view.count)
                 return;
 
-            syncSelectionState();
+            if (!isSelectedPriority() && state.selected === loader.view.itemAtIndex(selectedIndex)) {
+                state.selected = null;
+                return;
+            }
+
             loader.view.currentIndex = selectedIndex;
             loader.view.positionViewAtIndex(selectedIndex, GridView.Contain);
+            syncSelectionState();
         });
     }
 
@@ -134,7 +139,7 @@ IComponent {
                             required property int index
                             width: grid.cellWidth
                             height: chipContent.implicitHeight + Launcher.innerMargin * 2
-                            scale: index === root.selectedIndex ? 1.03 : 0.97
+                            scale: isSelectedPriority() && index === root.selectedIndex ? 1.03 : 0.97
 
                             IRect {
                                 anchors.fill: parent
@@ -155,6 +160,7 @@ IComponent {
                                         anchors.horizontalCenter: parent.horizontalCenter
                                         text: modelData.name
                                         font.pixelSize: Launcher.widgetFontSize * 0.7
+                                        font.bold: isSelectedPriority() && index === selectedIndex
                                         color: index === selectedIndex ? Colors.foreground1 : Colors.foreground2
                                         elide: Text.ElideRight
                                         width: parent.parent.width - Launcher.innerMargin * 2

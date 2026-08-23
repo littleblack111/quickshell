@@ -209,6 +209,7 @@ ILauncher {
                         onTextChanged: {
                             if (launcher.state.input !== textInput.text)
                                 pendingUpdate = true;
+
                             Qt.callLater(() => {
                                 if (pendingUpdate) {
                                     pendingUpdate = false;
@@ -422,19 +423,22 @@ ILauncher {
             break;
         }
 
-        switch (set) {
-        case 1:
-            if (launcher.state.selectedPriority < launcher.state.priorities.length - 1) {
-                launcher.state.selectedPriority++;
-                launcher.state.priorities[launcher.state.selectedPriority].home();
+        if (set !== 0) {
+            // launcher.state.priorities[launcher.state.selectedPriority].syncSelectionState();
+            switch (set) {
+            case 1:
+                if (launcher.state.selectedPriority < launcher.state.priorities.length - 1) {
+                    launcher.state.selectedPriority++;
+                    launcher.state.priorities[launcher.state.selectedPriority].home();
+                }
+                break;
+            case -1:
+                if (launcher.state.selectedPriority > 0) {
+                    launcher.state.selectedPriority--;
+                    launcher.state.priorities[launcher.state.selectedPriority].end();
+                }
+                break;
             }
-            break;
-        case -1:
-            if (launcher.state.selectedPriority > 0) {
-                launcher.state.selectedPriority--;
-                launcher.state.priorities[launcher.state.selectedPriority].end();
-            }
-            break;
         }
     }
 

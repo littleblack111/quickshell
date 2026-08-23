@@ -72,6 +72,7 @@ IComponent {
                     id: image
                     property real maxWidth: status === Image.Ready ? implicitWidth : 0
                     anchors.fill: parent
+                    scale: isSelectedPriority() ? 1.01 : 0.99
 
                     fillMode: Image.PreserveAspectCrop
 
@@ -87,6 +88,10 @@ IComponent {
                     }
 
                     Behavior on maxWidth {
+                        ISpringAnimation {}
+                    }
+
+                    Behavior on scale {
                         ISpringAnimation {}
                     }
                 }
@@ -112,7 +117,7 @@ IComponent {
                     text: answer
                     font {
                         pixelSize: Launcher.widgetFontSize * 1.1
-                        bold: true
+                        bold: isSelectedPriority()
                     }
                 }
 

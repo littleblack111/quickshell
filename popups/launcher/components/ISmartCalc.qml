@@ -9,9 +9,9 @@ import qs.config
 import core
 
 IComponent {
-	property string symbol
-	required property bool category
-	required property string predictiveText
+    property string symbol
+    required property bool category
+    required property string predictiveText
 
     property int cursorPosition: SelectionState.cursorPosition
 
@@ -22,14 +22,14 @@ IComponent {
     }
 
     onInputChanged: {
-	   	SmartCalc.reset_result();
-	}
+        SmartCalc.reset_result();
+    }
 
     process: function () {
-	   	SmartCalc.query(input);
-     	const answer = SmartCalc.result;
-		// TODO: use answer property rn its circular dependent since it has to be valid which is the line below
-		const valid = SmartCalc.result && SmartCalc.result.length > 0 && category;
+        SmartCalc.query(input);
+        const answer = SmartCalc.result;
+        // TODO: use answer property rn its circular dependent since it has to be valid which is the line below
+        const valid = SmartCalc.result && SmartCalc.result.length > 0 && category;
         return {
             valid,
             priority: valid,
@@ -60,7 +60,7 @@ IComponent {
                     text: input
                     font {
                         pixelSize: Launcher.widgetFontSize
-                        bold: true
+                        bold: isSelectedPriority()
                     }
                 }
             }
@@ -69,7 +69,7 @@ IComponent {
                 visible: valid
                 text: "→"
                 font.pixelSize: Launcher.widgetFontSize
-                font.bold: true
+                font.bold: isSelectedPriority()
             }
 
             Item {
@@ -83,7 +83,7 @@ IComponent {
                     text: valid ? answer : ''
                     font {
                         pixelSize: Launcher.widgetFontSize
-                        bold: true
+                        bold: isSelectedPriority()
                     }
                 }
             }
