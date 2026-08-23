@@ -14,7 +14,6 @@ Singleton {
         property string input: ""
         property int cursorPosition: 0
         property int selectedPriority: 0
-        property int previousSelectedPriority: 0
     }
 
     property Item selected: null
@@ -22,7 +21,6 @@ Singleton {
     property alias cursorPosition: persist.cursorPosition
     property var priorities: []
     property alias selectedPriority: persist.selectedPriority
-    property alias previousSelectedPriority: persist.previousSelectedPriority
     property var widgets: []
     signal syncSelectionState
 
@@ -38,14 +36,18 @@ Singleton {
 
         priorities.sort((a, b) => (widgets.indexOf(a) - widgets.indexOf(b)) || 0);
 
-        if (!priorities[selectedPriority]) {
-            if (priorities[previousSelectedPriority]) {
-                selectedPriority = previousSelectedPriority;
-            } else {
-                selectedPriority = 0;
+        Qt.callLater(() => {
+            let prevSelectedPriority = selectedPriority;
+            while (!priorities[selectedPriority] && selectedPriority > 0) {
+                if (prevSelectedPriority === selectedPriority) {
+                    Qt.callLater(() => {
+                        if (!priorities[selectedPriority] && selectedPriority > 0)
+                            selectedPriority--;
+                        priorities[selectedPriority]?.syncSelectionState();
+                    });
+                }
+                prevSelectedPriority = selectedPriority;
             }
-        }
-
-        priorities[selectedPriority]?.syncSelectionState();
+        });
     }
 }

@@ -68,7 +68,6 @@ Scope {
 						property int cursorPosition: 0
 						property var priorities: []
 						property int selectedPriority: 0
-						property int previousSelectedPriority: 0
 						property var widgets: []
 					}
 					readonly property list<Component> widgets: [
