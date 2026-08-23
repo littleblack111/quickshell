@@ -161,11 +161,17 @@ IComponent {
                                     }
                                 }
 
-                                MouseArea {
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    onPositionChanged: root.selectedIndex = index
-                                    onPressed: root._exec()
+                                HoverHandler {
+                                    onPointChanged: {
+                                        if (hovered)
+                                            root.selectedIndex = index;
+                                    }
+                                }
+                                TapHandler {
+                                    onTapped: {
+                                        root.selectedIndex = index;
+                                        root._exec();
+                                    }
                                 }
                             }
 

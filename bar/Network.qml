@@ -111,10 +111,12 @@ Item {
             }
         }
     }
-    MouseArea {
-        anchors.fill: container
+
+    HoverHandler {
         cursorShape: Qt.PointingHandCursor
-        onClicked: {
+    }
+    TapHandler {
+        onTapped: {
             root.isCollapsed = !root.isCollapsed;
         }
     }

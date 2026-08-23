@@ -110,14 +110,13 @@ Item {
             }
         }
 
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onEntered: {
-                root.collapsed = false;
-            }
-            onExited: {
-                root.collapsed = true;
+        HoverHandler {
+            onHoveredChanged: {
+                if (!hovered) {
+                    root.collapsed = true;
+                } else {
+                    root.collapsed = false;
+                }
             }
         }
     }
