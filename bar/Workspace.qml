@@ -234,7 +234,7 @@ Item {
             // no idea wats wrong w/ prev so we just unify it to use +/- 1
             if (event.angleDelta.y < 0) {
                 if (activeIndex + 1 < Bar.wss)
-	                Hyprland.dispatch(`hl.dsp.focus({ workspace = '+1' })`);
+                    Hyprland.dispatch(`hl.dsp.focus({ workspace = '+1' })`);
                 else
                     Hyprland.dispatch(`hl.dsp.focus({ workspace = '1' })`);
             } else if (event.angleDelta.y > 0) {

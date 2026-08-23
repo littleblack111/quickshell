@@ -27,17 +27,7 @@ Singleton {
     signal syncSelectionState
 
     onSelectedPriorityChanged: {
-        // so it won't mess w/ if we changed it via mouse
-        if (Math.abs(selectedPriority - previousSelectedPriority) == 1) {
-            if (selectedPriority > previousSelectedPriority) {
-                priorities[selectedPriority].home();
-            } else {
-                priorities[selectedPriority].end();
-            }
-        }
-        priorities[selectedPriority].syncSelectionState();
-
-        previousSelectedPriority = selectedPriority;
+        priorities[selectedPriority]?.syncSelectionState();
     }
 
     // order them based on widgets(which came from order from config)

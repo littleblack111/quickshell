@@ -2,6 +2,8 @@ import QtQuick
 import qs.config
 
 SpringAnimation {
-    spring: General.springAnimationSpring
-    damping: General.springAnimationDamping
+    property real speed: 1.0
+
+    spring: General.springAnimationSpring * (speed * speed)
+    damping: General.springAnimationDamping * (speed)
 }

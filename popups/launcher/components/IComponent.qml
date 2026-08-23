@@ -64,6 +64,13 @@ IRect {
         return state.priorities.indexOf(root);
     }
 
+    function trySetSelfPriority() {
+        let self = getSelfPriority();
+        // ??? why tf is it -1 not null or undefined this is why rust is better
+        if (self !== -1)
+            state.selectedPriority = self;
+    }
+
     // this doesn't change launcher size but only hides the actual content but the outside still think the content is there
     visible: active
     opacity: valid ? 1 : 0
@@ -98,13 +105,14 @@ IRect {
     HoverHandler {
         onHoveredChanged: {
             if (hovered)
-                root.state.selectedPriority = root.getSelfPriority();
+                root.trySetSelfPriority();
         }
     }
 
-    Component.onCompleted: {
-        Qt.callLater(() => {
-            syncSelectionState();
-        });
-    }
+    // causes all of them fighting for selection state
+    // Component.onCompleted: {
+    //     Qt.callLater(() => {
+    //         syncSelectionState();
+    //     });
+    // }
 }

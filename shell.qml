@@ -61,6 +61,7 @@ Scope {
 				import "popups/launcher/components"
 
 				LazyLoader {
+					// TODO: just use the same selectionState
 					property QtObject selectionState: QtObject {
 						property Item selected: null
 						property string input: ""

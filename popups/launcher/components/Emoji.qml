@@ -95,7 +95,7 @@ IComponent {
             if (!loader.view || selectedIndex < 0 || selectedIndex >= loader.view.count || !root.visible)
                 return;
 
-            state.selectedPriority = root.getSelfPriority();
+            trySetSelfPriority();
             state.selected = loader.view.itemAtIndex(selectedIndex);
         });
     }
@@ -134,7 +134,7 @@ IComponent {
                             required property int index
                             width: grid.cellWidth
                             height: chipContent.implicitHeight + Launcher.innerMargin * 2
-                            scale: index === selectedIndex ? 1.03 : 0.97
+                            scale: index === root.selectedIndex ? 1.03 : 0.97
 
                             IRect {
                                 anchors.fill: parent

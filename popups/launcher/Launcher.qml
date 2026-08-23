@@ -15,15 +15,6 @@ ILauncher {
 
     name: "quickshell::launcher::launcher"
 
-    Connections {
-        target: parentLoader
-        function onActiveChanged() {
-            if (!parentLoader.active && launcher.state) {
-                launcher.state.selected = null;
-            }
-        }
-    }
-
     anchors.top: true
     margins.top: Launcher.topMargin
     aboveWindows: true
@@ -65,16 +56,31 @@ ILauncher {
             radius: Launcher.borderRadius
             color: Qt.rgba(Colors.background1.r, Colors.background1.g, Colors.background1.b, Launcher.bgTransparency)
             Behavior on x {
-                ISpringAnimation {}
+                ISpringAnimation {
+                    id: springAnim
+                    speed: 1.5
+                }
             }
             Behavior on y {
-                ISpringAnimation {}
+                ISpringAnimation {
+                    speed: 1.5
+                }
             }
             Behavior on implicitWidth {
-                ISpringAnimation {}
+                NumberAnimation {
+                    duration: springAnim.duration
+                    easing.type: Easing.BezierSpline
+                    // fast slow
+                    easing.bezierCurve: [0.33, 0.8, 0, 1]
+                }
             }
-            Behavior on height {
-                ISpringAnimation {}
+            Behavior on implicitHeight {
+                NumberAnimation {
+                    duration: springAnim.duration
+                    easing.type: Easing.BezierSpline
+                    // fast slow
+                    easing.bezierCurve: [0.33, 0.8, 0, 1]
+                }
             }
         }
         color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.bgTransparency)
@@ -375,7 +381,7 @@ ILauncher {
     // 2 = up
     // -2 = down
     function changePos(direction: int) {
-        const item = launcher.state?.priorities[launcher.state.selectedPriority] || null;
+        const item = launcher.state?.priorities[launcher.state.selectedPriority];
         if (!item)
             return;
 
@@ -418,12 +424,16 @@ ILauncher {
 
         switch (set) {
         case 1:
-            if (launcher.state.selectedPriority < launcher.state.priorities.length - 1)
+            if (launcher.state.selectedPriority < launcher.state.priorities.length - 1) {
                 launcher.state.selectedPriority++;
+                launcher.state.priorities[launcher.state.selectedPriority].home();
+            }
             break;
         case -1:
-            if (launcher.state.selectedPriority > 0)
+            if (launcher.state.selectedPriority > 0) {
                 launcher.state.selectedPriority--;
+                launcher.state.priorities[launcher.state.selectedPriority].end();
+            }
             break;
         }
     }

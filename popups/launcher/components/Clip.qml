@@ -65,11 +65,11 @@ IComponent {
     }
 
     onSelectedIndexChanged: {
-        if (selectedIndex >= 0 && selectedIndex < listView.count) {
+        if (selectedIndex >= 0 && selectedIndex < listView.count)
             Qt.callLater(() => {
                 listView.positionViewAtIndex(selectedIndex, ListView.Contain);
             });
-        }
+
         syncSelectionState();
     }
 
@@ -78,7 +78,7 @@ IComponent {
             if (!root.visible || selectedIndex < 0 || selectedIndex >= listView.count)
                 return;
 
-            state.selectedPriority = root.getSelfPriority();
+            trySetSelfPriority();
             state.selected = listView.itemAtIndex(selectedIndex);
         });
     }
