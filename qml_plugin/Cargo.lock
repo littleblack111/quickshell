@@ -1811,7 +1811,6 @@ dependencies = [
  "smart-calculator",
  "tokio",
  "unwrap-print",
- "unwrap-retry",
 ]
 
 [[package]]
@@ -1882,7 +1881,7 @@ dependencies = [
  "once_cell",
  "socket2",
  "tracing",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -2102,7 +2101,7 @@ dependencies = [
  "security-framework",
  "security-framework-sys",
  "webpki-root-certs",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -2210,7 +2209,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5b55fb86dfd3a2f5f76ea78310a88f96c4ea21a3031f8d212443d56123fd0521"
 dependencies = [
  "libc",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -2750,18 +2749,9 @@ checksum = "8ecb6da28b8a351d773b68d5825ac39017e680750f980f3a1a85cd8dd28a47c1"
 
 [[package]]
 name = "unwrap-print"
-version = "0.1.1"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a5d0aeaa22516bc62ce84e47f3b72de84acc2120ce6cb38dbfc19825470b207e"
-
-[[package]]
-name = "unwrap-retry"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9300c005780a019c417e87e4adae3fdb1653be75b384f1fec16f7452fa724372"
-dependencies = [
- "tokio",
-]
+checksum = "25565fb171710b94bd5e4a46033dd914d5774d63d368c837c0f79f4074995fea"
 
 [[package]]
 name = "url"
@@ -2935,7 +2925,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
