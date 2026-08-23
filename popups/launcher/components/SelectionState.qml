@@ -36,17 +36,12 @@ Singleton {
 
         priorities.sort((a, b) => (widgets.indexOf(a) - widgets.indexOf(b)) || 0);
 
-        Qt.callLater(() => {
-            let prevSelectedPriority = selectedPriority;
-            while (!priorities[selectedPriority] && selectedPriority > 0) {
-                if (prevSelectedPriority === selectedPriority) {
-                    Qt.callLater(() => {
-                        if (!priorities[selectedPriority] && selectedPriority > 0)
-                            selectedPriority--;
-                        priorities[selectedPriority]?.syncSelectionState();
-                    });
-                }
-                prevSelectedPriority = selectedPriority;
+        Qt.callLater(function step() {
+            if (!priorities[selectedPriority] && selectedPriority > 0) {
+                selectedPriority--;
+                Qt.callLater(step);
+            } else {
+                priorities[selectedPriority]?.syncSelectionState();
             }
         });
     }
