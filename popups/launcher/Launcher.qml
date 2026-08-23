@@ -22,18 +22,21 @@ ILauncher {
 
     IRect {
         id: container
-        property var selection: launcher.state?.selected || null
+        property var selection: launcher.state?.selected
         property var mappedSelection: selection?.mapToItem(null, 0, 0)
+
         onMappedSelectionChanged: {
             // launcher.state?.selected may be slow.. smh qt
             // my guess is mapToItem is called when its not finished doing whatever it needs to do,
             // so it doesnt get the right vars, but it doesn't update after since it already triggered it
             selectionSync.running = true;
         }
+
         // for some reason selection changing doesnt call onMappedSelectionChanged, so we manually trigger it
         onSelectionChanged: {
             selectionSync.running = true;
         }
+
         Timer {
             id: selectionSync
             // TODO: evaluate weather i just leave it running repeat, might be costy though
@@ -113,9 +116,6 @@ ILauncher {
 
                     Behavior on topMargin {
                         ISpringAnimation {}
-                        // NumberAnimation {
-                        //     duration: General.animationDuration / 2
-                        // }
                     }
                 }
 

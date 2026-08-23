@@ -64,6 +64,7 @@ Item {
             //     }
             // }
 
+            // cannot remove and replace with modern non stealing handlers cuz otherwise slider will steal from us
             MouseArea {
                 id: mouseArea
                 anchors.fill: parent
