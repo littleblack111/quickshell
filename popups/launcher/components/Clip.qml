@@ -44,7 +44,6 @@ IComponent {
     home: function () {
         if (selectedIndex <= 0)
             return true;
-        selectedIndex = -1;
         selectedIndex = 0;
     }
     end: function () {
@@ -60,23 +59,24 @@ IComponent {
         }
 
         selectedIndex = 0;
-        listView.positionViewAtBeginning();
         syncSelectionState();
     }
 
     onSelectedIndexChanged: {
         if (selectedIndex >= 0 && selectedIndex < listView.count)
             Qt.callLater(() => {
+                listView.positionViewAtIndex(selectedIndex, ListView.Visible);
+                syncSelectionState();
                 listView.positionViewAtIndex(selectedIndex, ListView.Contain);
             });
-
-        syncSelectionState();
     }
 
     syncSelectionState: function () {
         Qt.callLater(() => {
-            if (!isSelectedPriority() && state.selected === listView.itemAtIndex(selectedIndex)) {
-                state.selected = null;
+            if (!isSelectedPriority()) {
+                if (state.selected && state.selected === listView.itemAtIndex(selectedIndex))
+                    state.selected = null;
+
                 return;
             }
 

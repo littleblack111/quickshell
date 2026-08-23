@@ -97,6 +97,13 @@ IComponent {
 
     syncSelectionState: function () {
         Qt.callLater(() => {
+            if (!isSelectedPriority()) {
+                if (state.selected === listView.itemAtIndex(selectedIndex))
+                    state.selected = null;
+
+                return;
+            }
+
             if (!loader.view || selectedIndex < 0 || selectedIndex >= loader.view.count || !root.visible)
                 return;
 

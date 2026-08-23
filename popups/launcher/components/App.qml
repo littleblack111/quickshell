@@ -94,7 +94,6 @@ IComponent {
         }
 
         selectedIndex = 0;
-        listView.contentY = 0;
         syncSelectionState();
     }
 
@@ -109,8 +108,10 @@ IComponent {
 
     syncSelectionState: function () {
         Qt.callLater(() => {
-            if (!isSelectedPriority() && state.selected === listView.itemAtIndex(selectedIndex)) {
-                state.selected = null;
+            if (!isSelectedPriority()) {
+                if (state.selected === listView.itemAtIndex(selectedIndex))
+                    state.selected = null;
+
                 return;
             }
 
