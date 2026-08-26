@@ -236,11 +236,10 @@ Item {
                 else
                     Hyprland.dispatch(`hl.dsp.focus({ workspace = '1' })`);
             } else if (event.angleDelta.y > 0) {
-                if (root.activeIndex + 1 > 1) {
+                if (root.activeIndex + 1 > 1)
                     Hyprland.dispatch(`hl.dsp.focus({ workspace = '1' })`);
-                } else if (Bar.wss > 1) {
+                else if (Bar.wss > 1)
                     Hyprland.dispatch(`hl.dsp.focus({ workspace = '${Bar.wss}' })`);
-                }
             }
         }
     }

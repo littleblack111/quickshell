@@ -175,18 +175,14 @@ IComponent {
                     }
                 }
 
-                TapHandler {
-                    acceptedButtons: Qt.LeftButton
-                    onTapped: {
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onPositionChanged: {
                         root.selectedIndex = index;
-                        root._exec();
                     }
-                }
-                HoverHandler {
-                    onPointChanged: {
-                        if (hovered) {
-                            root.selectedIndex = index;
-                        }
+                    onPressed: {
+                        root._exec();
                     }
                 }
             }

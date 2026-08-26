@@ -123,12 +123,10 @@ Item {
             }
         }
     }
-
-    HoverHandler {
+    MouseArea {
+        anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
-    }
-    TapHandler {
-        onTapped: {
+        onPressed: {
             root.isAlt = !root.isAlt;
         }
     }

@@ -180,16 +180,13 @@ IComponent {
                                     color: index === selectedIndex ? Colors.foreground1 : Colors.foreground2
                                 }
 
-                                HoverHandler {
-                                    onPointChanged: {
-                                        if (hovered) {
-                                            root.selectedIndex = index;
-                                        }
-                                    }
-                                }
-                                TapHandler {
-                                    onTapped: {
+                                MouseArea {
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    onPositionChanged: {
                                         root.selectedIndex = index;
+                                    }
+                                    onPressed: {
                                         root._exec();
                                     }
                                 }
