@@ -64,7 +64,7 @@ Scope {
                         Workspace {
                             id: workspace
                             // screen: barWindow.screen // multi monitor
-                            // Layout.minimumWidth: 400 // FIXME
+                            Layout.minimumWidth: implicitWidth
                         }
                         Mpris {
                             id: mpris
