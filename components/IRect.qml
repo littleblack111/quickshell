@@ -2,6 +2,8 @@ import QtQuick
 import qs.config
 
 Rectangle {
+    id: root
+
     Behavior on color {
         ColorAnimation {
             duration: General.animationDuration
@@ -9,7 +11,17 @@ Rectangle {
         }
     }
 
-    // TODO: use visible instead of opacity for perf, but we need to animate the opacity then set visible
+    states: [
+        State {
+            name: "hidden"
+            when: root.opacity === 0
+            PropertyChanges {
+                target: root
+                visible: false
+            }
+        }
+    ]
+
     Behavior on opacity {
         NumberAnimation {
             duration: General.animationDuration
