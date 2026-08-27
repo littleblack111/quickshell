@@ -8,8 +8,6 @@ import QtQuick.Controls
 Item {
     id: root
 
-    // TODO: use https://quickshell.org/docs/master/types/Quickshell/PopupWindow/ for tooltip
-
     required property real value
     required property string suffix // unit
     required property string icon
@@ -91,10 +89,36 @@ Item {
         }
     }
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
+        hoverEnabled: true
         cursorShape: altValue != value ? Qt.PointingHandCursor : Qt.ArrowCursor
         onPressed: {
             root.isAlt = !root.isAlt;
+        }
+    }
+
+    PopupWindow {
+        id: tooltip
+        visible: mouseArea.containsMouse
+        anchor {
+            item: root
+            edges: Edges.Bottom
+            gravity: Edges.Bottom
+        }
+
+        IRect {
+            color: Colors.background1
+            radius: Style.rounding.small
+            width: tooltipText.implicitWidth + Style.padding.large * 2
+            height: tooltipText.implicitHeight + Style.padding.normal * 2
+
+            IText {
+                id: tooltipText
+                anchors.centerIn: parent
+                text: !root.isAlt ? root.text : root.altText
+                fontSize: Style.font.size.normal
+            }
         }
     }
 }
