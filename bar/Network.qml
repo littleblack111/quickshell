@@ -51,7 +51,7 @@ Item {
             }
             IText {
                 visible: !root.isCollapsed
-                text: Services.Network.networkStrength
+                text: Services.Network.networkName !== "" ? Services.Network.networkName : "Disconnected"
                 renderType: Text.CurveRendering // it's not static and is rapidly updated
             }
 
