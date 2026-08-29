@@ -134,7 +134,7 @@ IComponent {
                             Loader {
                                 sourceComponent: modelData?.type === "image" ? img : text
                                 readonly property Component text: IText {
-                                    text: modelData?.data || ""
+                                    text: String(modelData?.data || "").substring(0, General.maxClipPreviewChar).replace(/\n/g, " ")
                                     color: isSelectedPriority() && index === selectedIndex ? Colors.foreground1 : Colors.foreground2
                                     font.pixelSize: Launcher.widgetFontSize
                                     font.bold: isSelectedPriority() && index === selectedIndex
@@ -198,6 +198,7 @@ IComponent {
 
                 Loader {
                     id: loader
+                    asynchronous: true
                     sourceComponent: clipHist[selectedIndex]?.type === "image" ? img : text
                     property Component text: ITextEdit {
                         id: textEdit
@@ -211,6 +212,7 @@ IComponent {
                     }
                     property Component img: Image {
                         id: image
+                        asynchronous: true
                         width: preview.width
                         height: preview.height
                         source: clipHist[selectedIndex]?.image || ""
@@ -220,6 +222,4 @@ IComponent {
             }
         }
     }
-
-    Component.onCompleted: {}
 }

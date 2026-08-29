@@ -24,4 +24,8 @@ Singleton {
     readonly property real springAnimationDamping: 0.4
 
     readonly property double accentTransparency: 0.15
+
+    readonly property int defaultSearchAlgorithm: Searchable.SearchAlgorithm.Include
+
+    readonly property int maxClipPreviewChar: 100
 }
