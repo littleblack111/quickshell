@@ -14,7 +14,7 @@ IComponent {
     property int cursorPosition: SelectionState.cursorPosition
     property bool expand: false
 
-    height: valid ? expand ? layout.implicitHeight + (Launcher.duckduckgoSpacing * 2) : Launcher.widgetHeight : 0
+    implicitHeight: valid ? expand ? layout.implicitHeight + (Launcher.duckduckgoSpacing * 2) : Launcher.widgetHeight : 0
 
     name: "DuckDuckGo" // subclass of WebSearch in the future
     preview: Component {
@@ -144,5 +144,9 @@ IComponent {
                 }
             }
         }
+    }
+
+    Behavior on implicitHeight {
+        ISpringAnimation {}
     }
 }
