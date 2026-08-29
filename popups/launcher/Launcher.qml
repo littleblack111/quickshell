@@ -243,7 +243,7 @@ ILauncher {
                         color: Qt.rgba(Colors.background2.r, Colors.background2.g, Colors.background2.b, Launcher.widgetBgTransparency)
                         IText {
                             id: text
-                            animate: false // too jumpy
+                            // animate: true // too jumpy
                             color: Colors.foreground3
                             renderType: Text.CurveRendering
                             antialiasing: true
