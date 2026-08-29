@@ -5,7 +5,7 @@ import "../utils/fzf.js" as Fzf
 import "../utils/fuzzysort.js" as Fuzzy
 import "../utils/levendist.js" as Levendist
 
-Singleton {
+Scope {
     required property var list
     property string key: "name"
 
@@ -15,7 +15,8 @@ Singleton {
         Fuzzysort,
         Include
     }
-    property int algorithm: Searchable.SearchAlgorithm.Levendist
+
+    property int algorithm: SearchAlgorithm.Levendist
     property int scoreThreshold: 50
     property var extraOpts: ({})
     property list<string> keys: [key]
@@ -73,15 +74,10 @@ Singleton {
     }
 
     function levendistQuery(search: string): list<var> {
-        const cacheCheck = getCachedSource(search);
-        if (cacheCheck.hit)
-            return cacheCheck.data;
-        let source = cacheCheck.data;
-
         const prefixGroups = keys.map(() => []);
         const fuzzyGroups = keys.map(() => []);
 
-        for (const s of source) {
+        for (const s of list) {
             let best = null;
             for (let i = 0; i < keys.length; i++) {
                 const t = fieldString(s, keys[i]).toLowerCase();
@@ -156,14 +152,10 @@ Singleton {
             });
         }
 
-        queryCache[search] = results;
         return results;
     }
 
     function fuzzysortQuery(search: string): list<var> {
-        const cacheCheck = getCachedSource(search);
-        if (cacheCheck.hit)
-            return cacheCheck.data;
         const res = Fuzzy.go(search, fuzzyPrepped, Object.assign({
             all: true,
             keys,
@@ -195,14 +187,10 @@ Singleton {
         for (const r of noMatch)
             ordered.push(r.obj._item);
 
-        queryCache[search] = ordered;
         return ordered;
     }
 
     function fzfQuery(search: string): list<var> {
-        const cacheCheck = getCachedSource(search);
-        if (cacheCheck.hit)
-            return cacheCheck.data;
         let results;
         if (keys.length <= 1) {
             results = fzf.find(search).sort((a, b) => {
@@ -237,36 +225,40 @@ Singleton {
             }
             results = out;
         }
-        queryCache[search] = results;
+
         return results;
     }
 
     function includeQuery(search: string): list<var> {
-        const cacheCheck = getCachedSource(search);
-        if (cacheCheck.hit)
-            return cacheCheck.data;
-        const results = list.filter(item => keys.some(k => transformSearch(fieldString(item, k)).includes(search)));
-        queryCache[search] = results;
-        return results;
+        return list.filter(item => keys.some(k => transformSearch(fieldString(item, k)).includes(search)));
     }
 
     function query(search: string): list<var> {
         search = transformSearch(search);
         if (!search)
-            return [...list];
+            return list;
+
+        const cacheCheck = getCachedSource(search);
+        if (cacheCheck.hit)
+            return cacheCheck.data;
+
+        let result;
 
         if (algorithm === Searchable.SearchAlgorithm.Levendist)
-            return levendistQuery(search.toLowerCase());
+            result = levendistQuery(search.toLowerCase());
 
         if (algorithm === Searchable.SearchAlgorithm.Fuzzysort)
-            return fuzzysortQuery(search);
+            result = fuzzysortQuery(search);
 
         if (algorithm === Searchable.SearchAlgorithm.Fzf)
-            return fzfQuery(search);
+            result = fzfQuery(search);
 
         if (algorithm === Searchable.SearchAlgorithm.Include)
-            return includeQuery(search);
+            result = includeQuery(search);
 
+        queryCache[search] = result;
+
+        return result;
         return [];
     }
 }
