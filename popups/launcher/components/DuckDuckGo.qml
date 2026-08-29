@@ -9,6 +9,8 @@ import qs.config
 import core
 
 IComponent {
+    id: root
+
     property int cursorPosition: SelectionState.cursorPosition
     property bool expand: false
 
@@ -72,7 +74,7 @@ IComponent {
                     id: image
                     property real maxWidth: status === Image.Ready ? implicitWidth : 0
                     anchors.fill: parent
-                    scale: isSelectedPriority() ? 1.01 : 0.99
+                    scale: root.isSelectedPriority() ? 1.01 : 0.99
 
                     fillMode: Image.PreserveAspectCrop
 
@@ -117,7 +119,7 @@ IComponent {
                     text: answer
                     font {
                         pixelSize: Launcher.widgetFontSize * 1.1
-                        bold: isSelectedPriority()
+                        bold: root.isSelectedPriority()
                     }
                 }
 

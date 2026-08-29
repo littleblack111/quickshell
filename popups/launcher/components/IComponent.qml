@@ -87,6 +87,18 @@ IRect {
             state.selectedPriority = self;
     }
 
+    function syncPriority() {
+        Qt.callLater(() => {
+            if (!standalone) {
+                if (state.priorities.includes(root) && !priority)
+                    state.priorities = state.priorities.filter(x => x !== root);
+                else if (priority)
+                    state.priorities = [...new Set(state.priorities), root];
+            } else
+                state.priorities = [root];
+        });
+    }
+
     // this doesn't change launcher size but only hides the actual content but the outside still think the content is there
     visible: active
     opacity: valid ? 1 : 0
@@ -103,12 +115,7 @@ IRect {
 
     onPriorityChanged: {
         // sync with state.priorities
-        Qt.callLater(() => {
-            if (!standalone)
-                state.priorities = state.priorities.includes(root) ? state.priorities.filter(x => x !== root) : [...new Set(state.priorities), root];
-            else
-                state.priorities = [root];
-        });
+        syncPriority();
     }
 
     Behavior on y {
@@ -127,10 +134,15 @@ IRect {
         }
     }
 
-    // causes all of them fighting for selection state
-    // Component.onCompleted: {
-    //     Qt.callLater(() => {
-    //         syncSelectionState();
-    //     });
-    // }
+    Component.onCompleted: {
+        syncPriority();
+
+        // Qt.callLater(() => {
+        //     syncSelectionState();
+        // });
+    }
+
+    Component.onDestruction: {
+        state.priorities = state.priorities.filter(x => x !== root);
+    }
 }

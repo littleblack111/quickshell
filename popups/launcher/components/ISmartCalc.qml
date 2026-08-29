@@ -9,6 +9,8 @@ import qs.config
 import core
 
 IComponent {
+    id: root
+
     property string symbol
     required property bool category
     required property string predictiveText
@@ -60,7 +62,7 @@ IComponent {
                     text: input
                     font {
                         pixelSize: Launcher.widgetFontSize
-                        bold: isSelectedPriority()
+                        bold: root.isSelectedPriority()
                     }
                 }
             }
@@ -69,7 +71,7 @@ IComponent {
                 visible: valid
                 text: "→"
                 font.pixelSize: Launcher.widgetFontSize
-                font.bold: isSelectedPriority()
+                font.bold: root.isSelectedPriority()
             }
 
             Item {
@@ -83,7 +85,7 @@ IComponent {
                     text: valid ? answer : ''
                     font {
                         pixelSize: Launcher.widgetFontSize
-                        bold: isSelectedPriority()
+                        bold: root.isSelectedPriority()
                     }
                 }
             }

@@ -206,6 +206,9 @@ ILauncher {
                                 }
                             }
                         }
+                        HoverHandler {
+                            cursorShape: Qt.IBeamCursor
+                        }
                         onTextChanged: {
                             if (launcher.state.input !== textInput.text)
                                 pendingUpdate = true;
@@ -233,14 +236,14 @@ ILauncher {
                         }
                     }
                     IRect {
-                        opacity: launcher.state?.priorities[0]?.predictiveCompletion ? 1 : 0
+                        opacity: launcher.state?.priorities[launcher.state.selectedPriority]?.predictiveCompletion ? 1 : 0
                         Layout.fillHeight: true
                         Layout.preferredWidth: text.width
                         radius: Launcher.predictiveCompletionRadius
                         color: Qt.rgba(Colors.background2.r, Colors.background2.g, Colors.background2.b, Launcher.widgetBgTransparency)
                         IText {
                             id: text
-                            // animate: true // too jumpy
+                            animate: false // too jumpy
                             color: Colors.foreground3
                             renderType: Text.CurveRendering
                             antialiasing: true
@@ -250,7 +253,7 @@ ILauncher {
                                 family: Style.font.family.sans
                                 wordSpacing: 5
                             }
-                            text: launcher.state?.priorities[0]?.predictiveCompletion || ""
+                            text: launcher.state?.priorities[launcher.state.selectedPriority]?.predictiveCompletion || ""
                         }
                         Behavior on Layout.preferredWidth {
                             ISpringAnimation {}
@@ -269,8 +272,8 @@ ILauncher {
                         Layout.fillWidth: true
                     }
                     Loader {
-                        active: launcher.state?.priorities[0]?.priority || false // .priority should always be true if it's in priorities
-                        sourceComponent: launcher.state?.priorities[0]?.preview
+                        active: launcher.state?.priorities[launcher.state.selectedPriority]?.priority || false // .priority should always be true if it's in priorities
+                        sourceComponent: launcher.state?.priorities[launcher.state.selectedPriority]?.preview
                     }
                 }
             }

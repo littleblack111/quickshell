@@ -9,6 +9,8 @@ import qs.config
 import core
 
 IComponent {
+    id: root
+
     property int cursorPosition: SelectionState.cursorPosition
 
     name: "Calculator"
@@ -103,7 +105,7 @@ IComponent {
                     .replace(/\s*\*\s*/g, " × ").replace(/\s*\/\s*/g, " ÷ ").replace(/\s*-\s*/g, " − ").replace(/\s*\+\s*/g, " + ")
                     font {
                         pixelSize: Launcher.widgetFontSize
-                        bold: isSelectedPriority()
+                        bold: root.isSelectedPriority()
                     }
                 }
             }
@@ -112,7 +114,7 @@ IComponent {
                 visible: valid
                 text: "→"
                 font.pixelSize: Launcher.widgetFontSize
-                font.bold: isSelectedPriority()
+                font.bold: root.isSelectedPriority()
             }
 
             Item {
@@ -126,7 +128,7 @@ IComponent {
                     text: valid ? answer : ''
                     font {
                         pixelSize: Launcher.widgetFontSize
-                        bold: isSelectedPriority()
+                        bold: root.isSelectedPriority()
                     }
                 }
             }

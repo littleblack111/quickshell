@@ -146,7 +146,7 @@ IComponent {
 
                 RowLayout {
                     id: item
-                    scale: isSelectedPriority() && index === selectedIndex ? 1.01 : 0.99
+                    scale: root.isSelectedPriority() && index === selectedIndex ? 1.01 : 0.99
                     anchors.left: parent.left
                     anchors.top: parent.top
                     anchors.margins: Launcher.innerMargin * 2
@@ -160,8 +160,8 @@ IComponent {
                     IText {
                         text: modelData ? modelData.name : ""
                         renderType: Text.QtRendering
-                        font.bold: isSelectedPriority() && index === selectedIndex
-                        color: isSelectedPriority() && index === selectedIndex ? Colors.foreground1 : Colors.foreground2
+                        font.bold: root.isSelectedPriority() && index === selectedIndex
+                        color: root.isSelectedPriority() && index === selectedIndex ? Colors.foreground1 : Colors.foreground2
                         Behavior on color {
                             ColorAnimation {
                                 duration: General.animationDuration

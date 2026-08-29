@@ -74,6 +74,7 @@ IComponent {
     syncSelectionState: function () {
         Qt.callLater(() => {
             if (!isSelectedPriority()) {
+                // TODO: fix sometimes
                 if (state.selected && state.selected === listView.itemAtIndex(selectedIndex))
                     state.selected = null;
 
