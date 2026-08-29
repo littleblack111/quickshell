@@ -178,7 +178,7 @@ IComponent {
                 MouseArea {
                     anchors.fill: parent
                     hoverEnabled: true
-                    onPositionChanged: {
+                    onEntered: {
                         root.selectedIndex = index;
                     }
                     onPressed: {

@@ -7,13 +7,14 @@ import Quickshell.Wayland
 import qs.components
 import qs.utils
 import qs.services
+import qs.config
 import "../utils/string_utils.js" as StringUtils
 
 Searchable {
     id: root
 
     key: "data"
-    algorithm: Searchable.SearchAlgorithm.Include
+    algorithm: General.defaultSearchAlgorithm
 
     property list<string> _clipHist: []
     property list<string> _clipImg: []

@@ -146,7 +146,7 @@ Item {
                         moveActive();
                     }
                     // https://github.com/quickshell-mirror/quickshell/issues/118
-                    // onPositionChanged: {
+                    // onEntered: {
                     //     moveActive();
                     // }
                     onExited: {
@@ -214,7 +214,7 @@ Item {
 
         // sync w the inner MouseArea
         // https://github.com/quickshell-mirror/quickshell/issues/118 // but onEnter won't update the mouseX
-        onPositionChanged: {
+        onEntered: {
             const abovedItemIndex = Math.round((mouseX - layout.x) / (Bar.wsIconSize + Bar.wsSpacing)) - 1; // TODO: workspaceActiveIconSize might be before
             activeRect.x = mouseX - activeRect.width / 2;
             root.activeOccupied = root.getWorkspaceStats(abovedItemIndex).isOccupied || false;

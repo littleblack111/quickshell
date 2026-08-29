@@ -86,7 +86,7 @@ Singleton {
             }
         }
         // not working https://github.com/quickshell-mirror/quickshell/issues/111
-        // function onPositionChanged() {
+        // function onEntered() {
         // }
     }
 
