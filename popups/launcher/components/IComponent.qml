@@ -88,15 +88,13 @@ IRect {
     }
 
     function syncPriority() {
-        Qt.callLater(() => {
-            if (!standalone) {
-                if (state.priorities.includes(root) && !priority)
-                    state.priorities = state.priorities.filter(x => x !== root);
-                else if (priority)
-                    state.priorities = [...new Set(state.priorities), root];
-            } else
-                state.priorities = [root];
-        });
+        if (!standalone) {
+            if (state.priorities.includes(root) && !priority)
+                state.priorities = state.priorities.filter(x => x !== root);
+            else if (priority)
+                state.priorities = [...new Set(state.priorities), root];
+        } else
+            state.priorities = [root];
     }
 
     // this doesn't change launcher size but only hides the actual content but the outside still think the content is there
@@ -107,15 +105,14 @@ IRect {
     implicitWidth: valid ? Launcher.widgetWidth : 0
     implicitHeight: valid ? Launcher.widgetHeight : 0
 
-    // implicitWidth: Launcher.widgetWidth
-    // implicitHeight: Launcher.widgetHeight
-
     radius: Launcher.widgetRadius
     color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetBgTransparency) // TODO when prioritized, highlight
 
     onPriorityChanged: {
         // sync with state.priorities
-        syncPriority();
+        Qt.callLater(() => {
+            syncPriority();
+        });
     }
 
     Behavior on y {
@@ -135,7 +132,9 @@ IRect {
     }
 
     Component.onCompleted: {
-        syncPriority();
+        Qt.callLater(() => {
+            syncPriority();
+        });
 
         // Qt.callLater(() => {
         //     syncSelectionState();
