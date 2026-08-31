@@ -145,6 +145,15 @@ IComponent {
                                     height: Launcher.widgetFontSize * 1.3
                                     fillMode: Image.PreserveAspectFit
                                     scale: isSelectedPriority() && index === root.selectedIndex ? 1.01 : 0.9
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: {
+                                            console.log("Opening image in default viewer:");
+                                            Quickshell.execDetached(["xdg-open", modelData?.data]);
+                                        }
+                                    }
+
                                     Behavior on scale {
                                         ISpringAnimation {}
                                     }
@@ -170,17 +179,6 @@ IComponent {
                                     font.pixelSize: Launcher.widgetFontSize / 1.35
                                 }
                             }
-                        }
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onEntered: {
-                            root.selectedIndex = index;
-                        }
-                        onPressed: {
-                            root._exec();
                         }
                     }
                 }
@@ -218,6 +216,12 @@ IComponent {
                         height: preview.height
                         source: clipHist[selectedIndex]?.image || ""
                         fillMode: Image.PreserveAspectFit
+                        TapHandler {
+                            onTapped: {
+                                console.log("Opening image in default viewer:");
+                                Quickshell.execDetached(["xdg-open", clipHist[selectedIndex]?.image]);
+                            }
+                        }
                     }
                 }
             }
