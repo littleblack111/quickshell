@@ -66,8 +66,6 @@ IRect {
             })
 
     signal close
-    // SAFETY: implementer should include safety checks
-    signal leave
 
     function _exec() {
         if (!exec())
@@ -129,7 +127,7 @@ IRect {
             if (hovered)
                 root.trySetSelfPriority();
             else
-                root.leave();
+                root.syncSelectionState();
         }
     }
 

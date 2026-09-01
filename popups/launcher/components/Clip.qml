@@ -73,18 +73,20 @@ IComponent {
 
     syncSelectionState: function () {
         Qt.callLater(() => {
+            if (!isSelectedPriority()) {
+                // TODO: fix sometimes
+                if (state.selected && state.selected === listView.itemAtIndex(selectedIndex))
+                    state.selected = null;
+
+                return;
+            }
+
             if (!root.visible || selectedIndex < 0 || selectedIndex >= listView.count)
                 return;
 
             trySetSelfPriority();
             state.selected = listView.itemAtIndex(selectedIndex);
         });
-    }
-
-    onLeave: {
-        // TODO: fix sometimes
-        if (state.selected && state.selected === listView.itemAtIndex(selectedIndex))
-            state.selected = null;
     }
 
     IInnerComponent {
