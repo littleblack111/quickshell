@@ -73,7 +73,7 @@ Scope {
 					readonly property list<Component> widgets: [
 						Component {
 							Loader {
-								sourceComponent: Qt.createComponent("popups/launcher/components/" + "${component}.qml")
+								sourceComponent: Qt.createComponent("popups/launcher/components/${component}.qml")
 								onLoaded: {
 									item.standalone = true
 									item.state = selectionState;

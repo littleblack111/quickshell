@@ -127,14 +127,16 @@ IComponent {
                 ScrollView {
                     id: scroll
                     Layout.fillWidth: true
-                    contentWidth: availableWidth
                     Layout.fillHeight: true
+                    contentWidth: availableWidth
                     clip: true
 
                     ITextEdit {
                         id: text
-                        height: scroll.contentHeight
+
                         animate: true
+
+                        height: scroll.contentHeight
                         width: scroll.contentWidth
 
                         readOnly: true

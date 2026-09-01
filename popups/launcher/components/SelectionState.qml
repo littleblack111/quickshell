@@ -40,9 +40,8 @@ Singleton {
             if (!priorities[selectedPriority] && selectedPriority > 0) {
                 selectedPriority--;
                 Qt.callLater(step);
-            } else {
+            } else
                 priorities[selectedPriority]?.syncSelectionState();
-            }
         });
     }
 }

@@ -89,6 +89,9 @@ IComponent {
 
     onEntriesChanged: {
         if (selectedIndex !== -1) {
+            if (selectedIndex > entries.length - 1)
+                selectedIndex = entries.length - 1;
+
             syncSelectionState();
             return;
         }
@@ -175,10 +178,10 @@ IComponent {
                     }
                 }
 
-                MouseArea {
+                IMouseArea {
                     anchors.fill: parent
                     hoverEnabled: true
-                    onEntered: {
+                    onEntered_: {
                         root.selectedIndex = index;
                     }
                     onPressed: {

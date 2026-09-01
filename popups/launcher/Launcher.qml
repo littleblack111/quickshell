@@ -299,9 +299,11 @@ ILauncher {
                             // FIXME: prev predictiveCompletion still exists here
                             // workaround atm: just clear it or preserve the text manually
                         }
+
                         Connections {
                             target: item
                             ignoreUnknownSignals: true
+
                             function onClose() {
                                 parentLoader.active = false;
                             }
