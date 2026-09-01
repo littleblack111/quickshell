@@ -1,5 +1,6 @@
 import Quickshell
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 
 import qs.components
@@ -123,23 +124,31 @@ IComponent {
                     }
                 }
 
-                ITextEdit {
-                    animate: true
-
+                ScrollView {
+                    id: scroll
                     Layout.fillWidth: true
+                    contentWidth: availableWidth
                     Layout.fillHeight: true
+                    clip: true
 
-                    readOnly: true
-                    renderType: Text.CurveRendering
-                    visible: valid && DuckDuckGo.title
-                    text: DuckDuckGo.title ? DuckDuckGo.description_html : ''
-                    font {
-                        pixelSize: Launcher.widgetFontSize
-                    }
+                    ITextEdit {
+                        id: text
+                        height: scroll.contentHeight
+                        animate: true
+                        width: scroll.contentWidth
 
-                    TapHandler {
-                        gesturePolicy: TapHandler.DragThreshold
-                        onTapped: expand = !expand
+                        readOnly: true
+                        renderType: Text.CurveRendering
+                        visible: valid && DuckDuckGo.title
+                        text: DuckDuckGo.title ? DuckDuckGo.description_html : ''
+                        font {
+                            pixelSize: Launcher.widgetFontSize
+                        }
+
+                        TapHandler {
+                            gesturePolicy: TapHandler.DragThreshold
+                            onTapped: expand = !expand
+                        }
                     }
                 }
             }
