@@ -51,6 +51,7 @@ IComponent {
             return true;
         selectedIndex = listView.count - 1;
     }
+    // TODO: impl pgup pgdn
 
     onClipHistChanged: {
         if (selectedIndex !== -1) {
@@ -73,14 +74,6 @@ IComponent {
 
     syncSelectionState: function () {
         Qt.callLater(() => {
-            if (!isSelectedPriority()) {
-                // TODO: fix sometimes
-                if (state.selected && state.selected === listView.itemAtIndex(selectedIndex))
-                    state.selected = null;
-
-                return;
-            }
-
             if (!root.visible || selectedIndex < 0 || selectedIndex >= listView.count)
                 return;
 

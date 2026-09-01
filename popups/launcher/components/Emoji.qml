@@ -97,17 +97,9 @@ IComponent {
 
     syncSelectionState: function () {
         Qt.callLater(() => {
-            if (!isSelectedPriority()) {
-                if (state.selected === loader.view.itemAtIndex(selectedIndex))
-                    state.selected = null;
-
-                return;
-            }
-
             if (!loader.view || selectedIndex < 0 || selectedIndex >= loader.view.count || !root.visible)
                 return;
 
-            trySetSelfPriority();
             state.selected = loader.view.itemAtIndex(selectedIndex);
         });
     }

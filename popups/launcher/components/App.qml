@@ -79,6 +79,7 @@ IComponent {
     pgdn: function () {
         if (selectedIndex === entries.length - 1)
             return true;
+
         const pageSize = Math.floor(listView.height / (General.appIconSize + Launcher.innerMargin * 2));
         if (selectedIndex + pageSize >= listView.count) {
             selectedIndex = listView.count - 1;
@@ -111,17 +112,9 @@ IComponent {
 
     syncSelectionState: function () {
         Qt.callLater(() => {
-            if (!isSelectedPriority()) {
-                if (state.selected === listView.itemAtIndex(selectedIndex))
-                    state.selected = null;
-
-                return;
-            }
-
             if (selectedIndex < 0 || selectedIndex >= listView.count || !root.visible)
                 return;
 
-            trySetSelfPriority();
             state.selected = listView.itemAtIndex(selectedIndex);
         });
     }

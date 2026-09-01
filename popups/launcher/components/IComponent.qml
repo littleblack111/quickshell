@@ -65,6 +65,12 @@ IRect {
                 bottom: true
             })
 
+    function enter() {
+        trySetSelfPriority();
+        // root or null hmm
+        state.selected = root;
+    }
+
     signal close
 
     function _exec() {
@@ -124,10 +130,10 @@ IRect {
 
     HoverHandler {
         onHoveredChanged: {
-            if (hovered)
-                root.trySetSelfPriority();
-            else
+            if (hovered) {
+                root.enter();
                 root.syncSelectionState();
+            }
         }
     }
 

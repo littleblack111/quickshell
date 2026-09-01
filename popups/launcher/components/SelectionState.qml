@@ -25,6 +25,7 @@ Singleton {
     signal syncSelectionState
 
     onSelectedPriorityChanged: {
+        priorities[selectedPriority]?.enter();
         priorities[selectedPriority]?.syncSelectionState();
     }
 
@@ -40,8 +41,10 @@ Singleton {
             if (!priorities[selectedPriority] && selectedPriority > 0) {
                 selectedPriority--;
                 Qt.callLater(step);
-            } else
+            } else {
+                priorities[selectedPriority]?.enter();
                 priorities[selectedPriority]?.syncSelectionState();
+            }
         });
     }
 }
