@@ -65,7 +65,7 @@ IComponent {
     }
 
     pgup: function () {
-        if (listView.count === 0)
+        if (selectedIndex <= 0)
             return true;
 
         const pageSize = Math.floor(listView.height / (General.appIconSize + Launcher.innerMargin * 2));
@@ -77,7 +77,7 @@ IComponent {
     }
 
     pgdn: function () {
-        if (listView.count === 0)
+        if (selectedIndex === entries.length - 1)
             return true;
         const pageSize = Math.floor(listView.height / (General.appIconSize + Launcher.innerMargin * 2));
         if (selectedIndex + pageSize >= listView.count) {
