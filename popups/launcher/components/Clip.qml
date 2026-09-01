@@ -149,7 +149,6 @@ IComponent {
                                     MouseArea {
                                         anchors.fill: parent
                                         onClicked: {
-                                            console.log("Opening image in default viewer:");
                                             Quickshell.execDetached(["xdg-open", modelData?.data]);
                                         }
                                     }
@@ -218,7 +217,6 @@ IComponent {
                         fillMode: Image.PreserveAspectFit
                         TapHandler {
                             onTapped: {
-                                console.log("Opening image in default viewer:");
                                 Quickshell.execDetached(["xdg-open", clipHist[selectedIndex]?.image]);
                             }
                         }
