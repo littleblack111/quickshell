@@ -73,20 +73,18 @@ IComponent {
 
     syncSelectionState: function () {
         Qt.callLater(() => {
-            if (!isSelectedPriority()) {
-                // TODO: fix sometimes
-                if (state.selected && state.selected === listView.itemAtIndex(selectedIndex))
-                    state.selected = null;
-
-                return;
-            }
-
             if (!root.visible || selectedIndex < 0 || selectedIndex >= listView.count)
                 return;
 
             trySetSelfPriority();
             state.selected = listView.itemAtIndex(selectedIndex);
         });
+    }
+
+    onLeave: {
+        // TODO: fix sometimes
+        if (state.selected && state.selected === listView.itemAtIndex(selectedIndex))
+            state.selected = null;
     }
 
     IInnerComponent {
@@ -122,7 +120,7 @@ IComponent {
                         clip: true
 
                         IconImage {
-                            scale: isSelectedPriority() && index === root.selectedIndex ? 1.01 : 0.9
+                            scale: root.isSelectedPriority() && index === root.selectedIndex ? 1.01 : 0.9
                             source: modelData?.appIcon
                             implicitSize: parent.height
 
@@ -136,15 +134,15 @@ IComponent {
                                 sourceComponent: modelData?.type === "image" ? img : text
                                 readonly property Component text: IText {
                                     text: String(modelData?.data || "").substring(0, General.maxClipPreviewChar).replace(/\n/g, " ")
-                                    color: isSelectedPriority() && index === selectedIndex ? Colors.foreground1 : Colors.foreground2
+                                    color: root.isSelectedPriority() && index === selectedIndex ? Colors.foreground1 : Colors.foreground2
                                     font.pixelSize: Launcher.widgetFontSize
-                                    font.bold: isSelectedPriority() && index === selectedIndex
+                                    font.bold: root.isSelectedPriority() && index === selectedIndex
                                 }
                                 readonly property Component img: Image {
                                     source: modelData?.data || ""
                                     height: Launcher.widgetFontSize * 1.3
                                     fillMode: Image.PreserveAspectFit
-                                    scale: isSelectedPriority() && index === root.selectedIndex ? 1.01 : 0.9
+                                    scale: root.isSelectedPriority() && index === root.selectedIndex ? 1.01 : 0.9
 
                                     MouseArea {
                                         anchors.fill: parent
@@ -174,7 +172,7 @@ IComponent {
                                 }
                                 IText {
                                     text: parent.sinceWhen || ""
-                                    color: isSelectedPriority() && index === root.selectedIndex ? Colors.foreground2 : Colors.foreground3
+                                    color: root.isSelectedPriority() && index === root.selectedIndex ? Colors.foreground2 : Colors.foreground3
                                     font.pixelSize: Launcher.widgetFontSize / 1.35
                                 }
                             }

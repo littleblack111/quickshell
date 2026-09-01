@@ -429,6 +429,7 @@ ILauncher {
         }
 
         if (set !== 0) {
+            launcher.state.priorities[launcher.state.selectedPriority].leave();
             switch (set) {
             case 1:
                 if (launcher.state.selectedPriority < launcher.state.priorities.length - 1) {
