@@ -86,6 +86,7 @@ Scope {
 					id: root
 					active: true
 					component: Launcher {
+						name: "quickshell::launcher::${component}"
 						widgetItems: widgets
 						state: selectionState
 						parentLoader: root
