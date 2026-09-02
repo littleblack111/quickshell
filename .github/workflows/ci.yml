@@ -170,7 +170,7 @@ jobs:
                   prettier --check "utils/**/*.js"
 
             - name: Check QML/JS Format
-              run: find . \( -name "*.qml" -o -name "*.js" \) -exec qmlformat -n {} +
+              run: find . \( -name "*.qml" -o -name "*.js" \) -exec /usr/lib/qt6/bin/qmlformat -n {} +
 
             - name: Lint Shell
               run: shellcheck utils/*.sh
