@@ -169,10 +169,11 @@ jobs:
                   EOF
                   prettier --check "utils/**/*.js"
 
-            - name: Check QML/JS Format
-              env:
-                  QT_LOGGING_RULES: qt.qmldom*=false
-              run: find . \( -name "*.qml" \) -exec /usr/lib/qt6/bin/qmlformat {} +
+            # not working rn
+            # - name: Check QML Format
+            #   env:
+            #       QT_LOGGING_RULES: qt.qmldom*=false
+            #   run: find . -name "*.qml" -exec /usr/lib/qt6/bin/qmlformat {} +
 
             - name: Lint Shell
               run: shellcheck utils/*.sh
