@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 tmp_dir="${XDG_CACHE_HOME:-$HOME/.cache}/quickshell/cliphist-img"
 
 mkdir -p "$tmp_dir"
