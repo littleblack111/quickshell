@@ -18,17 +18,9 @@ mod qobject {
         #[qobject]
         #[qml_element]
         #[qml_singleton]
-        #[qproperty(
-            QVariant, result
-        )]
-        #[qproperty(
-            ResultType,
-            result_type
-        )]
-        #[qproperty(
-            QVariant,
-            cached_query
-        )]
+        #[qproperty(QVariant, result)]
+        #[qproperty(ResultType, result_type)]
+        #[qproperty(QVariant, cached_query)]
         type SmartCalc = super::SmartCalcRs;
 
         #[qinvokable]
@@ -89,64 +81,43 @@ impl qobject::SmartCalc {
         if self.cached_query == (&input).into() {
             return;
         }
-        self.as_mut()
-            .set_cached_query((&input.clone()).into());
+        self.as_mut().set_cached_query((&input.clone()).into());
         let qt_thread = self.qt_thread();
-        self.as_mut()
-            .rust_mut()
-            .executor
-            .spawn(
-                async move {
-                    let result = smart_calculator::calculate(
-                        &input.to_string(),
-                        None,
+        self.as_mut().rust_mut().executor.spawn(async move {
+            let result = smart_calculator::calculate(&input.to_string(), None).await;
+            _ = qt_thread
+                .queue(|mut qo| {
+                    qo.as_mut().set_result_type(match &result {
+                        Ok(value) => (&value.res_type).into(),
+                        Err(_) => qobject::ResultType::Unset,
+                    });
+                    qo.as_mut().set_result(
+                        // TODO: do the calc outside of ts main qt ui render
+                        // thread.(all *.rs)
+                        match result {
+                            Ok(value) => {
+                                if value.formatted == value.input {
+                                    QVariant::default()
+                                } else {
+                                    let result: QString = value.formatted.into();
+                                    QVariant::from(&result)
+                                }
+                            }
+                            Err(_) => QVariant::default(),
+                        },
                     )
-                    .await;
-                    _ = qt_thread
-                        .queue(
-                            |mut qo| {
-                                qo.as_mut()
-                                    .set_result_type(
-                                        match &result {
-                                            Ok(value) => (&value.res_type).into(),
-                                            Err(_) => qobject::ResultType::Unset,
-                                        },
-                                    );
-                                qo.as_mut()
-                                    .set_result(
-                                        // TODO: do the calc outside of ts main qt ui render
-                                        // thread.(all *.rs)
-                                        match result {
-                                            Ok(value) => {
-                                                if value.formatted == value.input {
-                                                    QVariant::default()
-                                                } else {
-                                                    let result: QString = value
-                                                        .formatted
-                                                        .into();
-                                                    QVariant::from(&result)
-                                                }
-                                            }
-                                            Err(_) => QVariant::default(),
-                                        },
-                                    )
-                            },
-                        )
-                        .unwrap_print();
-                },
-            );
+                })
+                .unwrap_print();
+        });
     }
 
     fn reset(mut self: Pin<&mut Self>) {
-        self.as_mut()
-            .set_cached_query(QVariant::default());
+        self.as_mut().set_cached_query(QVariant::default());
         self.reset_result();
     }
 
     fn reset_result(mut self: Pin<&mut Self>) {
-        self.as_mut()
-            .set_result(QVariant::default());
-        self.as_mut()
-            .set_result_type(qobject::ResultType::Unset);
+        self.as_mut().set_result(QVariant::default());
+        self.as_mut().set_result_type(qobject::ResultType::Unset);
     }
 }

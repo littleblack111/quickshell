@@ -5,149 +5,150 @@ import qs.components
 import qs.config
 
 IRect {
-    id: root
-    // virtual properties
-    property bool standalone: false
-    property var state: SelectionState
-    property string name // Component/File name
-    readonly property string _input: state.input
-    readonly property string input: !standalone ? _input.slice(prefix.length) : _input
-    readonly property string inputCleaned: input.toLowerCase().trim()
-    property string prefix
-    property bool active: !standalone ? input && _input.startsWith(prefix) : true
-    property bool valid: !standalone ? processed?.valid || false : true
-    property bool priority: !standalone ? valid && processed?.priority || false : true // please set priority to false if it's invalid
-    property string answer: processed?.answer || ""
-    property Component preview: Component {
-        IText {
-            // TODO: use proper active: false via Loader
-            visible: answer.length <= Launcher.maxPreviewLen
-            animate: true
-            text: answer
-        }
-    }
-    property string predictiveCompletion: processed?.predictiveCompletion || "" // would technically work with just from answer, but stuff like calc's answer wouldnt have anything to do with the input
-    property var processed: active ? process() : {} // cached process, thought qml would do that automatically :/
-    property var process: () => ({
-                valid: valid,
-                priority: priority,
-                answer: answer,
-                preview: preview,
-                predictiveCompletion: predictiveCompletion
-            })
-    // use the current IRect if valid is set
-    property var syncSelectionState: () => {}
-    // actions
-    property var up: () => ({
-                top: true
-            })
-    property var down: () => ({
-                bottom: true
-            })
-    property var prev: () => ({
-                left: true
-            })
-    property var next: () => ({
-                right: true
-            })
-    // true if not closed
-    property var exec: () => {}
-    property var home: () => ({
-                top: true
-            })
-    property var end: () => ({
-                bottom: true
-            })
-    property var pgup: () => ({
-                top: true
-            })
-    property var pgdn: () => ({
-                bottom: true
-            })
+	id: root
+	// virtual properties
+	property bool standalone: false
+	property var state: SelectionState
+	property string name // Component/File name
+	readonly property string _input: state.input
+	readonly property string input: !standalone ? _input.slice(prefix.length) : _input
+	readonly property string inputCleaned: input.toLowerCase().trim()
+	property string prefix
+	property bool active: !standalone ? input && _input.startsWith(prefix) : true
+	property bool valid: !standalone ? processed?.valid || false : true
+	property bool priority: !standalone ? valid && processed?.priority || false : true // please set priority to false if it's invalid
+	property string answer: processed?.answer || ""
+	property Component preview: Component {
+		IText {
+			// TODO: use proper active: false via Loader
+			visible: answer.length <= Launcher.maxPreviewLen
+			animate: true
+			text: answer
+		}
+	}
+	property string predictiveCompletion: processed?.predictiveCompletion || "" // would technically work with just from answer, but stuff like calc's answer wouldnt have anything to do with the input
+	property var processed: active ? process() : {} // cached process, thought qml would do that automatically :/
+	// todo: change all to function
+	property var process: () => ({
+				valid: valid,
+				priority: priority,
+				answer: answer,
+				preview: preview,
+				predictiveCompletion: predictiveCompletion
+			})
+	// use the current IRect if valid is set
+	property var syncSelectionState: () => {}
+	// actions
+	property var up: () => ({
+				top: true
+			})
+	property var down: () => ({
+				bottom: true
+			})
+	property var prev: () => ({
+				left: true
+			})
+	property var next: () => ({
+				right: true
+			})
+	// true if not closed
+	property var exec: () => {}
+	property var home: () => ({
+				top: true
+			})
+	property var end: () => ({
+				bottom: true
+			})
+	property var pgup: () => ({
+				top: true
+			})
+	property var pgdn: () => ({
+				bottom: true
+			})
 
-    function enter() {
-        trySetSelfPriority();
-        // root or null hmm
-        state.selected = root;
-    }
+	function enter() {
+		trySetSelfPriority();
+		// root or null hmm
+		state.selected = root;
+	}
 
-    signal close
+	signal close
 
-    function _exec() {
-        if (!exec())
-            close();
-    }
+	function _exec() {
+		if (!exec())
+			close();
+	}
 
-    function getSelfPriority() {
-        return state.priorities.indexOf(root);
-    }
+	function getSelfPriority() {
+		return state.priorities.indexOf(root);
+	}
 
-    function isSelectedPriority() {
-        return state.selectedPriority === getSelfPriority();
-    }
+	function isSelectedPriority() {
+		return state.selectedPriority === getSelfPriority();
+	}
 
-    function trySetSelfPriority() {
-        let self = getSelfPriority();
-        // ??? why tf is it -1 not null or undefined this is why rust is better
-        if (self !== -1)
-            state.selectedPriority = self;
-    }
+	function trySetSelfPriority() {
+		let self = getSelfPriority();
+		// ??? why tf is it -1 not null or undefined this is why rust is better
+		if (self !== -1)
+			state.selectedPriority = self;
+	}
 
-    function syncPriority() {
-        if (!standalone) {
-            if (state.priorities.includes(root) && !priority)
-                state.priorities = state.priorities.filter(x => x !== root);
-            else if (priority)
-                state.priorities = [...new Set(state.priorities), root];
-        } else
-            state.priorities = [root];
-    }
+	function syncPriority() {
+		if (!standalone) {
+			if (state.priorities.includes(root) && !priority)
+				state.priorities = state.priorities.filter(x => x !== root);
+			else if (priority)
+				state.priorities = [...new Set(state.priorities), root];
+		} else
+			state.priorities = [root];
+	}
 
-    // this doesn't change launcher size but only hides the actual content but the outside still think the content is there
-    visible: active
-    opacity: valid ? 1 : 0
-    y: valid ? 0 : -Launcher.widgetHeight
+	// this doesn't change launcher size but only hides the actual content but the outside still think the content is there
+	visible: active
+	opacity: valid ? 1 : 0
+	y: valid ? 0 : -Launcher.widgetHeight
 
-    implicitWidth: valid ? Launcher.widgetWidth : 0
-    implicitHeight: valid ? Launcher.widgetHeight : 0
+	implicitWidth: valid ? Launcher.widgetWidth : 0
+	implicitHeight: valid ? Launcher.widgetHeight : 0
 
-    radius: Launcher.widgetRadius
-    color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetBgTransparency) // TODO when prioritized, highlight
+	radius: Launcher.widgetRadius
+	color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.widgetBgTransparency) // TODO when prioritized, highlight
 
-    onPriorityChanged: {
-        // sync with state.priorities
-        Qt.callLater(() => {
-            syncPriority();
-        });
-    }
+	onPriorityChanged: {
+		// sync with state.priorities
+		Qt.callLater(() => {
+			syncPriority();
+		});
+	}
 
-    Behavior on y {
-        NumberAnimation {
-            duration: General.animationDuration / 4
-            easing.type: Easing.InOutQuad
-        }
-    }
+	Behavior on y {
+		NumberAnimation {
+			duration: General.animationDuration / 4
+			easing.type: Easing.InOutQuad
+		}
+	}
 
-    HoverHandler {
-        onHoveredChanged: {
-            if (hovered) {
-                root.enter();
-                root.syncSelectionState();
-            }
-        }
-    }
+	HoverHandler {
+		onHoveredChanged: {
+			if (hovered) {
+				root.enter();
+				root.syncSelectionState();
+			}
+		}
+	}
 
-    Component.onCompleted: {
-        Qt.callLater(() => {
-            syncPriority();
-        });
+	Component.onCompleted: {
+		Qt.callLater(() => {
+			syncPriority();
+		});
 
-        // Qt.callLater(() => {
-        //     syncSelectionState();
-        // });
-    }
+		// Qt.callLater(() => {
+		//     syncSelectionState();
+		// });
+	}
 
-    Component.onDestruction: {
-        state.priorities = state.priorities.filter(x => x !== root);
-    }
+	Component.onDestruction: {
+		state.priorities = state.priorities.filter(x => x !== root);
+	}
 }

@@ -6,49 +6,49 @@ import QtQuick
 import qs.components
 
 Searchable {
-    id: root
+	id: root
 
-    property var _emojis: []
-    property var _emojiFile: FileView {
-        path: "/usr/share/rofi-emoji/all_emojis.txt"
-        onTextChanged: _parseEmojis()
-    }
+	property var _emojis: []
+	property var _emojiFile: FileView {
+		path: "/usr/share/rofi-emoji/all_emojis.txt"
+		onTextChanged: _parseEmojis()
+	}
 
-    list: _emojis
-    keys: ["name", "keywords", "category", "subcategory", "emoji"]
-    algorithm: Searchable.SearchAlgorithm.Include
+	list: _emojis
+	keys: ["name", "keywords", "category", "subcategory", "emoji"]
+	algorithm: Searchable.SearchAlgorithm.Include
 
-    function transformSearch(search) {
-        return search.toLowerCase();
-    }
+	function transformSearch(search) {
+		return search.toLowerCase();
+	}
 
-    function _parseEmojis() {
-        const text = _emojiFile.text();
-        if (!text) {
-            console.warn("Emoji service: failed to load", _emojiFile.path);
-            _emojis = [];
-            return;
-        }
+	function _parseEmojis() {
+		const text = _emojiFile.text();
+		if (!text) {
+			console.warn("Emoji service: failed to load", _emojiFile.path);
+			_emojis = [];
+			return;
+		}
 
-        const lines = text.split("\n").filter(l => l.trim());
-        const out = [];
-        for (let i = 0; i < lines.length; ++i) {
-            const parts = lines[i].split("\t");
-            if (parts.length < 5)
-                continue;
-            const [emoji, category, subcategory, name, keywords] = parts;
-            out.push({
-                emoji: emoji,
-                category: category,
-                subcategory: subcategory,
-                name: name,
-                keywords: keywords
-            });
-        }
-        _emojis = out;
-    }
+		const lines = text.split("\n").filter(l => l.trim());
+		const out = [];
+		for (let i = 0; i < lines.length; ++i) {
+			const parts = lines[i].split("\t");
+			if (parts.length < 5)
+				continue;
+			const [emoji, category, subcategory, name, keywords] = parts;
+			out.push({
+				emoji: emoji,
+				category: category,
+				subcategory: subcategory,
+				name: name,
+				keywords: keywords
+			});
+		}
+		_emojis = out;
+	}
 
-    function copy(emoji) {
-        Clip.copy(emoji);
-    }
+	function copy(emoji) {
+		Clip.copy(emoji);
+	}
 }

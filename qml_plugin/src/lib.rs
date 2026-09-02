@@ -2,14 +2,8 @@ use std::sync::LazyLock;
 
 use tokio::task;
 
-static RUNTIME: LazyLock<tokio::runtime::Runtime> = LazyLock::new(
-    || {
-        tokio::runtime::Builder::new_multi_thread()
-            .enable_all()
-            .build()
-            .unwrap()
-    },
-);
+static RUNTIME: LazyLock<tokio::runtime::Runtime> =
+    LazyLock::new(|| tokio::runtime::Builder::new_multi_thread().enable_all().build().unwrap());
 
 /// for example duckduckgo we wanna cancel first request if user types new query
 /// using this guarentee that only one request is running at a time or at least
@@ -32,10 +26,7 @@ impl ExclusiveExecutor {
         F: Future<Output = ()> + Send + 'static,
         F::Output: Send + 'static,
     {
-        if let Some(handle) = self
-            .handle
-            .take()
-        {
+        if let Some(handle) = self.handle.take() {
             handle.abort();
         }
 

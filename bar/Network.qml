@@ -6,116 +6,116 @@ import qs.components
 import qs.config
 
 Item {
-    id: root
-    property int down: Services.NetworkUsage.down
-    property string downUnit: Services.NetworkUsage.downUnit
-    property int up: Services.NetworkUsage.up
-    property string upUnit: Services.NetworkUsage.upUnit
+	id: root
+	property int down: Services.NetworkUsage.down
+	property string downUnit: Services.NetworkUsage.downUnit
+	property int up: Services.NetworkUsage.up
+	property string upUnit: Services.NetworkUsage.upUnit
 
-    property int significantUsage: 30
-    property string usageUnit: "M"
+	property int significantUsage: 30
+	property string usageUnit: "M"
 
-    property bool isCollapsed: true
+	property bool isCollapsed: true
 
-    implicitWidth: container.implicitWidth
-    implicitHeight: container.implicitHeight - General.rectMargin
+	implicitWidth: container.implicitWidth
+	implicitHeight: container.implicitHeight - General.rectMargin
 
-    IRect {
-        id: container
-        anchors {
-            fill: parent
-            verticalCenter: parent.verticalCenter
-            horizontalCenter: parent.horizontalCenter
-        }
+	IRect {
+		id: container
+		anchors {
+			fill: parent
+			verticalCenter: parent.verticalCenter
+			horizontalCenter: parent.horizontalCenter
+		}
 
-        implicitWidth: layout.implicitWidth + General.rectMargin * 2
-        implicitHeight: Bar.height
-        color: Colors.accent
-        radius: Style.rounding.large
+		implicitWidth: layout.implicitWidth + General.rectMargin * 2
+		implicitHeight: Bar.height
+		color: Colors.accent
+		radius: Style.rounding.large
 
-        RowLayout {
-            id: layout
-            anchors {
-                verticalCenter: parent.verticalCenter
-                horizontalCenter: parent.horizontalCenter
-            }
-            spacing: Bar.resourceIconTextSpacing
+		RowLayout {
+			id: layout
+			anchors {
+				verticalCenter: parent.verticalCenter
+				horizontalCenter: parent.horizontalCenter
+			}
+			spacing: Bar.resourceIconTextSpacing
 
-            Item {
-                Layout.fillWidth: true
-            }
+			Item {
+				Layout.fillWidth: true
+			}
 
-            Icon {
-                visible: root.isCollapsed
-                text: Services.Network.state
-            }
-            IText {
-                visible: !root.isCollapsed
-                text: Services.Network.networkStrength
-                renderType: Text.CurveRendering // it's not static and is rapidly updated
-            }
+			Icon {
+				visible: root.isCollapsed
+				text: Services.Network.state
+			}
+			IText {
+				visible: !root.isCollapsed
+				text: Services.Network.networkStrength
+				renderType: Text.CurveRendering // it's not static and is rapidly updated
+			}
 
-            ColumnLayout {
-                // spacing: Bar.resourceIconTextSpacing / 2
-                spacing: 0
-                Item {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                }
-                IText {
-                    animate: true
-                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                    text: root.down + root.downUnit
-                    color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : Colors.foreground2
-                    renderType: Text.CurveRendering // it's not static and is rapidly updated
-                }
-                Icon {
-                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                    text: Icons.resource.network.download
-                    iconSize: Style.font.size.normal
-                    color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : Colors.foreground2
-                }
-                Item {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                }
-            }
-            ColumnLayout {
-                // spacing: Bar.resourceIconTextSpacing / 2
-                spacing: 0
-                Item {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                }
-                Icon {
-                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                    text: Icons.resource.network.upload
-                    iconSize: Style.font.size.normal
-                    color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : Colors.foreground2
-                }
-                IText {
-                    animate: true
-                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                    text: root.up + root.upUnit
-                    color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : Colors.foreground2
-                    renderType: Text.CurveRendering // it's not static and is rapidly updated
-                }
-                Item {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                }
-            }
+			ColumnLayout {
+				// spacing: Bar.resourceIconTextSpacing / 2
+				spacing: 0
+				Item {
+					Layout.fillHeight: true
+					Layout.fillWidth: true
+				}
+				IText {
+					animate: true
+					Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+					text: root.down + root.downUnit
+					color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : Colors.foreground2
+					renderType: Text.CurveRendering // it's not static and is rapidly updated
+				}
+				Icon {
+					Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+					text: Icons.resource.network.download
+					iconSize: Style.font.size.normal
+					color: root.downUnit == root.usageUnit && root.down > root.significantUsage ? Colors.cyan : Colors.foreground2
+				}
+				Item {
+					Layout.fillHeight: true
+					Layout.fillWidth: true
+				}
+			}
+			ColumnLayout {
+				// spacing: Bar.resourceIconTextSpacing / 2
+				spacing: 0
+				Item {
+					Layout.fillHeight: true
+					Layout.fillWidth: true
+				}
+				Icon {
+					Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+					text: Icons.resource.network.upload
+					iconSize: Style.font.size.normal
+					color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : Colors.foreground2
+				}
+				IText {
+					animate: true
+					Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+					text: root.up + root.upUnit
+					color: root.upUnit == root.usageUnit && root.up > root.significantUsage ? Colors.cyan : Colors.foreground2
+					renderType: Text.CurveRendering // it's not static and is rapidly updated
+				}
+				Item {
+					Layout.fillHeight: true
+					Layout.fillWidth: true
+				}
+			}
 
-            Item {
-                Layout.fillWidth: true
-            }
-        }
-    }
-    MouseArea {
-        anchors.fill: container
-        cursorShape: Qt.PointingHandCursor
-        onClicked: {
-            root.isCollapsed = !root.isCollapsed;
-        }
-    }
+			Item {
+				Layout.fillWidth: true
+			}
+		}
+	}
+	MouseArea {
+		anchors.fill: container
+		cursorShape: Qt.PointingHandCursor
+		onClicked: {
+			root.isCollapsed = !root.isCollapsed;
+		}
+	}
 }

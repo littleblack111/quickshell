@@ -4,42 +4,42 @@
 import QtQuick
 
 MouseArea {
-    hoverEnabled: true
+	hoverEnabled: true
 
-    property real gx: Number.MAX_VALUE
-    property real gy: Number.MAX_VALUE
+	property real gx: Number.MAX_VALUE
+	property real gy: Number.MAX_VALUE
 
-    property bool hovered: false
+	property bool hovered: false
 
-    signal entered_
-    signal positionChanged_(var mouse)
+	signal entered_
+	signal positionChanged_(var mouse)
 
-    onPositionChanged: mouse => {
-        let gpos = mapToItem(null, mouse.x, mouse.y);
+	onPositionChanged: mouse => {
+		let gpos = mapToItem(null, mouse.x, mouse.y);
 
-        if (gx === Number.MAX_VALUE && gy === Number.MAX_VALUE) {
-            gx = gpos.x;
-            gy = gpos.y;
-            return;
-        }
+		if (gx === Number.MAX_VALUE && gy === Number.MAX_VALUE) {
+			gx = gpos.x;
+			gy = gpos.y;
+			return;
+		}
 
-        if (gpos.x === gx && gpos.y === gy)
-            return;
+		if (gpos.x === gx && gpos.y === gy)
+			return;
 
-        gx = gpos.x;
-        gy = gpos.y;
+		gx = gpos.x;
+		gy = gpos.y;
 
-        if (!hovered) {
-            hovered = true;
-            entered_();
-        }
+		if (!hovered) {
+			hovered = true;
+			entered_();
+		}
 
-        positionChanged_(mouse);
-    }
+		positionChanged_(mouse);
+	}
 
-    onExited: {
-        hovered = false;
-        gx = Number.MAX_VALUE;
-        gy = Number.MAX_VALUE;
-    }
+	onExited: {
+		hovered = false;
+		gx = Number.MAX_VALUE;
+		gy = Number.MAX_VALUE;
+	}
 }

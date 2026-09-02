@@ -8,183 +8,184 @@ import qs.services
 import qs.config
 
 IComponent {
-    id: root
+	id: root
 
-    property list<DesktopEntry> entries: AppSearch.query(inputCleaned)
-    property int selectedIndex: -1
+	property list<DesktopEntry> entries: AppSearch.query(inputCleaned)
+	property int selectedIndex: -1
 
-    name: "Applications"
+	name: "Applications"
 
-    implicitHeight: valid ? layout.height : 0
+	implicitHeight: valid ? layout.height : 0
 
-    preview: Component {
-        IconImage {
-            source: Quickshell.iconPath(answer, "image-missing")
-            implicitWidth: General.appIconSize
-            implicitHeight: General.appIconSize
-        }
-    }
+	preview: Component {
+		IconImage {
+			source: Quickshell.iconPath(answer, "image-missing")
+			implicitWidth: General.appIconSize
+			implicitHeight: General.appIconSize
+		}
+	}
 
-    property string predictiveCompletion: entries[selectedIndex]?.name.slice(input.length) || ""
+	property string predictiveCompletion: entries[selectedIndex]?.name.slice(input.length) || ""
 
-    process: function () {
-        const valid = entries.length > 0;
-        // TODO: consider removing the valid check
-        const selected = valid ? entries[selectedIndex] : "";
-        return {
-            valid,
-            priority: valid,
-            answer: selected?.icon || ""
-        };
-    }
+	process: function () {
+		const valid = entries.length > 0;
+		// TODO: consider removing the valid check
+		const selected = valid ? entries[selectedIndex] : "";
+		return {
+			valid,
+			priority: valid,
+			answer: selected?.icon || ""
+		};
+	}
 
-    exec: function () {
-        SelectionState.selected?.modelData?.execute();
-    }
+	exec: function () {
+		SelectionState.selected?.modelData?.execute();
+	}
 
-    up: function () {
-        if (selectedIndex <= 0)
-            return true;
-        selectedIndex--;
-    }
-    down: function () {
-        if (selectedIndex + 1 > listView.count - 1)
-            return true;
-        selectedIndex++;
-    }
+	up: function () {
+		if (selectedIndex <= 0)
+			return true;
+		selectedIndex--;
+	}
+	down: function () {
+		if (selectedIndex + 1 > listView.count - 1)
+			return true;
+		selectedIndex++;
+	}
 
-    home: function () {
-        if (selectedIndex <= 0)
-            return true;
-        selectedIndex = 0;
-    }
-    end: function () {
-        if (selectedIndex + 1 > listView.count - 1)
-            return true;
-        selectedIndex = listView.count - 1;
-    }
+	home: function () {
+		if (selectedIndex <= 0)
+			return true;
+		selectedIndex = 0;
+	}
+	end: function () {
+		if (selectedIndex + 1 > listView.count - 1)
+			return true;
+		selectedIndex = listView.count - 1;
+	}
 
-    pgup: function () {
-        if (selectedIndex <= 0)
-            return true;
+	pgup: function () {
+		if (selectedIndex <= 0)
+			return true;
 
-        const pageSize = Math.floor(listView.height / (General.appIconSize + Launcher.innerMargin * 2));
+		const pageSize = Math.floor(listView.height / (General.appIconSize + Launcher.innerMargin * 2));
 
-        if (selectedIndex - pageSize < 0)
-            selectedIndex = 0;
-        else
-            selectedIndex -= pageSize;
-    }
+		if (selectedIndex - pageSize < 0)
+			selectedIndex = 0;
+		else
+			selectedIndex -= pageSize;
+	}
 
-    pgdn: function () {
-        if (selectedIndex === entries.length - 1)
-            return true;
+	pgdn: function () {
+		if (selectedIndex === entries.length - 1)
+			return true;
 
-        const pageSize = Math.floor(listView.height / (General.appIconSize + Launcher.innerMargin * 2));
-        if (selectedIndex + pageSize >= listView.count) {
-            selectedIndex = listView.count - 1;
-        } else {
-            selectedIndex += pageSize;
-        }
-    }
+		const pageSize = Math.floor(listView.height / (General.appIconSize + Launcher.innerMargin * 2));
+		if (selectedIndex + pageSize >= listView.count) {
+			selectedIndex = listView.count - 1;
+		} else {
+			selectedIndex += pageSize;
+		}
+	}
 
-    onEntriesChanged: {
-        if (selectedIndex !== -1) {
-            if (selectedIndex > entries.length - 1)
-                selectedIndex = entries.length - 1;
+	onEntriesChanged: {
+		if (selectedIndex !== -1) {
+			if (selectedIndex > entries.length - 1)
+				selectedIndex = entries.length - 1;
 
-            syncSelectionState();
-            return;
-        }
+			syncSelectionState();
+			return;
+		}
 
-        selectedIndex = 0;
-        syncSelectionState();
-    }
+		selectedIndex = 0;
+		syncSelectionState();
+	}
 
-    onSelectedIndexChanged: {
-        Qt.callLater(() => {
-            // so at least it exist
-            listView.positionViewAtIndex(selectedIndex, ListView.Visible);
-            syncSelectionState();
-            listView.positionViewAtIndex(selectedIndex, ListView.Contain);
-        });
-    }
+	onSelectedIndexChanged: {
+		Qt.callLater(() => {
+			// so at least it exist
+			listView.scrollToIndex(selectedIndex, ListView.Visible);
+			syncSelectionState();
+			listView.scrollToIndex(selectedIndex, ListView.Contain);
+		});
+	}
 
-    syncSelectionState: function () {
-        Qt.callLater(() => {
-            if (selectedIndex < 0 || selectedIndex >= listView.count || !root.visible)
-                return;
+	syncSelectionState: function () {
+		Qt.callLater(() => {
+			if (selectedIndex < 0 || selectedIndex >= listView.count || !root.visible)
+				return;
 
-            state.selected = listView.itemAtIndex(selectedIndex);
-        });
-    }
+			state.selected = listView.itemAtIndex(selectedIndex);
+		});
+	}
 
-    IInnerComponent {
-        id: layout
-        fromParent: false
-        width: parent.width
-        height: Math.min(listView.contentHeight + titleBar.height, Launcher.widgetHeight * 1.5)
+	IInnerComponent {
+		id: layout
+		fromParent: false
+		width: parent.width
+		height: Math.min(listView.contentHeight + titleBar.height, Launcher.widgetHeight * 1.5)
 
-        ListView {
-            id: listView
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            clip: true
-            model: entries
-            spacing: 0
+		IListView {
+			id: listView
+			Layout.fillWidth: true
+			Layout.fillHeight: true
+			clip: true
+			model: entries
+			spacing: 0
 
-            delegate: Item {
-                required property DesktopEntry modelData
-                required property int index
-                visible: modelData !== null
-                width: item.implicitWidth + Launcher.innerMargin * 4
-                height: item.height + Launcher.innerMargin * 4
+			highlightMoveDuration: 500
+			delegate: Item {
+				required property DesktopEntry modelData
+				required property int index
+				visible: modelData !== null
+				width: item.implicitWidth + Launcher.innerMargin * 4
+				height: item.height + Launcher.innerMargin * 4
 
-                RowLayout {
-                    id: item
-                    scale: root.isSelectedPriority() && index === selectedIndex ? 1.01 : 0.99
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    anchors.margins: Launcher.innerMargin * 2
-                    spacing: Launcher.innerMargin * 2
+				RowLayout {
+					id: item
+					scale: root.isSelectedPriority() && index === selectedIndex ? 1.01 : 0.99
+					anchors.left: parent.left
+					anchors.top: parent.top
+					anchors.margins: Launcher.innerMargin * 2
+					spacing: Launcher.innerMargin * 2
 
-                    IconImage {
-                        source: modelData ? Quickshell.iconPath(modelData.icon, "image-missing") : ""
-                        implicitWidth: General.appIconSize
-                        implicitHeight: General.appIconSize
-                    }
-                    IText {
-                        text: modelData ? modelData.name : ""
-                        renderType: Text.QtRendering
-                        font.bold: root.isSelectedPriority() && index === selectedIndex
-                        color: root.isSelectedPriority() && index === selectedIndex ? Colors.foreground1 : Colors.foreground2
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: General.animationDuration
-                                easing.type: Easing.InOutQuad
-                            }
-                        }
-                    }
+					IconImage {
+						source: modelData ? Quickshell.iconPath(modelData.icon, "image-missing") : ""
+						implicitWidth: General.appIconSize
+						implicitHeight: General.appIconSize
+					}
+					IText {
+						text: modelData ? modelData.name : ""
+						renderType: Text.QtRendering
+						font.bold: root.isSelectedPriority() && index === selectedIndex
+						color: root.isSelectedPriority() && index === selectedIndex ? Colors.foreground1 : Colors.foreground2
+						Behavior on color {
+							ColorAnimation {
+								duration: General.animationDuration
+								easing.type: Easing.InOutQuad
+							}
+						}
+					}
 
-                    Behavior on scale {
-                        ISpringAnimation {}
-                    }
-                }
+					Behavior on scale {
+						ISpringAnimation {}
+					}
+				}
 
-                IMouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onEntered_: {
-                        root.selectedIndex = index;
-                    }
-                    onPressed: {
-                        root._exec();
-                    }
-                }
-            }
-            onContentYChanged: {
-                SelectionState.syncSelectionState();
-            }
-        }
-    }
+				IMouseArea {
+					anchors.fill: parent
+					hoverEnabled: true
+					onEntered_: {
+						root.selectedIndex = index;
+					}
+					onPressed: {
+						root._exec();
+					}
+				}
+			}
+			onContentYChanged: {
+				SelectionState.syncSelectionState();
+			}
+		}
+	}
 }

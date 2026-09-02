@@ -20,21 +20,9 @@ pub struct DuckDuckGoContent {
 impl From<DuckDuckGoContent> for QmlDuckDuckGo {
     fn from(value: DuckDuckGoContent) -> Self {
         Self {
-            title: value
-                .title
-                .into(),
-            description_html: value
-                .description_html
-                .into(),
-            image: value
-                .image
-                .map(
-                    |u| {
-                        u.to_string()
-                            .into()
-                    },
-                )
-                .unwrap_or_default(),
+            title: value.title.into(),
+            description_html: value.description_html.into(),
+            image: value.image.map(|u| u.to_string().into()).unwrap_or_default(),
         }
     }
 }
@@ -86,79 +74,45 @@ pub async fn query(input: &str) -> anyhow::Result<DuckDuckGoContent> {
     let resp = Browser::new()
         .get_api_response(
             input,
-            Some(
-                &SearchParams::new()
-                    .safe_search(SafeSearch::Off)
-                    .full_urls(Toggle::On),
-            ),
+            Some(&SearchParams::new().safe_search(SafeSearch::Off).full_urls(Toggle::On)),
         )
         .await?;
 
-    let infobox = match resp
-        .info_box
-        .map(serde_json::from_value::<Infobox>)
-    {
+    let infobox = match resp.info_box.map(serde_json::from_value::<Infobox>) {
         Some(Ok(o)) => Some(o),
         _ => None,
     };
 
-    let alt_desc = resp
-        .entity
-        .unwrap_or(
-            match infobox {
-                Some(i) => i
-                    .iter()
-                    .find(|i| i.data_type == "wd_description" || i.data_type == "official_website")
-                    .map_or(
-                        String::new(),
-                        |i| {
-                            if i.data_type == "official_website" {
-                                i.label
-                                    .clone()
-                            } else {
-                                match i.value {
-                                    InfoboxValue::Entity(_) => unreachable!(),
-                                    InfoboxValue::String(ref s) => s.to_string(),
-                                }
-                            }
-                        },
-                    ),
-                // TODO: find better way to get title from infobox
-                None => String::new(),
-            },
-        );
+    let alt_desc = resp.entity.unwrap_or(match infobox {
+        Some(i) => i
+            .iter()
+            .find(|i| i.data_type == "wd_description" || i.data_type == "official_website")
+            .map_or(String::new(), |i| {
+                if i.data_type == "official_website" {
+                    i.label.clone()
+                } else {
+                    match i.value {
+                        InfoboxValue::Entity(_) => unreachable!(),
+                        InfoboxValue::String(ref s) => s.to_string(),
+                    }
+                }
+            }),
+        // TODO: find better way to get title from infobox
+        None => String::new(),
+    });
 
-    Ok(
-        DuckDuckGoContent {
-            title: resp
-                .heading
-                .filter(|h| !h.is_empty())
-                .unwrap_or(
-                    resp.definition
-                        .filter(|d| !d.is_empty())
-                        .unwrap_or(alt_desc.clone()),
-                ),
-            description_html: resp
-                .answer
-                .filter(|a| !a.is_empty())
-                .unwrap_or(
-                    resp.r#abstract
-                        .filter(|a| !a.is_empty())
-                        .unwrap_or(alt_desc),
-                ),
-            // TODO: try also Results[*].Icon.URL and RelatedTopics[*].Icon.URL
-            image: resp
-                .image
-                .filter(|i| !i.is_empty())
-                .and_then(
-                    |i| {
-                        if !i.is_empty() {
-                            Url::parse(&format!("{DUCKDUCKGO}{i}",)).ok()
-                        } else {
-                            None
-                        }
-                    },
-                ),
-        },
-    )
+    Ok(DuckDuckGoContent {
+        title: resp
+            .heading
+            .filter(|h| !h.is_empty())
+            .unwrap_or(resp.definition.filter(|d| !d.is_empty()).unwrap_or(alt_desc.clone())),
+        description_html: resp
+            .answer
+            .filter(|a| !a.is_empty())
+            .unwrap_or(resp.r#abstract.filter(|a| !a.is_empty()).unwrap_or(alt_desc)),
+        // TODO: try also Results[*].Icon.URL and RelatedTopics[*].Icon.URL
+        image: resp.image.filter(|i| !i.is_empty()).and_then(|i| {
+            if !i.is_empty() { Url::parse(&format!("{DUCKDUCKGO}{i}",)).ok() } else { None }
+        }),
+    })
 }

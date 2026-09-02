@@ -12,49 +12,49 @@ import qs.services
 // TODO: remove all MouseArea and use modern alternative
 
 Scope {
-    id: root
+	id: root
 
-    property var standaloneObj: ({})
+	property var standaloneObj: ({})
 
-    Bar {}
+	Bar {}
 
-    PersistentProperties {
-        id: loaderProp
-        reloadableId: "launcherLoaderProp"
+	PersistentProperties {
+		id: loaderProp
+		reloadableId: "launcherLoaderProp"
 
-        property bool active: false
-    }
-    // TODO: cache/don't destory when closed(active=false)
-    LazyLoader {
-        id: launcherLoader
+		property bool active: false
+	}
+	// TODO: cache/don't destory when closed(active=false)
+	LazyLoader {
+		id: launcherLoader
 
-        active: loaderProp.active
+		active: loaderProp.active
 
-        component: Launcher {
-            parentLoader: loaderProp
-        }
-    }
+		component: Launcher {
+			parentLoader: loaderProp
+		}
+	}
 
-    IpcHandler {
-        target: "qs"
+	IpcHandler {
+		target: "qs"
 
-        function reload(hard: bool): void {
-            Quickshell.reload(hard);
-        }
-    }
-    IpcHandler {
-        target: "launcher"
+		function reload(hard: bool): void {
+			Quickshell.reload(hard);
+		}
+	}
+	IpcHandler {
+		target: "launcher"
 
-        function toggle() {
-            loaderProp.active = !loaderProp.active;
-        }
+		function toggle() {
+			loaderProp.active = !loaderProp.active;
+		}
 
-        function standalone(component: string): void {
-            if (root.standaloneObj.name === component) {
-                root.standaloneObj.obj.active = !root.standaloneObj.obj.active;
-                return;
-            }
-            root.standaloneObj.obj = Qt.createQmlObject(`
+		function standalone(component: string): void {
+			if (root.standaloneObj.name === component) {
+				root.standaloneObj.obj.active = !root.standaloneObj.obj.active;
+				return;
+			}
+			root.standaloneObj.obj = Qt.createQmlObject(`
 				import Quickshell
 				import QtQuick
 				import "popups/launcher"
@@ -93,17 +93,17 @@ Scope {
 					}
 				}
 			`, root);
-            root.standaloneObj.name = component;
-        }
-    }
+			root.standaloneObj.name = component;
+		}
+	}
 
-    Connections {
-        target: Quickshell
-        function onReloadCompleted() {
-            Quickshell.inhibitReloadPopup();
-        }
-        // function onReloadFailed() {
-        //     Quickshell.inhibitReloadPopup();
-        // }
-    }
+	Connections {
+		target: Quickshell
+		function onReloadCompleted() {
+			Quickshell.inhibitReloadPopup();
+		}
+		// function onReloadFailed() {
+		//     Quickshell.inhibitReloadPopup();
+		// }
+	}
 }

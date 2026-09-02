@@ -11,251 +11,251 @@ import qs.config
 import "../utils/string_utils.js" as StringUtils
 
 Searchable {
-    id: root
+	id: root
 
-    key: "data"
-    algorithm: General.defaultSearchAlgorithm
+	key: "data"
+	algorithm: General.defaultSearchAlgorithm
 
-    property list<string> _clipHist: []
-    property list<string> _clipImg: []
-    property list<string> _clipImgIds: _clipImg.map(p => p.split("/").pop().split(".").shift())
-    property var _clipMetadata: ({})
-    property var _clipDecoded: ({})
-    property int _pendingReorderId: -1
+	property list<string> _clipHist: []
+	property list<string> _clipImg: []
+	property list<string> _clipImgIds: _clipImg.map(p => p.split("/").pop().split(".").shift())
+	property var _clipMetadata: ({})
+	property var _clipDecoded: ({})
+	property int _pendingReorderId: -1
 
-    function getType(text: string): string {
-        if (!text)
-            return;
-        if (text.startsWith("http://") || text.startsWith("https://"))
-            return "web";
-        if (text.startsWith("file://"))
-            return "file";
+	function getType(text: string): string {
+		if (!text)
+			return;
+		if (text.startsWith("http://") || text.startsWith("https://"))
+			return "web";
+		if (text.startsWith("file://"))
+			return "file";
 
-        return "text";
-    }
+		return "text";
+	}
 
-    list: {
-        if (!_clipHist?.length)
-            return [];
+	list: {
+		if (!_clipHist?.length)
+			return [];
 
-        const imgMap = _clipImgIds.slice(0, Math.min(_clipImg.length, _clipImgIds.length)).reduce((map, id, i) => {
-            if (id)
-                map[id] = _clipImg[i];
-            return map;
-        }, {});
+		const imgMap = _clipImgIds.slice(0, Math.min(_clipImg.length, _clipImgIds.length)).reduce((map, id, i) => {
+			if (id)
+				map[id] = _clipImg[i];
+			return map;
+		}, {});
 
-        return _clipHist.filter(raw => raw).map((raw, idx) => {
-            const tab = raw.indexOf("\t");
-            let idNum = -1;
-            let payload = raw;
+		return _clipHist.filter(raw => raw).map((raw, idx) => {
+			const tab = raw.indexOf("\t");
+			let idNum = -1;
+			let payload = raw;
 
-            if (tab > 0) {
-                const n = parseInt(raw.slice(0, tab), 10);
-                if (!Number.isNaN(n)) {
-                    idNum = n;
-                    payload = raw.slice(tab + 1);
-                }
-            }
+			if (tab > 0) {
+				const n = parseInt(raw.slice(0, tab), 10);
+				if (!Number.isNaN(n)) {
+					idNum = n;
+					payload = raw.slice(tab + 1);
+				}
+			}
 
-            const imgPath = idNum >= 0 ? imgMap[idNum] || "" : "";
-            const isImg = !!imgPath;
-            const metadata = _clipMetadata[idNum] || {};
+			const imgPath = idNum >= 0 ? imgMap[idNum] || "" : "";
+			const isImg = !!imgPath;
+			const metadata = _clipMetadata[idNum] || {};
 
-            return {
-                index: idNum,
-                type: isImg ? "image" : root.getType(payload),
-                data: isImg ? imgPath : payload,
-                raw: raw,
-                timestamp: metadata.timestamp || "",
-                appId: metadata.appId || "",
-                appTitle: metadata.appTitle || "",
-                appIcon: Quickshell.iconPath(AppSearch.guessIcon(metadata.appId), "image-missing"),
-                image: imgPath,
-                decoded: root._clipDecoded[idx] || ""
-            };
-        });
-    }
+			return {
+				index: idNum,
+				type: isImg ? "image" : root.getType(payload),
+				data: isImg ? imgPath : payload,
+				raw: raw,
+				timestamp: metadata.timestamp || "",
+				appId: metadata.appId || "",
+				appTitle: metadata.appTitle || "",
+				appIcon: Quickshell.iconPath(AppSearch.guessIcon(metadata.appId), "image-missing"),
+				image: imgPath,
+				decoded: root._clipDecoded[idx] || ""
+			};
+		});
+	}
 
-    Persistent {
-        id: clipMetaStore
-        filePath: Directories.clipHistMetaDataPath
-        adapter: JsonAdapter {
-            property var metadata: ({})
-        }
-        fileView.onLoaded: {
-            const meta = adapter.metadata;
-            for (const k in meta) {
-                if (meta[k].timestamp && typeof meta[k].timestamp === "string") {
-                    meta[k].timestamp = new Date(meta[k].timestamp);
-                }
-            }
-            root._clipMetadata = meta;
-        }
-    }
+	Persistent {
+		id: clipMetaStore
+		filePath: Directories.clipHistMetaDataPath
+		adapter: JsonAdapter {
+			property var metadata: ({})
+		}
+		fileView.onLoaded: {
+			const meta = adapter.metadata;
+			for (const k in meta) {
+				if (meta[k].timestamp && typeof meta[k].timestamp === "string") {
+					meta[k].timestamp = new Date(meta[k].timestamp);
+				}
+			}
+			root._clipMetadata = meta;
+		}
+	}
 
-    on_ClipMetadataChanged: {
-        clipMetaStore.adapter.metadata = _clipMetadata;
-    }
+	on_ClipMetadataChanged: {
+		clipMetaStore.adapter.metadata = _clipMetadata;
+	}
 
-    function transformSearch(search) {
-        return search.toLowerCase();
-    }
+	function transformSearch(search) {
+		return search.toLowerCase();
+	}
 
-    function decodeAndCopy(text) {
-        const tab = text.indexOf("\t");
-        if (tab > 0) {
-            const idStr = text.slice(0, tab);
-            const n = parseInt(idStr, 10);
-            if (!Number.isNaN(n))
-                _pendingReorderId = n;
-        }
-        Quickshell.execDetached(["sh", "-c", `cliphist decode '${StringUtils.shellSingleQuoteEscape(text)}' | wl-copy`]);
-    }
+	function decodeAndCopy(text) {
+		const tab = text.indexOf("\t");
+		if (tab > 0) {
+			const idStr = text.slice(0, tab);
+			const n = parseInt(idStr, 10);
+			if (!Number.isNaN(n))
+				_pendingReorderId = n;
+		}
+		Quickshell.execDetached(["sh", "-c", `cliphist decode '${StringUtils.shellSingleQuoteEscape(text)}' | wl-copy`]);
+	}
 
-    function copy(text) {
-        _pendingReorderId = -1;
-        Quickshell.execDetached(["wl-copy", text]);
-    }
+	function copy(text) {
+		_pendingReorderId = -1;
+		Quickshell.execDetached(["wl-copy", text]);
+	}
 
-    function _update() {
-        clipProc.running = true;
-        clipDecodeProc.running = true;
-        imgProc.running = true;
-    }
+	function _update() {
+		clipProc.running = true;
+		clipDecodeProc.running = true;
+		imgProc.running = true;
+	}
 
-    function _captureMetadata() {
-        const now = new Date();
-        const activeToplevel = ToplevelManager.activeToplevel;
+	function _captureMetadata() {
+		const now = new Date();
+		const activeToplevel = ToplevelManager.activeToplevel;
 
-        Qt.callLater(() => {
-            clipProc.running = true;
-            clipProc.stdout.onceFinished = () => {
-                const lines = clipProc.stdout.text.split(/\r?\n/);
-                const firstLine = lines[0] || "";
-                const tab = firstLine.indexOf("\t");
+		Qt.callLater(() => {
+			clipProc.running = true;
+			clipProc.stdout.onceFinished = () => {
+				const lines = clipProc.stdout.text.split(/\r?\n/);
+				const firstLine = lines[0] || "";
+				const tab = firstLine.indexOf("\t");
 
-                if (tab > 0) {
-                    const idStr = firstLine.slice(0, tab);
-                    const n = parseInt(idStr, 10);
-                    if (!Number.isNaN(n)) {
-                        if (_clipMetadata[idStr]) {
-                            _pendingReorderId = -1;
-                            return;
-                        }
+				if (tab > 0) {
+					const idStr = firstLine.slice(0, tab);
+					const n = parseInt(idStr, 10);
+					if (!Number.isNaN(n)) {
+						if (_clipMetadata[idStr]) {
+							_pendingReorderId = -1;
+							return;
+						}
 
-                        let newMetadata = {};
-                        for (var k in _clipMetadata) {
-                            if (_clipMetadata.hasOwnProperty(k))
-                                newMetadata[k] = _clipMetadata[k];
-                        }
+						let newMetadata = {};
+						for (var k in _clipMetadata) {
+							if (_clipMetadata.hasOwnProperty(k))
+								newMetadata[k] = _clipMetadata[k];
+						}
 
-                        if (_pendingReorderId >= 0) {
-                            if (_clipMetadata[_pendingReorderId]) {
-                                newMetadata[idStr] = _clipMetadata[_pendingReorderId];
-                            }
-                            _pendingReorderId = -1;
-                        } else {
-                            if (!newMetadata[idStr]) {
-                                newMetadata[idStr] = {
-                                    timestamp: now,
-                                    appId: activeToplevel ? activeToplevel.appId : "",
-                                    appTitle: activeToplevel ? activeToplevel.title : ""
-                                };
-                            }
-                        }
-                        _clipMetadata = newMetadata;
-                    }
-                }
-            };
-        });
-    }
+						if (_pendingReorderId >= 0) {
+							if (_clipMetadata[_pendingReorderId]) {
+								newMetadata[idStr] = _clipMetadata[_pendingReorderId];
+							}
+							_pendingReorderId = -1;
+						} else {
+							if (!newMetadata[idStr]) {
+								newMetadata[idStr] = {
+									timestamp: now,
+									appId: activeToplevel ? activeToplevel.appId : "",
+									appTitle: activeToplevel ? activeToplevel.title : ""
+								};
+							}
+						}
+						_clipMetadata = newMetadata;
+					}
+				}
+			};
+		});
+	}
 
-    Process {
-        id: clipProc
-        running: true
-        command: ["cliphist", "-preview-width", 9 ** 9, "-max-items", 9 ** 9, "list"]
-        stdout: StdioCollector {
-            property bool pending: false
-            property var onceFinished: null
+	Process {
+		id: clipProc
+		running: true
+		command: ["cliphist", "-preview-width", 9 ** 9, "-max-items", 9 ** 9, "list"]
+		stdout: StdioCollector {
+			property bool pending: false
+			property var onceFinished: null
 
-            onStreamFinished: () => {
-                pending = true;
-                Qt.callLater(() => {
-                    if (pending) {
-                        pending = false;
-                        _clipHist = this.text.split(/\r?\n/);
-                        if (onceFinished) {
-                            onceFinished();
-                            onceFinished = null;
-                        }
-                    }
-                });
-            }
-        }
-    }
+			onStreamFinished: () => {
+				pending = true;
+				Qt.callLater(() => {
+					if (pending) {
+						pending = false;
+						_clipHist = this.text.split(/\r?\n/);
+						if (onceFinished) {
+							onceFinished();
+							onceFinished = null;
+						}
+					}
+				});
+			}
+		}
+	}
 
-    Process {
-        id: clipDecodeProc
-        property var tmp: ({})
-        property int index: 0
-        property string separator: "\0\x01\x02CLIP_SEP_7b9a4c8d\x02\x01\0"
-        running: true
-        command: ["sh", "-c", 'cliphist list | while IFS= read -r line; do\n' + '  cliphist decode "$line"; ' + 'printf "\\0\\x01\\x02CLIP_SEP_7b9a4c8d\\x02\\x01\\0";\n' + 'done']
-        onStarted: {
-            clipDecodeProc.tmp = [];
-            clipDecodeProc.index = 0;
-        }
-        onExited: {
-            if (clipDecodeProc.tmp)
-                root._clipDecoded = clipDecodeProc.tmp;
-        }
-        stdout: SplitParser {
-            onRead: data => {
-                const parts = data.split(clipDecodeProc.separator);
+	Process {
+		id: clipDecodeProc
+		property var tmp: ({})
+		property int index: 0
+		property string separator: "\0\x01\x02CLIP_SEP_7b9a4c8d\x02\x01\0"
+		running: true
+		command: ["sh", "-c", 'cliphist list | while IFS= read -r line; do\n' + '  cliphist decode "$line"; ' + 'printf "\\0\\x01\\x02CLIP_SEP_7b9a4c8d\\x02\\x01\\0";\n' + 'done']
+		onStarted: {
+			clipDecodeProc.tmp = [];
+			clipDecodeProc.index = 0;
+		}
+		onExited: {
+			if (clipDecodeProc.tmp)
+				root._clipDecoded = clipDecodeProc.tmp;
+		}
+		stdout: SplitParser {
+			onRead: data => {
+				const parts = data.split(clipDecodeProc.separator);
 
-                if (!clipDecodeProc.tmp[clipDecodeProc.index])
-                    clipDecodeProc.tmp[clipDecodeProc.index] = "";
+				if (!clipDecodeProc.tmp[clipDecodeProc.index])
+					clipDecodeProc.tmp[clipDecodeProc.index] = "";
 
-                clipDecodeProc.tmp[clipDecodeProc.index] += parts[0];
+				clipDecodeProc.tmp[clipDecodeProc.index] += parts[0];
 
-                for (let i = 1; i < parts.length; i++) {
-                    clipDecodeProc.index++;
-                    clipDecodeProc.tmp[clipDecodeProc.index] = parts[i];
-                }
-            }
-        }
-    }
+				for (let i = 1; i < parts.length; i++) {
+					clipDecodeProc.index++;
+					clipDecodeProc.tmp[clipDecodeProc.index] = parts[i];
+				}
+			}
+		}
+	}
 
-    Process {
-        id: imgProc
-        running: true
-        command: ["sh", Quickshell.shellDir + "/utils/cliphist-img.sh"]
-        stdout: StdioCollector {
-            property bool pending: false
-            onStreamFinished: () => {
-                pending = true;
-                Qt.callLater(() => {
-                    if (pending) {
-                        pending = false;
-                        _clipImg = this.text.split(/\r?\n/);
-                    }
-                });
-            }
-        }
-    }
+	Process {
+		id: imgProc
+		running: true
+		command: ["sh", Quickshell.shellDir + "/utils/cliphist-img.sh"]
+		stdout: StdioCollector {
+			property bool pending: false
+			onStreamFinished: () => {
+				pending = true;
+				Qt.callLater(() => {
+					if (pending) {
+						pending = false;
+						_clipImg = this.text.split(/\r?\n/);
+					}
+				});
+			}
+		}
+	}
 
-    Process {
-        id: watchProc
-        running: true
-        command: ["wl-paste", "-w", "echo"]
-        onRunningChanged: if (!running)
-            running = true
+	Process {
+		id: watchProc
+		running: true
+		command: ["wl-paste", "-w", "echo"]
+		onRunningChanged: if (!running)
+			running = true
 
-        stdout: SplitParser {
-            onRead: line => {
-                _captureMetadata();
-                _update();
-            }
-        }
-    }
+		stdout: SplitParser {
+			onRead: line => {
+				_captureMetadata();
+				_update();
+			}
+		}
+	}
 }

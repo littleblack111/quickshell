@@ -22,9 +22,7 @@ mod qobject {
         #[qobject]
         #[qml_element]
         #[qml_singleton]
-        #[qproperty(
-            QVariant, result
-        )]
+        #[qproperty(QVariant, result)]
         type MathCalc = super::MathCalcRs;
 
         #[qinvokable]
@@ -63,61 +61,34 @@ impl Default for MathCalcRs {
 impl qobject::MathCalc {
     fn query(mut self: Pin<&mut Self>, input: QString) {
         let qt_thread = self.qt_thread();
-        let ctx = Arc::clone(
-            &self
-                .as_mut()
-                .rust_mut()
-                .ctx,
-        );
+        let ctx = Arc::clone(&self.as_mut().rust_mut().ctx);
         // TODO: consider moving to spawn_blocking
-        self.rust_mut()
-            .executor
-            .spawn(
-                async move {
-                    let input = input.to_string();
-                    let result = parser::eval(
-                        &mut *ctx
-                            .lock()
-                            .await,
-                        &input,
-                        // TODO: move to const/config
-                        53,
-                    )
-                    .map_or_default(
-                        |r| {
-                            r.map_or_default(
-                                |r| {
-                                    let r: QString = r
-                                        // to display scientific notation properly
-                                        // other ones show both version without e or shows *10^_
-                                        // and have a = prefix
-                                        // to_string_big will result in 1/2=5.0000000000000000e − 1
-                                        .to_string()
-                                        .into();
-                                    if r != input.into() {
-                                        QVariant::from(&r)
-                                    } else {
-                                        QVariant::default()
-                                    }
-                                },
-                            )
-                        },
-                    );
-                    _ = qt_thread
-                        .queue(
-                            |mut qo| {
-                                qo.as_mut()
-                                    .set_result(result)
-                            },
-                        )
-                        .unwrap_print();
-                },
-            );
+        self.rust_mut().executor.spawn(async move {
+            let input = input.to_string();
+            let result = parser::eval(
+                &mut *ctx.lock().await,
+                &input,
+                // TODO: move to const/config
+                53,
+            )
+            .map_or_default(|r| {
+                r.map_or_default(|r| {
+                    let r: QString = r
+                        // to display scientific notation properly
+                        // other ones show both version without e or shows *10^_
+                        // and have a = prefix
+                        // to_string_big will result in 1/2=5.0000000000000000e − 1
+                        .to_string()
+                        .into();
+                    if r != input.into() { QVariant::from(&r) } else { QVariant::default() }
+                })
+            });
+            _ = qt_thread.queue(|mut qo| qo.as_mut().set_result(result)).unwrap_print();
+        });
     }
 
     fn reset(mut self: Pin<&mut Self>) {
-        self.as_mut()
-            .reset_result();
+        self.as_mut().reset_result();
         self.reset_ctx();
     }
 
@@ -126,13 +97,10 @@ impl qobject::MathCalc {
     }
 
     fn reset_ctx(mut self: Pin<&mut Self>) {
-        self.as_mut()
-            .rust_mut()
-            .ctx = Arc::new(Mutex::new(Self::new_ctx()))
+        self.as_mut().rust_mut().ctx = Arc::new(Mutex::new(Self::new_ctx()))
     }
 
     fn reset_result(mut self: Pin<&mut Self>) {
-        self.as_mut()
-            .set_result(QVariant::default())
+        self.as_mut().set_result(QVariant::default())
     }
 }

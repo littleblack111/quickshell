@@ -8,117 +8,117 @@ import qs.components
 
 // TODO: move to a full screen menu
 Item {
-    id: root
+	id: root
 
-    implicitWidth: container.implicitWidth
-    implicitHeight: container.implicitHeight
+	implicitWidth: container.implicitWidth
+	implicitHeight: container.implicitHeight
 
-    property bool collapsed: true
+	property bool collapsed: true
 
-    IRect {
-        id: container
+	IRect {
+		id: container
 
-        anchors {
-            fill: parent
-            verticalCenter: parent.verticalCenter
-            horizontalCenter: parent.horizontalCenter
-        }
-        implicitWidth: layout.implicitWidth + General.rectMargin * 2
-        implicitHeight: Bar.height - General.rectMargin
+		anchors {
+			fill: parent
+			verticalCenter: parent.verticalCenter
+			horizontalCenter: parent.horizontalCenter
+		}
+		implicitWidth: layout.implicitWidth + General.rectMargin * 2
+		implicitHeight: Bar.height - General.rectMargin
 
-        color: Colors.accent
-        radius: Style.rounding.large
+		color: Colors.accent
+		radius: Style.rounding.large
 
-        RowLayout {
-            id: layout
+		RowLayout {
+			id: layout
 
-            anchors.fill: parent
-            spacing: Bar.resourceIconTextSpacing
+			anchors.fill: parent
+			spacing: Bar.resourceIconTextSpacing
 
-            Item {
-                Layout.fillWidth: true
-            }
+			Item {
+				Layout.fillWidth: true
+			}
 
-            Icon {
-                id: powerIcon
-                text: Icons.power.shutdown
-                font.pixelSize: Style.font.size.large
-                color: Colors.red
-            }
+			Icon {
+				id: powerIcon
+				text: Icons.power.shutdown
+				font.pixelSize: Style.font.size.large
+				color: Colors.red
+			}
 
-            Item {
-                implicitWidth: root.collapsed ? 0 : loader.width
-                visible: root.collapsed ? false : true
-                Loader {
-                    id: loader
-                    anchors.verticalCenter: parent.verticalCenter
-                    active: !root.collapsed
-                    sourceComponent: Component {
-                        RowLayout {
-                            spacing: Bar.resourceIconTextSpacing
-                            Icon {
-                                text: Icons.power.dpms
-                                font.pixelSize: Style.font.size.large
-                            }
+			Item {
+				implicitWidth: root.collapsed ? 0 : loader.width
+				visible: root.collapsed ? false : true
+				Loader {
+					id: loader
+					anchors.verticalCenter: parent.verticalCenter
+					active: !root.collapsed
+					sourceComponent: Component {
+						RowLayout {
+							spacing: Bar.resourceIconTextSpacing
+							Icon {
+								text: Icons.power.dpms
+								font.pixelSize: Style.font.size.large
+							}
 
-                            Icon {
-                                text: Icons.power.lock
-                                font.pixelSize: Style.font.size.large
-                            }
+							Icon {
+								text: Icons.power.lock
+								font.pixelSize: Style.font.size.large
+							}
 
-                            Icon {
-                                text: Icons.power.suspend
-                                font.pixelSize: Style.font.size.large
-                            }
+							Icon {
+								text: Icons.power.suspend
+								font.pixelSize: Style.font.size.large
+							}
 
-                            Icon {
-                                text: Icons.power.reboot
-                                font.pixelSize: Style.font.size.large
-                            }
-                            SequentialAnimation {
-                                running: true
-                                NumberAnimation {
-                                    target: parent
-                                    property: "opacity"
-                                    from: 0
-                                    to: 1
-                                    duration: General.animationDuration / 2
-                                    easing.type: Easing.InOutQuad
-                                }
-                            }
-                        }
-                    }
-                }
-                Behavior on implicitWidth {
-                    NumberAnimation {
-                        duration: General.animationDuration / 4
-                        easing.type: Easing.InOutQuad
-                    }
-                }
+							Icon {
+								text: Icons.power.reboot
+								font.pixelSize: Style.font.size.large
+							}
+							SequentialAnimation {
+								running: true
+								NumberAnimation {
+									target: parent
+									property: "opacity"
+									from: 0
+									to: 1
+									duration: General.animationDuration / 2
+									easing.type: Easing.InOutQuad
+								}
+							}
+						}
+					}
+				}
+				Behavior on implicitWidth {
+					NumberAnimation {
+						duration: General.animationDuration / 4
+						easing.type: Easing.InOutQuad
+					}
+				}
 
-                // no idea why when collapsing the width animation won't trigger
-                Behavior on visible {
-                    NumberAnimation {
-                        duration: General.animationDuration / 4
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-            }
+				// no idea why when collapsing the width animation won't trigger
+				Behavior on visible {
+					NumberAnimation {
+						duration: General.animationDuration / 4
+						easing.type: Easing.InOutQuad
+					}
+				}
+			}
 
-            Item {
-                Layout.fillWidth: true
-            }
-        }
+			Item {
+				Layout.fillWidth: true
+			}
+		}
 
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onEntered: {
-                root.collapsed = false;
-            }
-            onExited: {
-                root.collapsed = true;
-            }
-        }
-    }
+		MouseArea {
+			anchors.fill: parent
+			hoverEnabled: true
+			onEntered: {
+				root.collapsed = false;
+			}
+			onExited: {
+				root.collapsed = true;
+			}
+		}
+	}
 }

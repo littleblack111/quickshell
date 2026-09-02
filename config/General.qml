@@ -4,29 +4,29 @@ import Quickshell
 import qs.components
 
 Singleton {
-    id: root
+	id: root
 
-    readonly property int resourceUpdateInterval: 1
+	readonly property int resourceUpdateInterval: 1
 
-    readonly property real iconSize: Style.font.size.larger
+	readonly property real iconSize: Style.font.size.larger
 
-    readonly property string cpuThermalPath: "/sys/class/thermal/thermal_zone0/temp"
+	readonly property string cpuThermalPath: "/sys/class/thermal/thermal_zone0/temp"
 
-    readonly property int rectMargin: Style.spacing.small
+	readonly property int rectMargin: Style.spacing.small
 
-    readonly property int appIconSize: 25
+	readonly property int appIconSize: 25
 
-    readonly property int appSearchFuzzySearchThreshold: 5
+	readonly property int appSearchFuzzySearchThreshold: 5
 
-    readonly property int fontSize: Style.font.size.larger
+	readonly property int fontSize: Style.font.size.larger
 
-    readonly property int animationDuration: Style.anim.durations.normal
-    readonly property real springAnimationSpring: 8
-    readonly property real springAnimationDamping: 0.4
+	readonly property int animationDuration: Style.anim.durations.normal
+	readonly property real springAnimationSpring: 8
+	readonly property real springAnimationDamping: 0.4
 
-    readonly property double accentTransparency: 0.15
+	readonly property double accentTransparency: 0.15
 
-    readonly property int defaultSearchAlgorithm: Searchable.SearchAlgorithm.Include
+	readonly property int defaultSearchAlgorithm: Searchable.SearchAlgorithm.Include
 
-    readonly property int maxClipPreviewChar: 100
+	readonly property int maxClipPreviewChar: 100
 }
