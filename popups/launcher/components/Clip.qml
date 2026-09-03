@@ -174,6 +174,17 @@ IComponent {
 							}
 						}
 					}
+
+					IMouseArea {
+						anchors.fill: parent
+						hoverEnabled: true
+						onEntered_: {
+							root.selectedIndex = index;
+						}
+						onClicked: {
+							root._exec();
+						}
+					}
 				}
 			}
 
