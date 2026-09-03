@@ -123,7 +123,7 @@ IComponent {
 		id: layout
 		fromParent: false
 		width: parent.width
-		height: Math.min(listView.contentHeight + titleBar.height, Launcher.widgetHeight * 1.5)
+		height: Math.min(listView.contentHeight + titleBar.height, Launcher.widgetHeight)
 
 		IListView {
 			id: listView
@@ -133,7 +133,8 @@ IComponent {
 			model: entries
 			spacing: 0
 
-			highlightMoveDuration: 500
+			// orientation: ListView.Horizontal
+
 			delegate: Item {
 				required property DesktopEntry modelData
 				required property int index
@@ -178,7 +179,7 @@ IComponent {
 					onEntered_: {
 						root.selectedIndex = index;
 					}
-					onPressed: {
+					onClicked: {
 						root._exec();
 					}
 				}

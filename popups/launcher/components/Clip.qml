@@ -86,7 +86,7 @@ IComponent {
 		id: layout
 		fromParent: false
 		width: parent.width
-		height: Math.min(listView.contentHeight + titleBar.height, Launcher.widgetHeight * 1.5)
+		height: Math.min(listView.contentHeight + titleBar.height, Launcher.widgetHeight)
 
 		RowLayout {
 			Layout.fillWidth: true
@@ -139,8 +139,9 @@ IComponent {
 									fillMode: Image.PreserveAspectFit
 									scale: root.isSelectedPriority() && index === root.selectedIndex ? 1.01 : 0.9
 
-									MouseArea {
+									IMouseArea {
 										anchors.fill: parent
+
 										onClicked: {
 											Quickshell.execDetached(["xdg-open", modelData?.data]);
 										}

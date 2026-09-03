@@ -14,6 +14,7 @@ IComponent {
 	property int cursorPosition: SelectionState.cursorPosition
 
 	name: "Calculator"
+
 	preview: Component {
 		Icon {
 			text: ""

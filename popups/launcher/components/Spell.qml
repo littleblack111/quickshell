@@ -179,7 +179,7 @@ IComponent {
 									onEntered: {
 										root.selectedIndex = index;
 									}
-									onPressed: {
+									onClicked: {
 										root._exec();
 									}
 								}

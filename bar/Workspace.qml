@@ -132,7 +132,7 @@ Item {
 					acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
 					hoverEnabled: true
 
-					onPressed: {
+					onClicked: {
 						if (!parent.active)
 							Hyprland.dispatch(`hl.dsp.focus({ workspace = '${index + 1}' })`);
 					}

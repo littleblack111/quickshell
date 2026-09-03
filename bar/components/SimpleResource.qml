@@ -93,7 +93,7 @@ Item {
 	MouseArea {
 		anchors.fill: parent
 		cursorShape: altValue != value ? Qt.PointingHandCursor : Qt.ArrowCursor
-		onPressed: {
+		onClicked: {
 			root.isAlt = !root.isAlt;
 		}
 	}

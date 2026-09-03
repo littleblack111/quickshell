@@ -170,7 +170,7 @@ IComponent {
 									anchors.fill: parent
 									hoverEnabled: true
 									onEntered: root.selectedIndex = index
-									onPressed: root._exec()
+									onClicked: root._exec()
 								}
 							}
 
