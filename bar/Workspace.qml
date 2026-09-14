@@ -18,7 +18,7 @@ Item {
 	property bool toChild: false
 
 	function getWorkspaceStats(index) {
-		const w = ws.values.find(i => i.id === index + 1);
+		const w = ws.values.find(i => i.name == index + 1);
 		return {
 			isOccupied: w?.toplevels?.values?.length,
 			isActive: w?.active,
