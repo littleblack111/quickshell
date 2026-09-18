@@ -2,6 +2,7 @@ pragma Singleton
 // pragma ComponentBehavior: Bound
 
 // TODO: move to rust or native Network modules
+import Quickshell.Networking
 import Quickshell
 import Quickshell.Io
 import QtQuick
@@ -13,7 +14,7 @@ Singleton {
 
 	property bool wifi: true
 	property bool ethernet: false
-	property string networkName: ""
+	property NetworkDevice connectedNetwork
 	property int networkStrength
 	property string state: ethernet ? Icons.resource.network.wifi : (networkName.length >= 0 && networkName !== "lo") ? (networkStrength >= 90 ? Icons.resource.network.wifi.max : networkStrength >= 80 ? Icons.resource.network.wifi.high : networkStrength >= 60 ? Icons.resource.network.wifi.mid : networkStrength >= 40 ? Icons.resource.network.wifi.low : networkStrength >= 20 ? Icons.resource.network.wifi.min : Icons.resource.network.disconnected) : Icons.resource.network.disconnected
 
@@ -68,7 +69,7 @@ Singleton {
 		running: true
 		stdout: SplitParser {
 			onRead: data => {
-				root.networkName = data;
+			// root.networkName = data;
 			}
 		}
 	}
@@ -82,5 +83,15 @@ Singleton {
 				root.networkStrength = parseInt(data);
 			}
 		}
+	}
+
+	Component.onCompleted: {
+		Networking.devices.values.forEach(device => {
+			device.networks.values.forEach(n => {
+				n.nmSettings.forEach(s => {
+				// console.log(Object.keys(s.read()));
+				});
+			});
+		});
 	}
 }

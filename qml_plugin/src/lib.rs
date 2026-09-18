@@ -34,5 +34,6 @@ impl ExclusiveExecutor {
     }
 }
 
-mod launcher;
+mod qml_interface;
+mod services;
 mod web;
