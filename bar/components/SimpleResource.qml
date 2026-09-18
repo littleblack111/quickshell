@@ -25,7 +25,7 @@ Item {
 	property color thresholdColorL2: Colors.yellow
 	property color thresholdColorL3: Colors.red
 
-	property bool isAlt: false
+	property bool alt: false
 
 	property color color: value < thresholdL1 ? Colors.accentAlt : value >= thresholdL3 ? thresholdColorL3 : value >= thresholdL2 ? thresholdColorL2 : thresholdColorL1
 
@@ -53,7 +53,7 @@ Item {
 				handle: Item
 				from: 0
 				to: 100
-				value: !root.isAlt ? root.value : root.altValue
+				value: !root.alt ? root.value : root.altValue
 				background: IRect {
 					anchors.fill: parent
 					color: "transparent"
@@ -81,7 +81,7 @@ Item {
 					centerIn: parent
 				}
 				iconSize: Style.font.size.small
-				text: !root.isAlt ? root.icon : root.altIcon
+				text: !root.alt ? root.icon : root.altIcon
 				color: root.value < root.thresholdL1 ? Colors.foreground2 : root.value >= root.thresholdL3 ? root.thresholdColorL3 : root.value >= root.thresholdL2 ? root.thresholdColorL2 : root.thresholdColorL1
 			}
 		}
@@ -94,7 +94,7 @@ Item {
 		anchors.fill: parent
 		cursorShape: altValue != value ? Qt.PointingHandCursor : Qt.ArrowCursor
 		onClicked: {
-			root.isAlt = !root.isAlt;
+			root.alt = !root.alt;
 		}
 	}
 }

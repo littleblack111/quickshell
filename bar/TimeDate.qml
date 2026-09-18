@@ -8,11 +8,12 @@ import qs.config
 Item {
 	id: root
 
-	property bool isAlt: false
-	property bool isCollapsed: false
+	property bool alt: false
+	property bool collapsed: true
 
 	implicitWidth: container.implicitWidth
 	implicitHeight: container.implicitHeight - General.rectMargin
+
 	IRect {
 		id: container
 		anchors {
@@ -32,7 +33,7 @@ Item {
 			anchors.centerIn: parent
 			spacing: Bar.resourceIconTextSpacing
 			Loader {
-				sourceComponent: !root.isAlt ? main : alt
+				sourceComponent: !root.alt ? main : alt
 				readonly property Component main: Component {
 					RowLayout {
 						id: root
@@ -89,6 +90,7 @@ Item {
 						}
 					}
 				}
+
 				readonly property Component alt: Component {
 					RowLayout {
 						Item {
@@ -121,13 +123,63 @@ Item {
 					}
 				}
 			}
+
+			Item {
+				implicitWidth: root.collapsed ? 0 : tray.width
+				implicitHeight: tray.height
+				visible: !root.collapsed || tray.active
+
+				Tray {
+					id: tray
+					anchors.verticalCenter: parent.verticalCenter
+					height: container.height - General.rectMargin * 2
+					active: !root.collapsed
+
+					SequentialAnimation {
+						running: true
+						NumberAnimation {
+							target: parent
+							property: "opacity"
+							from: 0
+							to: 1
+							duration: General.animationDuration / 2
+							easing.type: Easing.InOutQuad
+						}
+					}
+
+					HoverHandler {
+						id: trayHover
+					}
+				}
+
+				Behavior on implicitWidth {
+					NumberAnimation {
+						duration: General.animationDuration / 4
+						easing.type: Easing.InOutQuad
+					}
+				}
+
+				// no idea why when collapsing the width animation won't trigger
+				Behavior on visible {
+					NumberAnimation {
+						duration: General.animationDuration / 4
+						easing.type: Easing.InOutQuad
+					}
+				}
+			}
 		}
 	}
-	MouseArea {
-		anchors.fill: parent
+
+	TapHandler {
+		enabled: !trayHover.hovered
+		onTapped: root.alt = !root.alt
+	}
+
+	HoverHandler {
 		cursorShape: Qt.PointingHandCursor
-		onClicked: {
-			root.isAlt = !root.isAlt;
+
+		onHoveredChanged: {
+			root.collapsed = !hovered;
 		}
 	}
 }

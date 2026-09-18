@@ -29,4 +29,7 @@ Singleton {
 	readonly property int defaultSearchAlgorithm: Searchable.SearchAlgorithm.Include
 
 	readonly property int maxClipPreviewChar: 100
+
+	readonly property int toolTipDelay: 500
+	readonly property double toolTipBackgroundOpacity: 0.75
 }
