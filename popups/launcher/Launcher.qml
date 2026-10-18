@@ -16,7 +16,6 @@ ILauncher {
 	name: "quickshell::launcher::launcher"
 
 	anchors.top: true
-	margins.top: Launcher.topMargin
 	aboveWindows: true
 	exclusionMode: ExclusionMode.Ignore
 
@@ -448,6 +447,12 @@ ILauncher {
 
 	implicitWidth: container.width
 	implicitHeight: container.height
+
+	ISpringAnimation on margins.top {
+		from: 0
+		to: Launcher.topMargin
+		running: true
+	}
 
 	Connections {
 		target: launcher?.state
