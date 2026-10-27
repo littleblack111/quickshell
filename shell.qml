@@ -11,8 +11,6 @@ import core
 
 import qs.services
 
-// TODO: remove all MouseArea and use modern alternative
-
 Scope {
 	id: root
 
@@ -56,45 +54,9 @@ Scope {
 				root.standaloneObj.obj.active = !root.standaloneObj.obj.active;
 				return;
 			}
-			root.standaloneObj.obj = Qt.createQmlObject(`
-				import Quickshell
-				import QtQuick
-				import "popups/launcher"
-				import "popups/launcher/components"
-
-				LazyLoader {
-					// TODO: just use the same selectionState
-					property QtObject selectionState: QtObject {
-						property Item selected: null
-						property string input: ""
-						property int cursorPosition: 0
-						property var priorities: []
-						property int selectedPriority: 0
-						property var widgets: []
-					}
-					readonly property list<Component> widgets: [
-						Component {
-							Loader {
-								sourceComponent: Qt.createComponent("popups/launcher/components/${component}.qml")
-								onLoaded: {
-									item.standalone = true
-									item.state = selectionState;
-									item.priority = true
-									item.close.connect(() => root.active = false);
-								}
-							}
-						}
-					]
-					id: root
-					active: true
-					component: Launcher {
-						name: "quickshell::launcher::${component}"
-						widgetItems: widgets
-						state: selectionState
-						parentLoader: root
-					}
-				}
-			`, root);
+			root.standaloneObj.obj = Qt.createComponent("popups/launcher/StandaloneLauncher.qml", Component.PreferSynchronous, root).createObject(root, {
+				componentName: component
+			});
 			root.standaloneObj.name = component;
 		}
 	}
