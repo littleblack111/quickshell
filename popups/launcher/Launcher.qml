@@ -5,8 +5,8 @@ import QtQuick.Layouts
 import "components"
 import qs.components
 import qs.config
+import "../.."
 
-// TODO: currently, we're relying on the compositor to provide the animation which ig is fine, but we should use our own in the future, however it might look weird combined with the compositors's
 ILauncher {
 	id: launcher
 
@@ -23,6 +23,7 @@ ILauncher {
 		id: container
 		property var selection: launcher.state?.selected
 		property var mappedSelection: selection?.mapToItem(null, 0, 0)
+		property real openProgress: 0
 
 		onMappedSelectionChanged: {
 			// launcher.state?.selected may be slow.. smh qt
@@ -88,8 +89,14 @@ ILauncher {
 		color: Qt.rgba(Colors.background3.r, Colors.background3.g, Colors.background3.b, Launcher.bgTransparency)
 		radius: Launcher.borderRadius
 
-		width: Math.max(root.width, Launcher.defaultWidth) + Launcher.innerMargin
+		width: SharedState.centerBarWidth + (Math.max(root.width, Launcher.defaultWidth) + Launcher.innerMargin - SharedState.centerBarWidth) * openProgress
 		height: root.height
+
+		ISpringAnimation on openProgress {
+			from: 0
+			to: 1
+			running: true
+		}
 
 		IRect {
 			id: root
@@ -131,11 +138,11 @@ ILauncher {
 						property bool pendingUpdate: false
 						Keys.onPressed: event => {
 							if (event.key === Qt.Key_End || event.key === Qt.Key_Home) {
-								if (event.key === Qt.Key_End) {
+								if (event.key === Qt.Key_End)
 									endShortcut.activated();
-								} else if (event.key === Qt.Key_Home) {
+								else if (event.key === Qt.Key_Home)
 									homeShortcut.activated();
-								}
+
 								event.accepted = true;
 							}
 						}
